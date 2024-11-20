@@ -56,4 +56,10 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		return clienteDao.verificarCredenciales(username, password) ;
 	}
 
+	@Override
+	public boolean ValidacionUsuario(String usu) {
+		
+		return clienteDao.ValidacionUsuario(usu);
+	}
+
 }

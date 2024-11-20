@@ -15,4 +15,5 @@ public interface ClienteDao  {
 	public boolean ValidacionDni (int dni);
 	public boolean ValidacionCuil (int cuil);
 	public Usuario verificarCredenciales(String username, String password);
+	public boolean ValidacionUsuario (String usu);
 }

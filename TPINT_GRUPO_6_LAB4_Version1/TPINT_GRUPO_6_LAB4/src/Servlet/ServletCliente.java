@@ -100,8 +100,6 @@ public class ServletCliente extends HttpServlet {
 
             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             
-            
-             
             Usuario usu = new Usuario();
             Cliente cli = new Cliente();
             cli.setNombre(request.getParameter("txtNombre"));
@@ -131,6 +129,7 @@ public class ServletCliente extends HttpServlet {
             
             int dni = Integer.parseInt(request.getParameter("txtDNI"));
             int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
+            String user = request.getParameter("txtUsuario");
             
             if (bandolero.ValidacionDni(dni)) {
                 request.setAttribute("mensajeError", "El DNI ya existe en la base de datos. Por favor, intente con otro DNI.");
@@ -139,6 +138,16 @@ public class ServletCliente extends HttpServlet {
             }
             if (bandolero.ValidacionDni(cuil)) {
                 request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
+                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+                return;
+            }
+            if (bandolero.ValidacionDni(cuil)) {
+                request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
+                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+                return;
+            }
+            if (bandolero.ValidacionUsuario(user)) {
+                request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }

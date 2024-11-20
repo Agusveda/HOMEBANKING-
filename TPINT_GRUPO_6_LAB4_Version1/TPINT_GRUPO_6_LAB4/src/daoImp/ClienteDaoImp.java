@@ -506,6 +506,49 @@ public boolean ValidacionCuil(int cuil) {
 
     return exists;
 }
+
+@Override
+public boolean ValidacionUsuario(String usu) {
+	
+	boolean exists = false;
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
+
+    try {
+        
+        connection = Conexion.getConexion().getSQLConexion();
+        if (connection == null) {
+            throw new SQLException("Conexión a la base de datos es nula");
+        }
+
+        
+        String query = "SELECT COUNT(*) FROM usuario WHERE NombreUsuario = ?";
+        preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, usu);
+
+        
+        resultSet = preparedStatement.executeQuery();
+
+        
+        if (resultSet.next()) {
+            exists = resultSet.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); 
+    } finally {
+        
+        try {
+            if (resultSet != null) resultSet.close();
+            if (preparedStatement != null) preparedStatement.close();
+            // NO cierres la conexión aquí si usas un pool de conexiones
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return exists;
+}
 }
 
 
