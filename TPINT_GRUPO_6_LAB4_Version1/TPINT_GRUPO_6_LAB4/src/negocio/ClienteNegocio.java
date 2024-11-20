@@ -1,11 +1,11 @@
-package dao;
+package negocio;
 
 import java.util.ArrayList;
 
 import Entidades.Cliente;
 import Entidades.Usuario;
 
-public interface ClienteDao  {
+public interface ClienteNegocio {
 	public boolean insertCliente (Cliente clien,Usuario usu);
 	public boolean ModificarCliente (Cliente clie, Usuario usu);
 	public boolean eliminarCliente(int idCliente);

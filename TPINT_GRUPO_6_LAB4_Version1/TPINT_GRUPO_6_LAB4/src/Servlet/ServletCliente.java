@@ -1,6 +1,8 @@
 package Servlet;
 
 import java.io.IOException;
+import negocio.ClienteNegocio;
+import negocioImpl.ClienteNegocioImpl;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -33,7 +35,7 @@ public class ServletCliente extends HttpServlet {
         if (idClienteParam != null) {
             try {
                 int idCliente = Integer.parseInt(idClienteParam);
-                ClienteDaoImp banco = new ClienteDaoImp();          
+                ClienteNegocioImpl banco = new ClienteNegocioImpl();          
                 boolean bajaExitosa = banco.eliminarCliente(idCliente);
                 if (bajaExitosa) {
                     System.out.println("Cliente eliminado exitosamente.");
@@ -60,7 +62,7 @@ public class ServletCliente extends HttpServlet {
         if (request.getParameter("btnModificarCliente") != null) {
             Cliente cli = new Cliente();
             Usuario usu = new Usuario();
-            ClienteDaoImp bandolero = new ClienteDaoImp();
+            ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
 
             cli.setId(Integer.parseInt(request.getParameter("txtId")));
             cli.setNombre(request.getParameter("txtNombre"));
@@ -96,7 +98,7 @@ public class ServletCliente extends HttpServlet {
                 return;
             }
 
-            ClienteDaoImp bandolero = new ClienteDaoImp();
+            ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             
             
              
@@ -125,7 +127,7 @@ public class ServletCliente extends HttpServlet {
             }
             usu.setTipoUsuario(tipoUsuario);
 
-            ClienteDaoImp bandao = new ClienteDaoImp();
+            ClienteNegocioImpl bandao = new ClienteNegocioImpl();
             
             int dni = Integer.parseInt(request.getParameter("txtDNI"));
             int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
@@ -155,7 +157,7 @@ public class ServletCliente extends HttpServlet {
         String password = request.getParameter("txtpass");
 
         if (username != null && password != null) {
-            ClienteDaoImp bandolero = new ClienteDaoImp();
+            ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             Usuario usuario = bandolero.verificarCredenciales(username, password);
             
             if (usuario != null) {
