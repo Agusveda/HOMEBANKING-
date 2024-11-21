@@ -4,17 +4,15 @@
 
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Listado de Cuentas</title>
     <link rel="stylesheet" type="text/css" href="css/Cliente.css">
     <link rel="stylesheet" type="text/css" href="css/ABMCuenta.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
-    
-
-    
-    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">   
 </head>
+
 <body>
 <jsp:include page="Navbar.jsp"/>
 <div class="encabezado">
@@ -36,23 +34,21 @@
 	CuentaDaoImpl cuenta = new CuentaDaoImpl();
     ArrayList<Cuenta> listaCuenta;
  
-    		if ((ArrayList<Cuenta>)request.getAttribute("listaCuentaFiltrada") != null){
-    			
+    		if ((ArrayList<Cuenta>)request.getAttribute("listaCuentaFiltrada") != null){  			
     			listaCuenta =(ArrayList<Cuenta>)request.getAttribute("listaCuentaFiltrada");
     		}
     		else {
-    			listaCuenta = cuenta.ListarCuenta();
-    
+    			listaCuenta = cuenta.ListarCuenta();    
     		}  
-    		
-   
 %>
 
 <table id="table_Cuenta" class="display">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>id cliente</th>
+        	<th>ID Cuenta</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>DNI</th>
             <th>Tipo de Cuenta</th>
             <th>Fecha Creacion</th>
             <th>Numero Cuenta</th>
@@ -63,26 +59,31 @@
         </tr>
     </thead>
     <tbody>
+    
         <% 
             if (listaCuenta != null && !listaCuenta.isEmpty()) {
                 for (Cuenta cuentaItem : listaCuenta) {  
         %>
-            <tr>
-                <form action="ModificarCuenta.jsp" method="get">
-                    <td><input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>"></td>
-                    <td><%= cuentaItem.getIdCliente() %></td>
-                    <td><%= cuentaItem.getTipoCuenta() %></td>
-                    <td><%= cuentaItem.getFechaCreacion() %></td>
-                    <td><%= cuentaItem.getNumeroCuenta() %></td>
-                    <td><%= cuentaItem.getCbu() %></td>
-                    <td><%= cuentaItem.getSaldo() %></td>
-                    <td><%= cuentaItem.isActivo() %></td>
-                    <td>
-                        <input type="submit" class="button button-blue" value="Modificar" name="btnModificar"/>
-                        <input type="submit" class="button button-red" value="Eliminar" name="btnEliminar"/>
-                    </td>
-                </form>
-            </tr>
+<tr>
+    <form action="ModificarCuenta.jsp" method="get">
+   		<td><%= cuentaItem.getId() %></td>
+        <td><%= cuentaItem.getCliente().getNombre() %></td>
+        <td><%= cuentaItem.getCliente().getApellido() %></td>
+        <td><%= cuentaItem.getCliente().getDni() %></td>
+        <td><%= cuentaItem.getTipoCuenta() %></td>
+        <td><%= cuentaItem.getFechaCreacion() %></td>
+        <td><%= cuentaItem.getNumeroCuenta() %></td>
+        <td><%= cuentaItem.getCbu() %></td>
+        <td>$<%= cuentaItem.getSaldo() %></td>
+        <td><%= cuentaItem.isActivo() ? "Sí" : "No" %></td>
+        <td>
+            <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
+            <input type="submit" class="button button-blue" value="Modificar" name="btnModificar"/>
+            <input type="submit" class="button button-red" value="Eliminar" name="btnEliminar"/>
+        </td>
+    </form>
+    
+</tr>
         <% 
                 }
             } else { 

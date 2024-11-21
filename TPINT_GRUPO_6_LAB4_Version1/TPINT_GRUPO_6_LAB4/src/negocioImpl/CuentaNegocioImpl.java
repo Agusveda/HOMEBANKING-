@@ -9,7 +9,7 @@ import negocio.CuentaNegocio;
 
 public class CuentaNegocioImpl implements CuentaNegocio {
 	
-	private CuentaDao cuentaDao = new CuentaDaoImpl();
+	private CuentaDaoImpl cuentaDao = new CuentaDaoImpl();
 
 	@Override
 	public boolean insertCuenta(Cuenta cuenta) {

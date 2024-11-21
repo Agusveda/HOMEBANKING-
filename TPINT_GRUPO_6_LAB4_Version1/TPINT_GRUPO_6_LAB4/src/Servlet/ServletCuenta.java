@@ -59,7 +59,10 @@ public class ServletCuenta extends HttpServlet {
     	    
     	   // CuentaDaoImpl cuentadao = new CuentaDaoImpl();
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
-    	    cuentaNegocio.EliminarCuenta(id);
+    	    boolean eliminada = cuentaNegocio.EliminarCuenta(id);
+    	    
+    	    String mensaje = eliminada ? "Cuenta eliminada exitosamente." : "Hubo un error al eliminar la cuenta.";
+    	    request.setAttribute("mensaje", mensaje);
     	    
     	    RequestDispatcher rd = request.getRequestDispatcher("/ListarCuenta.jsp");
     	    rd.forward(request, response);
@@ -72,7 +75,7 @@ public class ServletCuenta extends HttpServlet {
     	    int numeroCuenta = Integer.parseInt(request.getParameter("txtNumeroCuenta"));
     	    int cbu = Integer.parseInt(request.getParameter("txtCBU"));
     	    float saldo = Float.parseFloat(request.getParameter("txtSaldo"));
-    	    boolean activo = Boolean.parseBoolean(request.getParameter("txtActivo"));
+    	  //  boolean activo = Boolean.parseBoolean(request.getParameter("txtActivo"));
 
     	    Cuenta cuenta = new Cuenta();
     	    cuenta.setId(idCuenta);
@@ -80,7 +83,7 @@ public class ServletCuenta extends HttpServlet {
     	    cuenta.setNumeroCuenta(numeroCuenta);
     	    cuenta.setCbu(cbu);
     	    cuenta.setSaldo(saldo);
-    	    cuenta.setActivo(activo);
+    	   // cuenta.setActivo(activo);
 
     	   //CuentaDaoImpl cuentadao = new CuentaDaoImpl();
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
@@ -89,7 +92,7 @@ public class ServletCuenta extends HttpServlet {
     	    String mensaje = modificada ? "Cuenta modificada exitosamente." : "Hubo un error al modificar la cuenta.";
     	    request.setAttribute("mensaje", mensaje);
 
-    	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Administrador.jsp");
+    	    RequestDispatcher dispatcher = request.getRequestDispatcher("/ListarCuenta.jsp");
     	    dispatcher.forward(request, response);
     	    return; // Detener ejecución aquí
     	}

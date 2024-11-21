@@ -10,6 +10,7 @@ public class Cuenta {
 	private int cbu;
 	private float saldo;
 	private boolean activo;
+	private Cliente cliente; 
 	
 	public Cuenta(){}
 
@@ -99,6 +100,13 @@ public class Cuenta {
 		this.activo = activo;
 	}
 
+	public Cliente getCliente() {
+	    return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+	    this.cliente = cliente;
+	}
 	@Override
 	public String toString() {
 		return "Cuenta [id=" + id + ", idTipoMovimiento=" + idTipoMovimiento + ", idCliente=" + idCliente

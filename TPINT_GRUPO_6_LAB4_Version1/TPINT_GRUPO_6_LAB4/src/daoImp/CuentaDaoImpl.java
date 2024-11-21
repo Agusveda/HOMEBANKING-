@@ -15,8 +15,13 @@ import dao.CuentaDao;
 public class CuentaDaoImpl implements CuentaDao {
 
     private static final String insertCuenta = "INSERT INTO cuenta ( IdCliente, TipoCuenta, FechaCreacion , NumeroCuenta, CBU, Saldo, Activo) VALUES ( ?, ?, CURDATE(), ?, ?, 10000, ?)";
-    private static final String ListarCuenta = "select cuenta.id as id,  cuenta.idcliente as IdCliente , cuenta.tipocuenta as TipoCuenta, cuenta.FechaCreacion as FechaCreacion, cuenta.NumeroCuenta , cuenta.CBU as CBU, cuenta.Saldo as Saldo, cuenta.Activo as Activo from cuenta inner join cliente on cuenta.IdCliente = cliente.id where cliente.DNI = ?";
-    private static final String ListarCuentaTodos = "select cuenta.id as id,  cuenta.idcliente as IdCliente , cuenta.tipocuenta as TipoCuenta, cuenta.FechaCreacion as FechaCreacion, cuenta.NumeroCuenta , cuenta.CBU as CBU, cuenta.Saldo as Saldo, cuenta.Activo as Activo from cuenta inner join cliente on cuenta.IdCliente = cliente.id";
+    //private static final String ListarCuenta = "select cuenta.id as id,  cuenta.idcliente as IdCliente , cuenta.tipocuenta as TipoCuenta, cuenta.FechaCreacion as FechaCreacion, cuenta.NumeroCuenta , cuenta.CBU as CBU, cuenta.Saldo as Saldo, cuenta.Activo as Activo from cuenta inner join cliente on cuenta.IdCliente = cliente.id where cliente.DNI = ?";
+    //private static final String ListarCuentaTodos = "select cuenta.id as id,  cuenta.idcliente as IdCliente , cuenta.tipocuenta as TipoCuenta, cuenta.FechaCreacion as FechaCreacion, cuenta.NumeroCuenta , cuenta.CBU as CBU, cuenta.Saldo as Saldo, cuenta.Activo as Activo from cuenta inner join cliente on cuenta.IdCliente = cliente.id";
+    
+    private static final String ListarCuenta = "SELECT cuenta.id AS ID,cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cliente.DNI = ?";
+    
+    private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id";
+    
     private static final String EliminarCuenta = "UPDATE cuenta SET Activo = 0 WHERE id = ?";
     private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ?, Activo = ? WHERE Id = ?";
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
@@ -113,29 +118,35 @@ public class CuentaDaoImpl implements CuentaDao {
     public ArrayList<Cuenta> ListarCuenta(int DNI) {
         ArrayList<Cuenta> ListaCuenta = new ArrayList<>();
         
-        
         String query = ListarCuenta; 
         
         Connection con = Conexion.getConexion().getSQLConexion();
-        
-        
+                
         try {
         	PreparedStatement ps = con.prepareStatement(query); 
-        	
         	ps.setInt(1, DNI );
         	ResultSet rs = ps.executeQuery();
+        	
             while (rs.next()) {
-            	
-                Cuenta cue = new Cuenta();
-                cue.setId(rs.getInt("Id"));
-                cue.setIdCliente(rs.getInt("IdCliente"));
-                cue.setTipoCuenta(rs.getInt("TipoCuenta"));
-                cue.setFechaCreacion(rs.getString("FechaCreacion"));
-                cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
-                cue.setCbu(rs.getInt("CBU"));
-                cue.setSaldo(rs.getFloat("Saldo"));
-                cue.setActivo(rs.getBoolean("Activo"));
-                ListaCuenta.add(cue);
+            	  Cliente cli = new Cliente();
+                  Cuenta cue = new Cuenta();
+
+                  cue.setId(rs.getInt("ID"));
+                  cli.setNombre(rs.getString("Nombre"));
+                  cli.setApellido(rs.getString("Apellido"));
+                  cli.setDni(rs.getInt("DNI"));
+                  cli.setNombre(rs.getString("Nombre"));
+                  cli.setApellido(rs.getString("Apellido"));
+                  cli.setDni(rs.getInt("DNI"));
+                  cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+                  cue.setFechaCreacion(rs.getString("FechaCreacion"));
+                  cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+                  cue.setCbu(rs.getInt("CBU"));
+                  cue.setSaldo(rs.getFloat("Saldo"));
+                  cue.setActivo(rs.getBoolean("Activo"));
+                  cue.setCliente(cli);
+                  
+                  ListaCuenta.add(cue);
             }
         }
         catch (SQLException e) {
@@ -144,6 +155,7 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         return ListaCuenta;
     }    
+    
     public ArrayList<Cuenta> ListarCuenta() {
         ArrayList<Cuenta> ListaCuenta = new ArrayList<>();
         
@@ -159,16 +171,20 @@ public class CuentaDaoImpl implements CuentaDao {
         
         	ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-            	
+            	Cliente cli = new Cliente();
                 Cuenta cue = new Cuenta();
-                cue.setId(rs.getInt("Id"));
-                cue.setIdCliente(rs.getInt("IdCliente"));
+                cue.setId(rs.getInt("ID"));
+                cli.setNombre(rs.getString("Nombre"));
+                cli.setApellido(rs.getString("Apellido"));
+                cli.setDni(rs.getInt("DNI"));
                 cue.setTipoCuenta(rs.getInt("TipoCuenta"));
                 cue.setFechaCreacion(rs.getString("FechaCreacion"));
                 cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
                 cue.setCbu(rs.getInt("CBU"));
                 cue.setSaldo(rs.getFloat("Saldo"));
                 cue.setActivo(rs.getBoolean("Activo"));
+                cue.setCliente(cli);
+                
                 ListaCuenta.add(cue);
             }
         	
@@ -234,6 +250,7 @@ public class CuentaDaoImpl implements CuentaDao {
             conexion.setAutoCommit(false);
 
             statement = conexion.prepareStatement(ModificarCuenta);
+            
             statement.setInt(1, cuenta.getTipoCuenta());
             statement.setInt(2, cuenta.getNumeroCuenta());
             statement.setInt(3, cuenta.getCbu());

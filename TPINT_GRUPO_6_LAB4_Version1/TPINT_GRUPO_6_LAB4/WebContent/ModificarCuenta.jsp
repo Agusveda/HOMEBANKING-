@@ -1,12 +1,12 @@
 <%@ page import="daoImp.CuentaDaoImpl" %>
 <%@ page import="Entidades.Cuenta" %>
-<%@ page import="dao.CuentaDao" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 
 <%
-	String idCuentaParam = request.getParameter("idCuenta");
+    String idCuentaParam = request.getParameter("idCuenta");
     int idCuenta = 0;
 
+    // Obtener el ID de la cuenta
     if (idCuentaParam != null && !idCuentaParam.isEmpty()) {
         try {
             idCuenta = Integer.parseInt(idCuentaParam); 
@@ -14,8 +14,10 @@
             e.printStackTrace();     
         }
     }
-    CuentaDao cuentadao = new CuentaDaoImpl();
-    Cuenta cuenta = cuentadao.obtenerCuentaPorId(idCuenta);
+    
+    // Buscar la cuenta por su ID
+    CuentaDaoImpl cuentadao = new CuentaDaoImpl();
+    Cuenta cuenta = cuentadao.obtenerCuentaPorId(idCuenta); 
 %>
 
 <!DOCTYPE html>
@@ -38,19 +40,18 @@
             <form method="post" action="ServletCuenta">
                 <input type="hidden" name="txtIdCuenta" value="<%= cuenta.getId() %>" />
 
-               
                 <table>
                     <tr>
                         <td><label for="txtTipoCuenta">Tipo de Cuenta:</label></td>
-                        <td><input type="number" name="txtTipoCuenta" value="<%= cuenta.getTipoCuenta() %>" required /></td>
+                        <td><input type="text" name="txtTipoCuenta" value="<%= cuenta.getTipoCuenta() %>" required /></td>
                     </tr>
                     <tr>
                         <td><label for="txtNumeroCuenta">Número de Cuenta:</label></td>
-                        <td><input type="number" name="txtNumeroCuenta" value="<%= cuenta.getNumeroCuenta() %>" required /></td>
+                        <td><input type="text" name="txtNumeroCuenta" value="<%= cuenta.getNumeroCuenta() %>" required /></td>
                     </tr>
                     <tr>
                         <td><label for="txtCBU">CBU:</label></td>
-                        <td><input type="number" name="txtCBU" value="<%= cuenta.getCbu() %>" required /></td>
+                        <td><input type="text" name="txtCBU" value="<%= cuenta.getCbu() %>" required /></td>
                     </tr>
                     <tr>
                         <td><label for="txtSaldo">Saldo:</label></td>
@@ -58,9 +59,8 @@
                     </tr>
                 </table>
 
-               
+                <!-- Botones de acción -->
                 <button type="submit" name="btnModificarCuenta">Modificar Cuenta</button>
-                
                 <button type="button" onclick="window.location.href='ListarCuenta.jsp'">Cancelar</button>
             </form>
         <% } else { %>
@@ -68,7 +68,6 @@
         <% } %>
     </div>
 
-    
     <jsp:include page="Footer.jsp"/>
 
 </body>
