@@ -382,22 +382,15 @@ public Usuario verificarCredenciales(String username, String password) {
 
 @Override
 public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
-	try {
-        Class.forName("com.mysql.jdbc.Driver");
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    String query = "SELECT * FROM cliente WHERE Activo = 1 AND Sexo = ?";
-    ArrayList<Cliente> lista = new ArrayList<>();
-
+	ArrayList<Cliente> lista = new ArrayList<>();
+    String query = "SELECT * FROM cliente WHERE Activo = 1 AND UPPER(Sexo) = UPPER(?)";
+    
     try (Connection conexion = Conexion.getConexion().getSQLConexion();
          PreparedStatement statement = conexion.prepareStatement(query)) {
-    	
+
         statement.setString(1, sexo);
         ResultSet rs = statement.executeQuery();
 
-        // Procesar los resultados
         while (rs.next()) {
             Cliente cli = new Cliente();
             cli.setId(rs.getInt("Id"));
@@ -420,6 +413,7 @@ public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
         e.printStackTrace();
     }
 
+    System.out.println("Clientes encontrados para el género '" + sexo + "': " + lista.size()); // Depuración
     return lista;
 }
 

@@ -2,6 +2,8 @@
 <%@ page import="daoImp.ClienteDaoImp"%>
 <%@ page import="Entidades.Cliente"%>
 <%@ page import="java.util.ArrayList"%>
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -44,12 +46,22 @@
 	ClienteDaoImp banco = new ClienteDaoImp();
 	ArrayList<Cliente> lista;
 	String sexo = request.getParameter("sexo");
+	System.out.println("Sexo seleccionado: " + sexo);
 	
-	if (sexo == null || sexo.equals("todos")) {
+	if (sexo == null || sexo.trim().isEmpty() ||sexo.equals("todos")) {
+		System.out.println("Obteniendo todos los clientes.");
 	    lista = banco.ListarCliente();
 	} else {
+		System.out.println("Filtrando por género: " + sexo);
 	    lista = banco.filtrarClienteXsexo(sexo);
 	}
+	
+	if (lista == null || lista.isEmpty()) {
+        System.out.println("No se encontraron clientes para el filtro: " + (sexo == null ? "null" : sexo));
+    } else {
+        System.out.println("Cantidad de clientes encontrados: " + lista.size());
+    }
+	
 %>
 
 <table id="clientes_table" class="display">
@@ -107,9 +119,11 @@
     let selectedId = null;
 
     $(document).ready(function() {
-        // Inicializar DataTable una sola vez
-        $('#clientes_table').DataTable();
+        $('#clientes_table').DataTable().destroy(); // Elimina cualquier inicialización previa
+        $('#clientes_table').DataTable();          // Inicializa la tabla de nuevo
     });
+
+
     
     function selectRow(row) {
         if (selectedRow) {
@@ -145,4 +159,7 @@
         var form = document.getElementById('filtroForm');
         form.submit(); // Esto hará que se re-renderice el JSP con el filtro aplicado.
     }
+    
+   
+
 </script>
