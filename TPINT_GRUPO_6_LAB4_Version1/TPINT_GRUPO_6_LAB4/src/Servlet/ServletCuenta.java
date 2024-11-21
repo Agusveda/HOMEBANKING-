@@ -27,7 +27,6 @@ public class ServletCuenta extends HttpServlet {
     	    cuenta.setTipoCuenta(Integer.parseInt(request.getParameter("txtTipoCuenta")));
     	    cuenta.setActivo(true);
 
-    	    //CuentaDaoImpl cuentadao = new CuentaDaoImpl();
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    
     	    boolean insertado = cuentaNegocio.insertCuenta(cuenta);
