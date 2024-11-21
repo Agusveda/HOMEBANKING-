@@ -1,6 +1,8 @@
 package Servlet;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+
 import negocio.ClienteNegocio;
 import negocioImpl.ClienteNegocioImpl;
 
@@ -136,12 +138,7 @@ public class ServletCliente extends HttpServlet {
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
-            if (bandolero.ValidacionDni(cuil)) {
-                request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
-                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
-                return;
-            }
-            if (bandolero.ValidacionDni(cuil)) {
+            if (bandolero.ValidacionCuil(cuil)) {
                 request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
@@ -156,9 +153,12 @@ public class ServletCliente extends HttpServlet {
             boolean insertado = bandao.insertCliente(cli, usu);
             
 
-            String mensaje = insertado ? "Cliente registrado exitosamente." : "Hubo un error al registrar el cliente.";
-            request.setAttribute("mensaje", mensaje);
-            request.getRequestDispatcher("/Administrador.jsp").forward(request, response);
+            if (insertado) {
+                request.setAttribute("mensaje", "Cliente registrado exitosamente.");
+            } else {
+                request.setAttribute("mensajeError", "Hubo un error al registrar el cliente.");
+            }
+            request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
         }
 
         // Validación del login

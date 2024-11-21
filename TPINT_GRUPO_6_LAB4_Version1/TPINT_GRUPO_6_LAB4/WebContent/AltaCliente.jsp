@@ -11,13 +11,19 @@
 
   <div class="form-register">
         <h4>Alta de Cliente</h4>
-
-        <!-- Mensaje de error -->
-        <c:if test="${not empty mensajeError}">
-            <div style="color: red; font-weight: bold;">
-                ${mensajeError}
-            </div>
-        </c:if>
+        
+        <% 
+	    String mensaje = (String) request.getAttribute("mensaje");
+	    String mensajeError = (String) request.getAttribute("mensajeError");
+	    %>
+        
+        <!-- Mensajes de éxito o error -->
+	    <% if (mensaje != null) { %>
+	    <div class="mensaje mensaje-exito"><%= mensaje %></div>
+		<% } %>
+		<% if (mensajeError != null) { %>
+		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
+		<% } %>
 
         <!-- Formulario para registrar cliente -->
         <form method="post" action="ServletBanco">
@@ -111,11 +117,14 @@
                 <input type="hidden" name="action" value="ValidarContraseñas">
 
             </fieldset>
-            <p>
+            
+            <div class="botones-container">
                 <input class="botons" id="btnAceptar" type="submit" value="Aceptar" required name="btnAltaCliente">
-            </p>
+                <input class="botons" type="submit" value="Volver" id="btnVolver" onclick="window.location.href='Administrador.jsp'; return false;">
+            </div>
         </form>
     </div>
+    
 
     <jsp:include page="Footer.jsp"/>
 </body>
