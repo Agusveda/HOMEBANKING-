@@ -1,3 +1,8 @@
+<%@page import="negocioImpl.ClienteNegocioImpl"%>
+<%@page import="negocio.ClienteNegocio"%>
+<%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
+<%@page import="Entidades.Nacionalidades"%>
+<%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -60,9 +65,17 @@
                     <label class="form-label" for="nacionalidad">Nacionalidad</label>
                     <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="cargarProvincias()">
                         <option value="">Seleccione</option>
-                        <option value="1">Argentina</option>
-                        <option value="2">Brasil</option>
-                        <option value="3">Chile</option>
+                        <%
+                        	ClienteNegocioImpl CliNeg = new ClienteNegocioImpl();
+                        	ArrayList<Nacionalidades> listaNac = CliNeg.ListNacionaliadaes(); 
+                    		if (listaNac != null){
+                    			for (Nacionalidades nac : listaNac){
+                    	%>		
+                    			<option value="<%= nac.getId() %>"><%= nac.getNombre() %></option>
+                    	<%
+                    			}
+                    		}
+                        %>
                        
                     </select>
                 </p>

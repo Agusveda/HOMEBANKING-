@@ -3,6 +3,7 @@ package negocioImpl;
 import java.util.ArrayList;
 
 import Entidades.Cliente;
+import Entidades.Nacionalidades;
 import Entidades.Usuario;
 import dao.ClienteDao;
 import daoImp.ClienteDaoImp;
@@ -60,6 +61,11 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	public boolean ValidacionUsuario(String usu) {
 		
 		return clienteDao.ValidacionUsuario(usu);
+	}
+
+	@Override
+	public ArrayList<Nacionalidades> ListNacionaliadaes() {
+		return clienteDao.ListNacionaliadaes();
 	}
 
 }
