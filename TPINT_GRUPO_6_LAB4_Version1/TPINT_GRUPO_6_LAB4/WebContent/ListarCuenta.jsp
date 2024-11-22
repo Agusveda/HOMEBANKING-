@@ -8,11 +8,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Listado de Cuentas</title>
-    <link rel="stylesheet" type="text/css" href="css/Cliente.css">
+   
     <link rel="stylesheet" type="text/css" href="css/ABMCuenta.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">   
 </head>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#table_Cuenta').DataTable();
+    });
+</script>
+    
 <body>
 <jsp:include page="Navbar.jsp"/>
 <div class="encabezado">
@@ -42,6 +50,7 @@
     		}  
 %>
 
+    
 <table id="table_Cuenta" class="display">
     <thead>
         <tr>
@@ -64,8 +73,8 @@
             if (listaCuenta != null && !listaCuenta.isEmpty()) {
                 for (Cuenta cuentaItem : listaCuenta) {  
         %>
-<tr>
-    <form action="ModificarCuenta.jsp" method="get">
+      <tr onclick="selectRow(this)">
+
    		<td><%= cuentaItem.getId() %></td>
         <td><%= cuentaItem.getCliente().getNombre() %></td>
         <td><%= cuentaItem.getCliente().getApellido() %></td>
@@ -77,11 +86,15 @@
         <td>$<%= cuentaItem.getSaldo() %></td>
         <td><%= cuentaItem.isActivo() ? "Sí" : "No" %></td>
         <td>
+            <form action="ModificarCuenta.jsp" method="get">
             <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
             <input type="submit" class="button button-blue" value="Modificar" name="btnModificar"/>
-            <input type="submit" class="button button-red" value="Eliminar" name="btnEliminar"/>
+            </form>
+				<form  method="get">
+ 			<input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
+            <input type="submit" class="button-red" value="Eliminar" name="btnEliminar" style=" background-color: red"/>
+				</form> 
         </td>
-    </form>
     
 </tr>
         <% 
@@ -99,4 +112,8 @@
 
 <jsp:include page="Footer.jsp"/>
 </body>
+    
+
+
+
 </html>
