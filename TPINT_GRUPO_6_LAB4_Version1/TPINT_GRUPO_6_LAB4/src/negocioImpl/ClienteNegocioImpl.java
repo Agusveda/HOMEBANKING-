@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Entidades.Cliente;
 import Entidades.Nacionalidades;
+import Entidades.Provincia;
 import Entidades.Usuario;
 import dao.ClienteDao;
 import daoImp.ClienteDaoImp;
@@ -67,5 +68,12 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	public ArrayList<Nacionalidades> ListNacionaliadaes() {
 		return clienteDao.ListNacionaliadaes();
 	}
+
+	@Override
+	public ArrayList<Provincia> listProvincias() {
+		return clienteDao.listProvincias();
+	}
+	
+	
 
 }

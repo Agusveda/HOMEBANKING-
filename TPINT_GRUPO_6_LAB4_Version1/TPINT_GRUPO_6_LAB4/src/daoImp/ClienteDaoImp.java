@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import Entidades.Cliente;
 import Entidades.Nacionalidades;
+import Entidades.Provincia;
 import Entidades.Usuario;
 import dao.ClienteDao;
 import daoImp.Conexion;
@@ -625,6 +626,51 @@ public ArrayList<Nacionalidades> ListNacionaliadaes() {
     
     
     return ListaPais;
+}
+
+@Override
+public ArrayList<Provincia> listProvincias() {
+	try {
+        Class.forName("com.mysql.jdbc.Driver");
+        System.out.println("Driver cargado exitosamente.");
+    } catch (ClassNotFoundException e) {
+        System.out.println("Error al cargar el driver: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    ArrayList<Provincia> ListaProv = new ArrayList<Provincia>();
+    String query = "SELECT IDProvincia, IdNacionalidad, Provincia FROM provincias";
+    Connection con = Conexion.getConexion().getSQLConexion();
+    
+    if (con == null) {
+        System.out.println("No se pudo obtener la conexión a la base de datos.");
+        return ListaProv;
+    } else {
+        System.out.println("Conexión a la base de datos establecida.");
+    }
+    
+    try (PreparedStatement ps = con.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+        
+        while (rs.next()) {
+            Provincia Pro = new Provincia();
+            
+            Pro.setId(rs.getInt("IDProvincia"));
+            Pro.setIdNacionalidad(rs.getInt("IdNacionalidad"));
+            Pro.setProvincia(rs.getString("Provincia"));
+     
+            ListaProv.add(Pro);
+            
+        }
+        
+        
+    } catch (SQLException e) {
+        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    
+    return ListaProv;
 }
 }
 

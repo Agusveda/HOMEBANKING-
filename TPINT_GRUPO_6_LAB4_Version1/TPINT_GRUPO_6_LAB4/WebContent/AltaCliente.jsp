@@ -1,3 +1,4 @@
+<%@page import="Entidades.Provincia"%>
 <%@page import="negocioImpl.ClienteNegocioImpl"%>
 <%@page import="negocio.ClienteNegocio"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
@@ -63,15 +64,20 @@
                 </p>
                 <p>
                     <label class="form-label" for="nacionalidad">Nacionalidad</label>
-                    <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="cargarProvincias()">
+                    <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
                         <option value="">Seleccione</option>
                         <%
                         	ClienteNegocioImpl CliNeg = new ClienteNegocioImpl();
+                    		
                         	ArrayList<Nacionalidades> listaNac = CliNeg.ListNacionaliadaes(); 
+                    		
+                    		String NacionalidadSeleccionada = request.getParameter("txtNacionalidad");
+                    		
                     		if (listaNac != null){
                     			for (Nacionalidades nac : listaNac){
+                    				boolean seleccionado = NacionalidadSeleccionada != null && NacionalidadSeleccionada.equals(String.valueOf(nac.getId()));
                     	%>		
-                    			<option value="<%= nac.getId() %>"><%= nac.getNombre() %></option>
+                    			<option value="<%= nac.getId() %>" <%= seleccionado ? "selected" : "" %>><%= nac.getNombre() %></option>
                     	<%
                     			}
                     		}
@@ -80,10 +86,25 @@
                     </select>
                 </p>
                
-                <p>
-                    <label class="form-label" for="provincia">Provincia</label>
-                    <input class="controls" id="provincia" type="text" placeholder="Ingrese la provincia" required name="txtProvincia">
-                </p>
+                <label class="form-label" for="provincia">Provincia</label>
+				<select class="controls" id="provincia" required name="txtProvincia">
+				    <option value="">Seleccione</option>
+				    <%
+				        ClienteNegocioImpl CliNe = new ClienteNegocioImpl();
+				        ArrayList<Provincia> listaPro = CliNe.listProvincias(); 
+				        if (listaPro != null) {
+				            for (Provincia Pro : listaPro) {
+				    %>		
+				        <option value="<%= Pro.getId() %>">
+				            <%= Pro.getProvincia() %> (Nacionalidad ID: <%= Pro.getIdNacionalidad() %>)
+				        </option>
+				    <%
+				            }
+				        }
+				    %>
+				</select>
+
+
                 <p>
                     <label class="form-label" for="localidad">Localidad</label>
                     <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" required name="txtLocalidad" onchange="cargarLocalidades()" >

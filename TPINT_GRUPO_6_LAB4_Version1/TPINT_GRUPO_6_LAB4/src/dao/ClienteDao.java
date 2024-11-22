@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Entidades.Cliente;
 import Entidades.Nacionalidades;
+import Entidades.Provincia;
 import Entidades.Usuario;
 
 public interface ClienteDao  {
@@ -18,4 +19,5 @@ public interface ClienteDao  {
 	public Usuario verificarCredenciales(String username, String password);
 	public boolean ValidacionUsuario (String usu);
 	public ArrayList<Nacionalidades> ListNacionaliadaes ();
+	public ArrayList<Provincia> listProvincias ();
 }
