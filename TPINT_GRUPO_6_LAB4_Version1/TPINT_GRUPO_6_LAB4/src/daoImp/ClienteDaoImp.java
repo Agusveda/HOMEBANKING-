@@ -356,11 +356,16 @@ public Usuario verificarCredenciales(String username, String password) {
     Usuario usuario = null;
     String query = "SELECT * FROM usuario WHERE NombreUsuario = ? AND Contraseña = ?";
 
-    try (Connection conn = Conexion.getConexion().getSQLConexion();
-            PreparedStatement stmt = conn.prepareStatement(query)){
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    ResultSet rs = null;
+
+    try {
+        conn = Conexion.getConexion().getSQLConexion(); // Mantener la conexión abierta
+        stmt = conn.prepareStatement(query);
         stmt.setString(1, username);
         stmt.setString(2, password);
-        ResultSet rs = stmt.executeQuery();
+        rs = stmt.executeQuery();
 
         if (rs.next()) {
             usuario = new Usuario();
@@ -370,26 +375,44 @@ public Usuario verificarCredenciales(String username, String password) {
             try {
                 usuario.setTipoUsuario(rs.getInt("TipoUsario"));
             } catch (SQLException e) {
-                
+                // Manejo de error al obtener tipoUsuario
             }
         }
     } catch (SQLException e) {
-        e.printStackTrace(); 
+        e.printStackTrace(); // Mostrar detalles del error
+    } finally {
+        // Cerrar solo el ResultSet y PreparedStatement, no la conexión
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (stmt != null) {
+                stmt.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
+    // No cerramos la conexión aquí, para que pueda ser reutilizada si es necesario
     return usuario;
 }
 
 @Override
 public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
-	ArrayList<Cliente> lista = new ArrayList<>();
+    ArrayList<Cliente> lista = new ArrayList<>();
     String query = "SELECT * FROM cliente WHERE Activo = 1 AND UPPER(Sexo) = UPPER(?)";
     
-    try (Connection conexion = Conexion.getConexion().getSQLConexion();
-         PreparedStatement statement = conexion.prepareStatement(query)) {
+   
+    Connection conexion = null;
+    PreparedStatement statement = null;
+    ResultSet rs = null;
 
+    try {
+        conexion = Conexion.getConexion().getSQLConexion(); 
+        statement = conexion.prepareStatement(query);
         statement.setString(1, sexo);
-        ResultSet rs = statement.executeQuery();
+        rs = statement.executeQuery();
 
         while (rs.next()) {
             Cliente cli = new Cliente();
@@ -409,11 +432,26 @@ public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
             cli.setActivo(rs.getBoolean("Activo"));
             lista.add(cli);
         }
+
+        System.out.println("Clientes encontrados para el género '" + sexo + "': " + lista.size());
     } catch (SQLException e) {
+        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         e.printStackTrace();
+    } finally {
+        // Cerrar solo el Statement y ResultSet, no la conexión
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    System.out.println("Clientes encontrados para el género '" + sexo + "': " + lista.size()); // Depuración
+    // No se cierra la conexión aquí
     return lista;
 }
 

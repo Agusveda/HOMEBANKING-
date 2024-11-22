@@ -26,6 +26,7 @@ public class ServletCliente extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String action = request.getParameter("btnPrestamos");
+        
         String idClienteParam = request.getParameter("idCliente");
 
       

@@ -58,14 +58,22 @@
                 </p>
                 <p>
                     <label class="form-label" for="nacionalidad">Nacionalidad</label>
-                    <select class="controls" id="nacionalidad" required name="txtNacionalidad">
+                    <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="cargarProvincias()">
                         <option value="">Seleccione</option>
                         <option value="1">Argentina</option>
                         <option value="2">Brasil</option>
                         <option value="3">Chile</option>
-                        <option value="4">Uruguay</option>
-                        <option value="5">Paraguay</option>
+                       
                     </select>
+                </p>
+               
+                <p>
+                    <label class="form-label" for="provincia">Provincia</label>
+                    <input class="controls" id="provincia" type="text" placeholder="Ingrese la provincia" required name="txtProvincia">
+                </p>
+                <p>
+                    <label class="form-label" for="localidad">Localidad</label>
+                    <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" required name="txtLocalidad" onchange="cargarLocalidades()" >
                 </p>
                 <p>
                     <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
@@ -74,14 +82,6 @@
                 <p>
                     <label class="form-label" for="direccion">Dirección</label>
                     <input class="controls" id="direccion" type="text" placeholder="Ingrese la dirección" required name="txtDireccion">
-                </p>
-                <p>
-                    <label class="form-label" for="localidad">Localidad</label>
-                    <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" required name="txtLocalidad">
-                </p>
-                <p>
-                    <label class="form-label" for="provincia">Provincia</label>
-                    <input class="controls" id="provincia" type="text" placeholder="Ingrese la provincia" required name="txtProvincia">
                 </p>
                 <p>
                     <label class="form-label" for="email">Correo Electrónico</label>
