@@ -3,6 +3,7 @@ package dao;
 import java.util.ArrayList;
 
 import Entidades.Cliente;
+import Entidades.Nacionalidades;
 import Entidades.Usuario;
 
 public interface ClienteDao  {
@@ -16,4 +17,5 @@ public interface ClienteDao  {
 	public boolean ValidacionCuil (int cuil);
 	public Usuario verificarCredenciales(String username, String password);
 	public boolean ValidacionUsuario (String usu);
+	public ArrayList<Nacionalidades> ListNacionaliadaes ();
 }

@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import Entidades.Cliente;
+import Entidades.Nacionalidades;
 import Entidades.Usuario;
 import dao.ClienteDao;
 import daoImp.Conexion;
@@ -580,6 +581,50 @@ public boolean ValidacionUsuario(String usu) {
     }
 
     return exists;
+}
+
+@Override
+public ArrayList<Nacionalidades> ListNacionaliadaes() {
+	
+	try {
+        Class.forName("com.mysql.jdbc.Driver");
+        System.out.println("Driver cargado exitosamente.");
+    } catch (ClassNotFoundException e) {
+        System.out.println("Error al cargar el driver: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    ArrayList<Nacionalidades> ListaPais = new ArrayList<Nacionalidades>();
+    String query = "SELECT IdNacionalidad, Pais FROM Nacionalidades";
+    Connection con = Conexion.getConexion().getSQLConexion();
+    
+    if (con == null) {
+        System.out.println("No se pudo obtener la conexión a la base de datos.");
+        return ListaPais;
+    } else {
+        System.out.println("Conexión a la base de datos establecida.");
+    }
+    
+    try (PreparedStatement ps = con.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+        
+        while (rs.next()) {
+            Nacionalidades nac = new Nacionalidades();
+            nac.setId(rs.getInt("IdNacionalidad"));
+            nac.setNombre(rs.getString("Pais"));
+     
+            ListaPais.add(nac);
+            
+        }
+        
+        
+    } catch (SQLException e) {
+        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    
+    return ListaPais;
 }
 }
 
