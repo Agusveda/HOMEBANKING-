@@ -3,6 +3,8 @@
 <%@page import="negocio.ClienteNegocio"%>
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="Entidades.Nacionalidades"%>
+<%@page import="Entidades.Localidad"%>
+
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -62,53 +64,85 @@
                         <option value="Otro">Otro</option>
                     </select>
                 </p>
-                <p>
-                    <label class="form-label" for="nacionalidad">Nacionalidad</label>
-                    <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
-                        <option value="">Seleccione</option>
-                        <%
-                        	ClienteNegocioImpl CliNeg = new ClienteNegocioImpl();
-                    		
-                        	ArrayList<Nacionalidades> listaNac = CliNeg.ListNacionaliadaes(); 
-                    		
-                    		String NacionalidadSeleccionada = request.getParameter("txtNacionalidad");
-                    		
-                    		if (listaNac != null){
-                    			for (Nacionalidades nac : listaNac){
-                    				boolean seleccionado = NacionalidadSeleccionada != null && NacionalidadSeleccionada.equals(String.valueOf(nac.getId()));
-                    	%>		
-                    			<option value="<%= nac.getId() %>" <%= seleccionado ? "selected" : "" %>><%= nac.getNombre() %></option>
-                    	<%
-                    			}
-                    		}
-                        %>
-                       
-                    </select>
-                </p>
+    <p>
+  <label class="form-label" for="nacionalidad">Nacionalidad</label>
+
+ 
+    
+        <input type="hidden" name="action" value="ActualizarNacionalidad">
+        
+        <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
+            <option value="">Seleccione</option>
+            <%
+                ClienteNegocioImpl CliNego = new ClienteNegocioImpl();
+                ArrayList<Nacionalidades> listaNac = CliNego.ListNacionaliadaes(); 
+                String NacionalidadSeleccionada = request.getParameter("txtNacionalidad");
+
+                if (listaNac != null) {
+                    for (Nacionalidades nac : listaNac) {
+                        boolean seleccionado = NacionalidadSeleccionada != null && NacionalidadSeleccionada.equals(String.valueOf(nac.getId()));
+            %>
+                        <option value="<%= nac.getId() %>" <%= seleccionado ? "selected" : "" %>><%= nac.getNombre() %></option>
+            <%
+                    }
+                }
+            %>
+        </select>
+ 
+</p>
+</p>
                
-                <label class="form-label" for="provincia">Provincia</label>
-				<select class="controls" id="provincia" required name="txtProvincia">
-				    <option value="">Seleccione</option>
-				    <%
-				        ClienteNegocioImpl CliNe = new ClienteNegocioImpl();
-				        ArrayList<Provincia> listaPro = CliNe.listProvincias(); 
-				        if (listaPro != null) {
-				            for (Provincia Pro : listaPro) {
-				    %>		
-				        <option value="<%= Pro.getId() %>">
-				            <%= Pro.getProvincia() %> (Nacionalidad ID: <%= Pro.getIdNacionalidad() %>)
-				        </option>
-				    <%
-				            }
-				        }
-				    %>
-				</select>
+<label class="form-label" for="provincia">Provincia</label>
+<input type="hidden" name="action" value="ActualizarProvincia">
+<select class="controls" id="provincia" name="txtProvincia" onchange="this.form.submit()">
+    <option value="">Seleccione</option>
+    <%
+        ClienteNegocioImpl CliNeg = new ClienteNegocioImpl();
+        String idNacionalidadSeleccionada = request.getParameter("txtNacionalidad");
+		String provinciaSeleccionada = request.getParameter("txtProvincia");
+		request.setAttribute("provinciaSeleccionada", provinciaSeleccionada);
 
+        if (idNacionalidadSeleccionada != null && !idNacionalidadSeleccionada.isEmpty()) {
+            int idNacionalidad = Integer.parseInt(idNacionalidadSeleccionada);
+            ArrayList<Provincia> listaPro = CliNeg.listProvincias(idNacionalidad);
 
-                <p>
-                    <label class="form-label" for="localidad">Localidad</label>
-                    <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" required name="txtLocalidad" onchange="cargarLocalidades()" >
-                </p>
+            if (listaPro != null) {
+                for (Provincia pro : listaPro) {
+                    boolean seleccionada = provinciaSeleccionada != null && provinciaSeleccionada.equals(String.valueOf(pro.getId()));
+    %>        
+                    <option value="<%= pro.getId() %>" <%= seleccionada ? "selected" : "" %>><%= pro.getProvincia() %></option>
+    <%
+                }
+            }
+        }
+    %>
+</select>
+
+<label class="form-label" for="localidad">Localidad</label>
+<select class="controls" id="localidad" required name="txtLocalidad">
+    <option value="">Seleccione</option>
+    <%
+    ClienteNegocioImpl CliNegoc = new ClienteNegocioImpl();
+
+    String idProvinciaSeleccionada = request.getParameter("txtProvincia");
+    String localidadSeleccionada = (String) request.getAttribute("localidadSeleccionada");
+
+    if (idProvinciaSeleccionada != null && !idProvinciaSeleccionada.isEmpty()) {
+        int idProvincia = Integer.parseInt(idProvinciaSeleccionada);
+        ArrayList<Localidad> listaLoc = CliNegoc.listLocalidades(idProvincia);
+
+        if (listaLoc != null) {
+            for (Localidad loc : listaLoc) {
+                // Verificar si esta localidad es la seleccionada
+                boolean seleccionada = localidadSeleccionada != null && localidadSeleccionada.equals(String.valueOf(loc.getIdLocalidad()));
+    %>        
+                <option value="<%= loc.getIdLocalidad() %>" <%= seleccionada ? "selected" : "" %>><%= loc.getLocalidad() %></option>
+    <%
+            }
+        }
+    }
+    %>
+</select>
                 <p>
                     <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
                     <input class="controls" id="fechaNacimiento" type="date" required name="txtFechaNacimiento">

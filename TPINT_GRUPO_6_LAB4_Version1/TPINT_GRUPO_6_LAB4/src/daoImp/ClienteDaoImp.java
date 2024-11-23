@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import Entidades.Cliente;
+import Entidades.Localidad;
 import Entidades.Nacionalidades;
 import Entidades.Provincia;
 import Entidades.Usuario;
@@ -629,49 +630,76 @@ public ArrayList<Nacionalidades> ListNacionaliadaes() {
 }
 
 @Override
-public ArrayList<Provincia> listProvincias() {
-	try {
-        Class.forName("com.mysql.jdbc.Driver");
-        System.out.println("Driver cargado exitosamente.");
-    } catch (ClassNotFoundException e) {
-        System.out.println("Error al cargar el driver: " + e.getMessage());
-        e.printStackTrace();
-    }
-    
-    ArrayList<Provincia> ListaProv = new ArrayList<Provincia>();
-    String query = "SELECT IDProvincia, IdNacionalidad, Provincia FROM provincias";
+public ArrayList<Provincia> listProvincias(int idNacionalidad) {
+	  ArrayList<Provincia> ListaProv = new ArrayList<Provincia>();
+	    String query = "SELECT IDProvincia, IdNacionalidad, Provincia FROM provincias WHERE IdNacionalidad = ?";
+	    Connection con = Conexion.getConexion().getSQLConexion();
+
+	    if (con == null) {
+	        System.out.println("No se pudo obtener la conexión a la base de datos.");
+	        return ListaProv;
+	    } else {
+	        System.out.println("Conexión a la base de datos establecida.");
+	    }
+
+	    try (PreparedStatement ps = con.prepareStatement(query)) {
+	        // Filtrar por nacionalidad
+	        ps.setInt(1, idNacionalidad);
+
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                Provincia pro = new Provincia();
+	                pro.setId(rs.getInt("IDProvincia"));
+	                pro.setIdNacionalidad(rs.getInt("IdNacionalidad"));
+	                pro.setProvincia(rs.getString("Provincia"));
+	                ListaProv.add(pro);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+
+	    return ListaProv;
+	}
+
+	
+public ArrayList<Localidad> listLocalidades(int idProvincia) {
+    ArrayList<Localidad> listaLoc = new ArrayList<Localidad>();
+    String query = "SELECT IDLocalidad, IdProvincia, Localiadad FROM localidades WHERE IdProvincia = ?";
     Connection con = Conexion.getConexion().getSQLConexion();
-    
+
     if (con == null) {
         System.out.println("No se pudo obtener la conexión a la base de datos.");
-        return ListaProv;
+        return listaLoc;
     } else {
         System.out.println("Conexión a la base de datos establecida.");
     }
-    
-    try (PreparedStatement ps = con.prepareStatement(query);
-         ResultSet rs = ps.executeQuery()) {
-        
-        while (rs.next()) {
-            Provincia Pro = new Provincia();
-            
-            Pro.setId(rs.getInt("IDProvincia"));
-            Pro.setIdNacionalidad(rs.getInt("IdNacionalidad"));
-            Pro.setProvincia(rs.getString("Provincia"));
-     
-            ListaProv.add(Pro);
-            
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+        // Filtrar por provincia
+        ps.setInt(1, idProvincia);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+            	Localidad localidad = new Localidad();
+                localidad.setIdLocalidad(rs.getInt("idLocalidad"));
+                localidad.setLocalidad(rs.getString("Localiadad"));
+                localidad.setIdProvincia(rs.getInt("IDProvincia"));
+                listaLoc.add(localidad);
+            }
         }
-        
-        
     } catch (SQLException e) {
         System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         e.printStackTrace();
     }
-    
-    
-    return ListaProv;
+
+    return listaLoc;
 }
+
+
+
+
 }
 
 

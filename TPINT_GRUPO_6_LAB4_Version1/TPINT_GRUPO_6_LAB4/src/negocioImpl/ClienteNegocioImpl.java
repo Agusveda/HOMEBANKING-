@@ -3,6 +3,7 @@ package negocioImpl;
 import java.util.ArrayList;
 
 import Entidades.Cliente;
+import Entidades.Localidad;
 import Entidades.Nacionalidades;
 import Entidades.Provincia;
 import Entidades.Usuario;
@@ -70,10 +71,15 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
-	public ArrayList<Provincia> listProvincias() {
-		return clienteDao.listProvincias();
+	public ArrayList<Provincia> listProvincias(int idNacionalidad) {
+		return clienteDao.listProvincias(idNacionalidad);
 	}
 	
-	
+	@Override
+	public ArrayList<Localidad> listLocalidades(int idProvincias) {
+		return clienteDao.listLocalidades(idProvincias);
+	}
+
+
 
 }

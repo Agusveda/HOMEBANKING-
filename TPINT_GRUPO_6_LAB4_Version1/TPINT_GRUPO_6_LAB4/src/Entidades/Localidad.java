@@ -1,29 +1,44 @@
 package Entidades;
 
 public class Localidad {
-    private int id;
-    private String nombre;
+    private int idLocalidad;
+    private String localidad;
+    private int idProvincia;
 
-    // Constructor
-    public Localidad(int id, String nombre) {
-        this.id = id;
-        this.nombre = nombre;
+    
+    public Localidad(int idLocalidad, String localidad, int idProvincia) {
+        this.idLocalidad = idLocalidad;
+        this.localidad = localidad;
+        this.idProvincia = idProvincia;
     }
 
-    // Getters y Setters
-    public int getId() {
-        return id;
+   
+    public Localidad() {
+     
     }
 
-    public void setId(int id) {
-        this.id = id;
+
+    public int getIdLocalidad() {
+        return idLocalidad;
     }
 
-    public String getNombre() {
-        return nombre;
+    public void setIdLocalidad(int idLocalidad) {
+        this.idLocalidad = idLocalidad;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public String getLocalidad() {
+        return localidad;
+    }
+
+    public void setLocalidad(String localidad) {
+        this.localidad = localidad;
+    }
+
+    public int getIdProvincia() {
+        return idProvincia;
+    }
+
+    public void setIdProvincia(int idProvincia) {
+        this.idProvincia = idProvincia;
     }
 }

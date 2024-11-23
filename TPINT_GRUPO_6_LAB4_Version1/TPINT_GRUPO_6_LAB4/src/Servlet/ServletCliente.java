@@ -61,7 +61,34 @@ public class ServletCliente extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Modificar de Cliente
+        
+    	
+    	 String action = request.getParameter("action");
+
+ 	    // Manejo de la acción "ActualizarNacionalidad"
+ 	    if ("ActualizarNacionalidad".equals(action)) {
+ 	        String nacionalidadSeleccionada = request.getParameter("txtNacionalidad");
+
+ 	        // Opcional: Si necesitas hacer algo con la nacionalidad seleccionada (como guardarla en sesión)
+ 	        request.setAttribute("nacionalidadSeleccionada", nacionalidadSeleccionada);
+
+ 	        // Redirigir de vuelta al formulario de alta de cliente
+ 	        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+ 	        return;
+ 	    }
+ 	    
+ 	    if ("ActualizarProvincia".equals(action)) {
+ 	        String provinciaSeleccionada = request.getParameter("txtProvincia");
+
+ 	        // Guardar el valor seleccionado en los atributos de la solicitud
+ 	        request.setAttribute("provinciaSeleccionada", provinciaSeleccionada);
+
+ 	        // Redirigir de vuelta al formulario
+ 	        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+ 	        return;
+ 	    }
+    	
+    	// Modificar de Cliente
         if (request.getParameter("btnModificarCliente") != null) {
             Cliente cli = new Cliente();
             Usuario usu = new Usuario();

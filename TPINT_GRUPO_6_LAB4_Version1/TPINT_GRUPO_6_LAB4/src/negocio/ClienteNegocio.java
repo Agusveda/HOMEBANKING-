@@ -3,6 +3,7 @@ package negocio;
 import java.util.ArrayList;
 
 import Entidades.Cliente;
+import Entidades.Localidad;
 import Entidades.Nacionalidades;
 import Entidades.Provincia;
 import Entidades.Usuario;
@@ -19,5 +20,7 @@ public interface ClienteNegocio {
 	public Usuario verificarCredenciales(String username, String password);
 	public boolean ValidacionUsuario (String usu);
 	public ArrayList<Nacionalidades> ListNacionaliadaes ();
-	public ArrayList<Provincia> listProvincias ();;
+	public ArrayList<Provincia> listProvincias (int idNacionalidad);
+	public ArrayList<Localidad> listLocalidades (int idProvincias);
+
 }
