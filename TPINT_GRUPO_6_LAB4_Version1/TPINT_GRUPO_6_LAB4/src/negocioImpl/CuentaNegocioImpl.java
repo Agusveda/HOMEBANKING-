@@ -16,6 +16,7 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		return cuentaDao.insertCuenta(cuenta);
 	}
 
+	
 	@Override
 	public boolean EliminarCuenta(int id) {
 		return cuentaDao.EliminarCuenta(id);
@@ -24,6 +25,11 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	@Override
 	public ArrayList<Cuenta> ListarCuenta(int DNI) {
 		return (ArrayList<Cuenta>)cuentaDao.ListarCuenta(DNI);
+	}
+
+	@Override
+	public ArrayList<Cuenta> ListarCuenta() {
+		return (ArrayList<Cuenta>)cuentaDao.ListarCuenta();
 	}
 
 	@Override

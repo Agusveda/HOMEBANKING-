@@ -44,6 +44,8 @@
  
     		if ((ArrayList<Cuenta>)request.getAttribute("listaCuentaFiltrada") != null){  			
     			listaCuenta =(ArrayList<Cuenta>)request.getAttribute("listaCuentaFiltrada");
+    		}if ((ArrayList<Cuenta>)request.getAttribute("listaCuenta") != null){  			
+    			listaCuenta =(ArrayList<Cuenta>)request.getAttribute("listaCuenta");
     		}
     		else {
     			listaCuenta = cuenta.ListarCuenta();    
@@ -90,10 +92,11 @@
             <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
             <input type="submit" class="button button-blue" value="Modificar" name="btnModificar"/>
             </form>
-				<form  method="get">
- 			<input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
-            <input type="submit" class="button-red" value="Eliminar" name="btnEliminar" style=" background-color: red"/>
-				</form> 
+				<form action="ServletCuenta" method="post">
+    <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
+    <button type="submit" name="btnEliminar" style="background-color: red; color: white;">Eliminar</button>
+</form>
+
         </td>
     
 </tr>

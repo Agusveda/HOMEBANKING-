@@ -52,21 +52,26 @@ public class ServletCuenta extends HttpServlet {
     	    rd.forward(request, response);
     	    return; // Detener ejecución aquí
     	}
-
     	if (request.getParameter("btnEliminar") != null) {
+    		 CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    int id = Integer.parseInt(request.getParameter("idCuenta"));
-    	    
-    	   // CuentaDaoImpl cuentadao = new CuentaDaoImpl();
-    	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    boolean eliminada = cuentaNegocio.EliminarCuenta(id);
-    	    
-    	    String mensaje = eliminada ? "Cuenta eliminada exitosamente." : "Hubo un error al eliminar la cuenta.";
-    	    request.setAttribute("mensaje", mensaje);
-    	    
+
+    	    if (eliminada) {
+    	        System.out.println("Cuenta eliminada exitosamente.");
+    	    } else {
+    	        System.out.println("Error al eliminar la cuenta.");
+    	    }
+
+    	    ArrayList<Cuenta> lista = cuentaNegocio.ListarCuenta();
+    	    System.out.println("Lista de cuentas después de eliminar: " + lista.size());
+    	    request.setAttribute("listaCuenta", lista);
+
     	    RequestDispatcher rd = request.getRequestDispatcher("/ListarCuenta.jsp");
     	    rd.forward(request, response);
-    	    return; // Detener ejecución aquí
+    	    return;
     	}
+
 
     	if (request.getParameter("btnModificarCuenta") != null) {
     	    int idCuenta = Integer.parseInt(request.getParameter("txtIdCuenta"));
