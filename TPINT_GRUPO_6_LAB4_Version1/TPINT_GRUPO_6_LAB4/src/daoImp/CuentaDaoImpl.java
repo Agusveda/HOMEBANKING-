@@ -212,27 +212,11 @@ public class CuentaDaoImpl implements CuentaDao {
             PreparedStatement st = conexion.prepareStatement(query);
             st.setInt(1, id);
 
-            if (st.executeUpdate() > 0) {
-                conexion.commit();
-                exitoso = true;
-            }
         } catch (SQLException e) {
             e.printStackTrace();
-            try {
-                if (conexion != null && !conexion.isClosed()) {
-                    conexion.rollback();
-                }
-            } catch (SQLException rollbackEx) {
-                rollbackEx.printStackTrace();
-            }
+           
         } finally {
-            try {
-                if (conexion != null && !conexion.isClosed()) {
-                    conexion.close();
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+           
         }
         return exitoso;
     }
