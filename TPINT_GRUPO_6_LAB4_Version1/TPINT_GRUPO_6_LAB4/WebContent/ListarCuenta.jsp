@@ -94,7 +94,7 @@
             </form>
 				<form action="ServletCuenta" method="post">
     <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
-    <button type="submit" name="btnEliminar" style="background-color: red; color: white;">Eliminar</button>
+    <input type="submit" name="btnEliminar" value="Eliminar" style="background-color: red;"/>
 </form>
 
         </td>

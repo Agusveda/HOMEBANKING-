@@ -198,28 +198,71 @@ public class CuentaDaoImpl implements CuentaDao {
     }    
  
     public boolean EliminarCuenta(int id) {
-        boolean exitoso = false;
-        Connection conexion = Conexion.getConexion().getSQLConexion();
-        String query = EliminarCuenta;
-        
-        try {
-            if (conexion == null || conexion.isClosed()) {
-                throw new SQLException("La conexión está cerrada.");
-            }
+    	Connection conexion = null;
+    PreparedStatement stmt = null;
+    boolean success = false;
 
-            conexion.setAutoCommit(false);
+    try {
+      
+        System.out.println("Intentando conectar a la base de datos...");
+        conexion = Conexion.getConexion().getSQLConexion();
 
-            PreparedStatement st = conexion.prepareStatement(query);
-            st.setInt(1, id);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-           
-        } finally {
-           
+   
+        if (conexion != null) {
+            System.out.println("Conexión a la base de datos establecida.");
+        } else {
+            System.out.println("Error al conectar con la base de datos.");
+            return false;
         }
-        return exitoso;
+
+     
+        conexion.setAutoCommit(false);
+
+      
+        String query = EliminarCuenta;
+        stmt = conexion.prepareStatement(query);
+        stmt.setInt(1, id);
+
+        System.out.println("Ejecutando actualización para eliminar cuenta con ID: " + id);
+        int rowsAffected = stmt.executeUpdate();
+
+   
+ 
+        if (rowsAffected > 0) {
+            success = true;
+            System.out.println("cuenta eliminada exitosamente. Filas afectadas: " + rowsAffected);
+            conexion.commit(); 
+        } else {
+            System.out.println("No se encontró ningún cliente con ID: " + id);
+            conexion.rollback(); 
+        }
+
+    } catch (SQLException e) {
+        System.out.println("Error de SQL al intentar eliminar el cliente.");
+        e.printStackTrace();
+        try {
+            if (conexion != null) {
+                conexion.rollback(); 
+            }
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    } finally {
+        
+        if (stmt != null) {
+            try {
+                stmt.close();
+                System.out.println("PreparedStatement cerrado.");
+            } catch (SQLException e) {
+                System.out.println("Error al cerrar PreparedStatement.");
+                e.printStackTrace();
+            }
+        }
+       
     }
+    
+    return success;
+}
 
     public boolean modificarCuenta(Cuenta cuenta) {
         boolean exitoso = false;
