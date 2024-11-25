@@ -713,7 +713,7 @@ public boolean existeEmail(String Mail) {
         }
 
         
-        String query = "SELECT COUNT(*) FROM cliente WHERE email = ?";
+        String query = "SELECT COUNT(*) FROM cliente WHERE CorreoElectronico = ?";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, Mail);
 
@@ -742,33 +742,60 @@ public boolean existeEmail(String Mail) {
 
 @Override
 public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena) {
-			String query = "UPDATE usuario u "
-		            + "INNER JOIN cliente c ON u.IdCliente = c.Id "
-		            + "SET u.Contraseña = ? "
-		            + "WHERE c.CorreoElectronico = ?";
-		
-		try (Connection con = Conexion.getConexion().getSQLConexion();
-		    PreparedStatement ps = con.prepareStatement(query)) {
-		   
-		   ps.setString(1, nuevaContrasena);
-		   ps.setString(2, email);
-		   
-		   int rowsAffected = ps.executeUpdate();  // Verifica cuántas filas se vieron afectadas
-		   
-		   // Si se afectaron filas, la actualización fue exitosa
-		   if (rowsAffected > 0) {
-		       return true;
-		   } else {
-		       System.out.println("No se encontró un cliente con ese correo electrónico.");
-		       return false;
-		   }
-		} catch (SQLException e) {
-		   e.printStackTrace();
-		   return false;  // En caso de error, retorna false
-		}
-			
-		}
+	Connection cn = null;
+    PreparedStatement ps = null;
 
+    try {
+        // Obtener la conexión
+        cn = Conexion.getConexion().getSQLConexion();
+        if (cn == null) {
+            System.out.println("No se pudo obtener la conexión a la base de datos.");
+            return false;
+        }
+
+        // Consulta para actualizar la contraseña
+        String query = "UPDATE usuario u "
+                     + "INNER JOIN cliente c ON u.IdCliente = c.Id "
+                     + "SET u.Contraseña = ? "
+                     + "WHERE c.CorreoElectronico = ?";
+        
+        // Preparar la consulta
+        ps = cn.prepareStatement(query);
+        ps.setString(1, nuevaContrasena); // Nueva contraseña
+        ps.setString(2, email);          // Correo electrónico
+
+        // Ejecutar la consulta
+        int rowsAffected = ps.executeUpdate();
+        
+        if (rowsAffected > 0) {
+            System.out.println("Actualización exitosa de la contraseña para el correo: " + email);
+            cn.commit(); // Confirmar la transacción
+            return true;
+        } else {
+            System.out.println("No se encontró un cliente con el correo: " + email);
+            return false;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+        if (cn != null) {
+            try {
+                cn.rollback(); // Revertir la transacción en caso de error
+            } catch (SQLException rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        }
+        return false;
+    } finally {
+        // Cerrar los recursos
+        try {
+            if (ps != null) ps.close();
+            if (cn != null) cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+}
 }
 
 
