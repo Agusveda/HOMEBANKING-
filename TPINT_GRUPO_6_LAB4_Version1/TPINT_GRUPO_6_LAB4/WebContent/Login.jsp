@@ -45,7 +45,7 @@
             </button>
         </div>
         <br>
-       	<a href="RecuperarContraseña.jsp" class="password-link" > Olvide mi contraseña</a>
+       	<a href="RecuperarContrasenia.jsp" class="password-link" > Olvide mi contraseña</a>
 
         <input type="submit" class="btnSec" value="Iniciar sesión">
       </fieldset>
