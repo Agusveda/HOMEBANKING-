@@ -10,10 +10,11 @@ public interface CuentaDao {
 	public boolean insertCuenta(Cuenta cuenta);
 	public boolean EliminarCuenta(int id);
 	public ArrayList<Cuenta> ListarCuenta(int DNI);
-	 public ArrayList<Cuenta> ListarCuenta();
+	public ArrayList<Cuenta> ListarCuenta();
 	public int GenerarNumeroCuenta() ;
 	public int GenerarCBU();
 	public boolean modificarCuenta(Cuenta cuenta);
 	public Cuenta obtenerCuentaPorId(int id);
+	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 }
 

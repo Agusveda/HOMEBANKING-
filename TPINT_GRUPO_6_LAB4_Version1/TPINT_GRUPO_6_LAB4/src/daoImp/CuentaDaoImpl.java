@@ -349,4 +349,67 @@ public class CuentaDaoImpl implements CuentaDao {
 
         return cuenta;
     }
+    
+    
+    
+  
+    public ArrayList<Cuenta> filtrarCuentaXTipoCuenta(int tipoCuenta) {
+        ArrayList<Cuenta> listaCuentas = new ArrayList<>();
+        String query = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, " +
+                       "cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, " +
+                       "cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo " +
+                       "FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id " +
+                       "WHERE cuenta.TipoCuenta = ?";
+        
+        Connection conexion = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+
+        try {
+            conexion = Conexion.getConexion().getSQLConexion(); 
+            statement = conexion.prepareStatement(query);
+            statement.setInt(1, tipoCuenta);
+            rs = statement.executeQuery();
+
+            while (rs.next()) {
+                Cliente cli = new Cliente();
+                Cuenta cue = new Cuenta();
+
+                // Mapear datos de la tabla cliente
+                cli.setNombre(rs.getString("Nombre"));
+                cli.setApellido(rs.getString("Apellido"));
+
+                // Mapear datos de la tabla cuenta
+                cue.setId(rs.getInt("ID"));
+                cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+                cue.setFechaCreacion(rs.getString("FechaCreacion"));
+                cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+                cue.setCbu(rs.getInt("CBU"));
+                cue.setSaldo(rs.getFloat("Saldo"));
+                cue.setActivo(rs.getBoolean("Activo"));
+                cue.setCliente(cli); // Asociar cliente a la cuenta
+
+                listaCuentas.add(cue);
+            }
+
+            System.out.println("Cuentas encontradas para el tipo de cuenta " + tipoCuenta + ": " + listaCuentas.size());
+        } catch (SQLException e) {
+            System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            // Cerrar ResultSet y PreparedStatement
+            try {
+                if (rs != null) rs.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return listaCuentas;
+    }
+
+    
+    
+    
 }

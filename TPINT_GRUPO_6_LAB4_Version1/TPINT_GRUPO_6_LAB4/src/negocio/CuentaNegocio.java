@@ -13,4 +13,5 @@ public interface CuentaNegocio {
 	public int GenerarCBU();
 	public boolean modificarCuenta(Cuenta cuenta);
 	public Cuenta obtenerCuentaPorId(int id);
+	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 }

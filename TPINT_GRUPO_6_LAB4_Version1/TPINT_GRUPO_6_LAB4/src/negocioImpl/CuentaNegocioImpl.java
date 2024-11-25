@@ -2,6 +2,7 @@ package negocioImpl;
 
 import java.util.ArrayList;
 
+import Entidades.Cliente;
 import Entidades.Cuenta;
 import dao.CuentaDao;
 import daoImp.CuentaDaoImpl;
@@ -51,6 +52,13 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	public Cuenta obtenerCuentaPorId(int id) {
 		
 		return cuentaDao.obtenerCuentaPorId(id);
+	}
+	
+
+	@Override
+	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta(int tipoCuenta) {
+		return cuentaDao.filtrarCuentaXTipoCuenta(tipoCuenta);
+
 	}
 	
 }
