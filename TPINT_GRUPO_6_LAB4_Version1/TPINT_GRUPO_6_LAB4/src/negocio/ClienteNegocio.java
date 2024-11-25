@@ -22,5 +22,7 @@ public interface ClienteNegocio {
 	public ArrayList<Nacionalidades> ListNacionaliadaes ();
 	public ArrayList<Provincia> listProvincias (int idNacionalidad);
 	public ArrayList<Localidad> listLocalidades (int idProvincias);
+	public boolean existeEmail(String Mail);
+	public boolean actualizarContrasenaPorEmail (String email, String nuevaContrasena);
 
 }

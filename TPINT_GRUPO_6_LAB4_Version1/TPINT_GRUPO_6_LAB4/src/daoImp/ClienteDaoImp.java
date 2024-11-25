@@ -697,8 +697,77 @@ public ArrayList<Localidad> listLocalidades(int idProvincia) {
     return listaLoc;
 }
 
+@Override
+public boolean existeEmail(String Mail) {
+	
+	boolean exists = false;
+    Connection connection = null;
+    PreparedStatement preparedStatement = null;
+    ResultSet resultSet = null;
 
+    try {
+        
+        connection = Conexion.getConexion().getSQLConexion();
+        if (connection == null) {
+            throw new SQLException("Conexión a la base de datos es nula");
+        }
 
+        
+        String query = "SELECT COUNT(*) FROM cliente WHERE email = ?";
+        preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setString(1, Mail);
+
+        
+        resultSet = preparedStatement.executeQuery();
+
+        
+        if (resultSet.next()) {
+            exists = resultSet.getInt(1) > 0;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace(); 
+    } finally {
+        
+        try {
+            if (resultSet != null) resultSet.close();
+            if (preparedStatement != null) preparedStatement.close();
+            // NO cierres la conexión aquí si usas un pool de conexiones
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    return exists;
+}
+
+@Override
+public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena) {
+			String query = "UPDATE usuario u "
+		            + "INNER JOIN cliente c ON u.IdCliente = c.Id "
+		            + "SET u.Contraseña = ? "
+		            + "WHERE c.CorreoElectronico = ?";
+		
+		try (Connection con = Conexion.getConexion().getSQLConexion();
+		    PreparedStatement ps = con.prepareStatement(query)) {
+		   
+		   ps.setString(1, nuevaContrasena);
+		   ps.setString(2, email);
+		   
+		   int rowsAffected = ps.executeUpdate();  // Verifica cuántas filas se vieron afectadas
+		   
+		   // Si se afectaron filas, la actualización fue exitosa
+		   if (rowsAffected > 0) {
+		       return true;
+		   } else {
+		       System.out.println("No se encontró un cliente con ese correo electrónico.");
+		       return false;
+		   }
+		} catch (SQLException e) {
+		   e.printStackTrace();
+		   return false;  // En caso de error, retorna false
+		}
+			
+		}
 
 }
 

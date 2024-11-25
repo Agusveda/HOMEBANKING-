@@ -80,6 +80,18 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		return clienteDao.listLocalidades(idProvincias);
 	}
 
+	@Override
+	public boolean existeEmail(String Mail) {
+		
+		return clienteDao.existeEmail(Mail);
+	}
+
+	@Override
+	public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena) {
+		
+		return clienteDao.actualizarContrasenaPorEmail(email, nuevaContrasena);
+	}
+
 
 
 }
