@@ -80,6 +80,8 @@
             <th>Provincia</th>
             <th>Correo Electrónico</th>
             <th>Teléfono</th>
+            <th>Usuario</th>
+            <th>Contraseña</th>
         </tr>
     </thead>
     <tbody>
@@ -99,6 +101,8 @@
                     <td><%= cli.getProvincia() %></td>
                     <td><%= cli.getCorreoElectronico() %></td>
                     <td><%= cli.getTelefono() %></td>
+                 	<td><%= cli.getUsuario() %></td>
+                    <td><%= cli.getContrasenia() %></td>
                 </tr>
             <% }
         } else { %>

@@ -22,7 +22,20 @@ public class Cliente {
     
 
 
-	public Cliente() {}
+	public Cliente() 
+	{
+		nombre="";
+		apellido="";
+		sexo="";
+		nacionalidad="";
+		fechaNacimiento="";
+		direccion="";
+		localidad="";
+		provincia="";
+		correoElectronico="";
+		usuario="";
+		contrasenia="";
+	}
     
     
 	public Cliente(int id, int dni, int cuil, String nombre, String apellido, String sexo, String nacionalidad,

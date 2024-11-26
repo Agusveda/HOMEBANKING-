@@ -31,6 +31,18 @@
     <div class="form-register">
         <h4>Modificar Cliente</h4>
         
+        <% 
+	    	String mensaje = (String) request.getAttribute("mensaje");
+	    	String mensajeError = (String) request.getAttribute("mensajeError");
+	    %>
+        
+        <% if (mensaje != null) { %>
+	    <div class="mensaje mensaje-exito"><%= mensaje %></div>
+		<% } %>
+		<% if (mensajeError != null) { %>
+		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
+		<% } %>
+        
         <form method="post" action="ServletBanco">
         <fieldset>
             <legend>Datos del Cliente</legend>

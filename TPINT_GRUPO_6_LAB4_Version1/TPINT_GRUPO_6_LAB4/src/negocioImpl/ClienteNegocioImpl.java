@@ -91,6 +91,22 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 		
 		return clienteDao.actualizarContrasenaPorEmail(email, nuevaContrasena);
 	}
+	
+	@Override
+	public boolean ValidacionDniModificar(int dni, int id) {
+		return clienteDao.ValidacionDniModificar(dni, id);
+	}
+
+	@Override
+	public boolean ValidacionCuilModificar(int cuil, int id) {
+		
+		return clienteDao.ValidacionCuilModificar(cuil, id);
+	}
+
+	@Override
+	public boolean ValidacionUsuarioModificar(String usu, int id) {
+		return clienteDao.ValidacionUsuarioModificar(usu, id);
+	}
 
 
 

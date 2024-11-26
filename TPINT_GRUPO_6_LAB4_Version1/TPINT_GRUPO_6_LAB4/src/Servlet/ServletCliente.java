@@ -86,6 +86,27 @@ public class ServletCliente extends HttpServlet {
 
             usu.setUsuario(request.getParameter("txtUsuario"));
             usu.setContraseña(request.getParameter("txtContrasena"));
+            
+            int id = Integer.parseInt(request.getParameter("txtId"));
+            int dni = Integer.parseInt(request.getParameter("txtDNI"));
+            int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
+            String user = request.getParameter("txtUsuario");
+            
+            if (bandolero.ValidacionDniModificar(dni, id)) {
+                request.setAttribute("mensajeError", "El DNI ya existe en la base de datos. Por favor, intente con otro DNI.");
+                request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
+                return;
+            }
+            if (bandolero.ValidacionCuilModificar(cuil, id)) {
+                request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
+                request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
+                return;
+            }
+            if (bandolero.ValidacionUsuarioModificar(user, id)) {
+                request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
+                request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
+                return;
+            }
 
             bandolero.ModificarCliente(cli, usu);
             RequestDispatcher vari = request.getRequestDispatcher("/Administrador.jsp");

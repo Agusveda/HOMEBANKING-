@@ -24,4 +24,7 @@ public interface ClienteDao  {
 	public ArrayList<Localidad> listLocalidades (int idLocalidad);
 	public boolean existeEmail(String Mail);
 	public boolean actualizarContrasenaPorEmail (String email, String nuevaContrasena);
+	public boolean ValidacionDniModificar (int dni, int id);
+	public boolean ValidacionCuilModificar (int cuil, int id);
+	public boolean ValidacionUsuarioModificar (String usu, int id);
 }
