@@ -15,7 +15,9 @@
 
 <div class="Encabezado">
 <span class="Saludo"> Bienvenido.. (cliente) </span> 
+<input type = "submit" class="btn_movimientos" name="btninfo" value="perfil" onclick="window.location.href='InformacionPersonal.jsp'; return false;">
 </div>
+
 
 <div class="Estado">
    Estado de tu cuenta
@@ -47,7 +49,6 @@
             </div>
             <div >
 		<input type="submit" class="btn_cbu" name="btnVercbu" value="CBU / ALIAS">
-
             </div>
         </div>
     </div>
