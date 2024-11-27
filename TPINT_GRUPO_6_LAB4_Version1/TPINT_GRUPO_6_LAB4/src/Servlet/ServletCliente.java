@@ -12,6 +12,8 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import Entidades.Cliente;
 import Entidades.Usuario;
 import daoImp.ClienteDaoImp;
@@ -196,10 +198,12 @@ public class ServletCliente extends HttpServlet {
             
             if (usuario != null) {
             	request.removeAttribute("mensajeError");
-                int tipoUsuario = usuario.getTipoUsuario();  
+                int tipoUsuario = usuario.getTipoUsuario();
+
+                request.getSession().setAttribute("IdCliente", usuario.getIdCliente());
                 
-                
-                if (tipoUsuario == 1) {
+                if (tipoUsuario == 1) 
+                {
                     
                     response.sendRedirect("Administrador.jsp");
                 } else {
@@ -209,7 +213,7 @@ public class ServletCliente extends HttpServlet {
             } else {
                 request.setAttribute("mensajeError", "Usuario o contraseña incorrectos");
                 request.getRequestDispatcher("/Login.jsp").forward(request, response);
-               
+                
             }
         } else {
         	

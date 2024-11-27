@@ -47,6 +47,8 @@ public class ServletTransferencia extends HttpServlet {
 
 		if (request.getParameter("btnAceptar") != null)
 		{
+			String id = request.getSession().getAttribute("IdCliente").toString();	
+            			
 			//declaracion de objetos
 			Movimiento movimiento = new Movimiento();
 			MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();

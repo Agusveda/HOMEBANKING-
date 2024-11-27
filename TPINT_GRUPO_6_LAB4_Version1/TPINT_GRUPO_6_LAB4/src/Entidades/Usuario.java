@@ -1,10 +1,41 @@
 package Entidades;
 
 public class Usuario {
+	private int id;
 	private String usuario;
 	private String contraseña;
 	private int tipoUsuario;
-    private boolean Activo;
+	private int IdCliente;
+	
+	
+	public Usuario ()
+	{
+		
+	}
+	
+    public Usuario(int id, String usuario, String contraseña, int tipoUsuario, int idCliente, boolean activo) {
+		super();
+		this.id = id;
+		this.usuario = usuario;
+		this.contraseña = contraseña;
+		this.tipoUsuario = tipoUsuario;
+		IdCliente = idCliente;
+		Activo = activo;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getIdCliente() {
+		return IdCliente;
+	}
+	public void setIdCliente(int idCliente) {
+		IdCliente = idCliente;
+	}
+
+	private boolean Activo;
 
 	
 	public String getUsuario() {

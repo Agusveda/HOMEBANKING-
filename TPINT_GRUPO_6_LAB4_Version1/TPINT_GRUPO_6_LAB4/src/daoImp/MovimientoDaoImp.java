@@ -13,7 +13,8 @@ import dao.MovimientoDao;
 public class MovimientoDaoImp implements MovimientoDao
 {
 	private static final String IngresarMovimiento = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , ? , ? , ?)";
-	private static final String ModificarCuenta = "update cuenta SET Saldo = Saldo + ? where Id = ?";
+	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
+	private static final String ModificarCuentaNegativo = "update cuenta SET Saldo = Saldo - ? where Id = ?";
 	private static final String ObtenerIdCuentaPorCBU = "select Id from cuenta where CBU = ?";
 	
 	
@@ -24,6 +25,7 @@ public class MovimientoDaoImp implements MovimientoDao
 
 	    PreparedStatement statementMovimiento = null;
 	    PreparedStatement statementCuenta = null;
+	    PreparedStatement statementBajaSueldo = null;
 	    Connection conexion = Conexion.getConexion().getSQLConexion();
 	    if (conexion == null) {
 	        System.out.println("No se pudo obtener la conexión a la base de datos.");
@@ -38,7 +40,7 @@ public class MovimientoDaoImp implements MovimientoDao
 
 	        statementMovimiento = conexion.prepareStatement(IngresarMovimiento);
 	       
-	        statementMovimiento.setFloat(1, movi.getImporte());
+	        statementMovimiento.setFloat(1, -movi.getImporte());
 	        statementMovimiento.setInt(2, movi.getIdCuenta()); // SE DEBERIA OBTENER ID DE CUENTA
 	        statementMovimiento.setString(3, movi.getDetalle());
 
@@ -48,9 +50,13 @@ public class MovimientoDaoImp implements MovimientoDao
 	                // Inserción en Cuenta
 	            System.out.println("Preparando declaración de inserción para cuenta.");
 
-	                statementCuenta = conexion.prepareStatement(ModificarCuenta);
+	                statementCuenta = conexion.prepareStatement(ModificarCuentaPositivo);
 	                statementCuenta.setFloat(1, movi.getImporte());
 	                statementCuenta.setInt(2, movi.getIdCuenta());
+
+	                statementBajaSueldo = conexion.prepareStatement(ModificarCuentaNegativo);
+	                statementBajaSueldo.setFloat(1, movi.getImporte());
+	                statementBajaSueldo.setInt(2, movi.getIdCuenta());
 
 
 	                // Ejecutar la inserción de Usuario
@@ -78,7 +84,8 @@ public class MovimientoDaoImp implements MovimientoDao
 
 
 	@Override
-	public int ObtenerIdCuentaPorCBU(int CBU) {
+	public int ObtenerIdCuentaPorCBU(int CBU) 
+	{
 				int id;
 		        Cuenta cuenta = null;
 		        PreparedStatement statement = null;
@@ -114,7 +121,7 @@ public class MovimientoDaoImp implements MovimientoDao
 		        id = cuenta.getId();
 		        
 		        return id;
-		    }
+	}
 		
 		
 		

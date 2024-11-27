@@ -376,6 +376,7 @@ public Usuario verificarCredenciales(String username, String password) {
             usuario = new Usuario();
             usuario.setUsuario(rs.getString("NombreUsuario"));
             usuario.setContraseña(rs.getString("Contraseña"));
+            usuario.setIdCliente(rs.getInt("IdCliente"));
 
             try {
                 usuario.setTipoUsuario(rs.getInt("TipoUsario"));
