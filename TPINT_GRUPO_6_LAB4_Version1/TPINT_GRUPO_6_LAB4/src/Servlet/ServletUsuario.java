@@ -34,7 +34,7 @@ public class ServletUsuario extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idUsuarioStr = request.getParameter("Id");
+		String idUsuarioStr = request.getParameter("IdCliente");
 		int idUsuario = Integer.parseInt(idUsuarioStr);
 		
 		UsuarioDaoImp usuarioDao = new UsuarioDaoImp();

@@ -28,7 +28,7 @@
 <jsp:include page="Navbar.jsp"/>
 
 <%
-	Cliente cli = (Cliente) session.getAttribute("Id");
+	Cliente cli = (Cliente) session.getAttribute("IdCliente");
 	if(cli == null){
 		response.sendRedirect("Login.jsp"); // Redirigir al login si no hay sesión activa
 	    return;
