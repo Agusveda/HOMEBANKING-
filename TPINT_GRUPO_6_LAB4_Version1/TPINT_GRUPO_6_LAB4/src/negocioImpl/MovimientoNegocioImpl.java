@@ -11,9 +11,9 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	private MovimientoDaoImp MovimientoDao = new MovimientoDaoImp();
 
 	@Override
-	public boolean insertar(Movimiento movi) 
+	public boolean insertar(Movimiento movi, int idCue) 
 	{
-		return MovimientoDao.insertar(movi);
+		return MovimientoDao.insertar(movi, idCue);
 	}
 
 	@Override
@@ -21,6 +21,11 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		
 		return MovimientoDao.ObtenerIdCuentaPorCBU(CBU);
 		
+	}
+
+	@Override
+	public int ObtenerIdCuentaPorIdCliente(int IdCliente) {
+		return MovimientoDao.ObtenerIdCuentaPorIdCliente(IdCliente);
 	}
 	
 }

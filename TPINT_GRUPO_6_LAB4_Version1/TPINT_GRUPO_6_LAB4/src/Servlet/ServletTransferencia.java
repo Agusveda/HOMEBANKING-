@@ -47,7 +47,7 @@ public class ServletTransferencia extends HttpServlet {
 
 		if (request.getParameter("btnAceptar") != null)
 		{
-			String id = request.getSession().getAttribute("IdCliente").toString();	
+			String idCli = request.getSession().getAttribute("IdCliente").toString();	
             			
 			//declaracion de objetos
 			Movimiento movimiento = new Movimiento();
@@ -67,18 +67,18 @@ public class ServletTransferencia extends HttpServlet {
 			movimiento.setImporte(Float.parseFloat(request.getParameter("txtImporte")));
 			movimiento.setDetalle(request.getParameter("txtDetalle"));
 			movimiento.setIdCuenta(CuentaDestino);
-
+				
 			
+			int idCue = movimientoNegocio.ObtenerIdCuentaPorIdCliente(Integer.parseInt(idCli));
 	    	    
-	    	    boolean insertado = movimientoNegocio.insertar(movimiento);
+	   	    boolean insertado = movimientoNegocio.insertar(movimiento, idCue);
 	    	    
+	   	    String mensaje = insertado ? "Transferencia enviada exitosamente." : "Hubo un error al crear la cuenta.";
+    	    request.setAttribute("mensaje", mensaje);
 
-	    	    String mensaje = insertado ? "Transferencia enviada exitosamente." : "Hubo un error al crear la cuenta.";
-	    	    request.setAttribute("mensaje", mensaje);
-
-	    	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Trasferencias.jsp");
-	    	    dispatcher.forward(request, response);
-	    	    return; 
+	   	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Trasferencias.jsp");
+	   	    dispatcher.forward(request, response);
+	   	    return; 
 			
 		}
 		doGet(request, response);
