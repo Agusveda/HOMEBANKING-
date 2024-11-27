@@ -475,7 +475,7 @@ public boolean ValidacionDni(int dni) {
         }
 
         
-        String query = "SELECT COUNT(*) FROM cliente WHERE DNI = ?";
+        String query = "SELECT COUNT(*) FROM cliente WHERE DNI = ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, dni);
 
@@ -517,7 +517,7 @@ public boolean ValidacionCuil(int cuil) {
         }
 
         
-        String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ?";
+        String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, cuil);
 
@@ -560,7 +560,7 @@ public boolean ValidacionUsuario(String usu) {
         }
 
         
-        String query = "SELECT COUNT(*) FROM usuario WHERE NombreUsuario = ?";
+        String query = "SELECT COUNT(*) FROM usuario WHERE NombreUsuario = ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, usu);
 

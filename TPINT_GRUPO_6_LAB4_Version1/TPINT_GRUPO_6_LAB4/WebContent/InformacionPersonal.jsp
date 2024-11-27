@@ -38,52 +38,52 @@
       <legend>Informacion personal</legend>
       <p>
         <label for="nombres" style="font-weight: bold">Nombre: </label>
-        <label for="lblNombre">Andres</label>
+        <label for="lblNombre"></label>
       </p>
       <p>
         <label for="apellido" style="font-weight: bold">Apellido: </label>
-        <label for="lblApellido">Cuccitini</label>
+        <label for="lblApellido"></label>
       </p>
       <p>
         <label for="DNI" style="font-weight: bold">DNI: </label>
-        <label for="lblDni">18.12.22</label>
+        <label for="lblDni"></label>
       </p>
       <p>
         <label for="CUIL" style="font-weight: bold">CUIL: </label>
-        <label for="lblCUIL">12345678</label>
+        <label for="lblCUIL"></label>
       </p>
       <p>
         <label for="Sexo" style="font-weight: bold">Sexo: </label>
-        <label for="lblSexo">Masculino</label>
+        <label for="lblSexo"></label>
       </p>
       <p>
         <label for="Nacionalidad" style="font-weight: bold">Nacionalidad: </label>
-        <label for="lblNacionalidad">Argento</label>
+        <label for="lblNacionalidad"></label>
       </p>
       
 	  <p>
     	<label for="Fecha" style="font-weight: bold">Fecha de nacimiento: </label>
-	    <label for="lblFecha">09/12/18</label>
+	    <label for="lblFecha"></label>
   	  </p>
   	  <p>
         <label for="Direccion" style="font-weight: bold">Direccion: </label>
-        <label for="lblDireccion">El Obelisco 123</label>
+        <label for="lblDireccion"></label>
       </p>
       <p>
         <label for="Localidad" style="font-weight: bold">Localidad: </label>
-        <label for="lblLocalidad">La plata</label>
+        <label for="lblLocalidad"></label>
       </p>
       <p>
         <label for="Provincia" style="font-weight: bold">Provincia: </label>
-        <label for="lblProvincia">Buenos Aires</label>
+        <label for="lblProvincia"></label>
       </p>
       <p>
         <label for="Correo" style="font-weight: bold">Correo: </label>
-        <label for="lblCorreo">graciasdibu@gmail.com</label>
+        <label for="lblCorreo"></label>
       </p>
       <p>
         <label for="Telefono" style="font-weight: bold">Telefono: </label>
-        <label for="lblTelefono">11223344</label>
+        <label for="lblTelefono"></label>
       </p>
             
     </fieldset>
