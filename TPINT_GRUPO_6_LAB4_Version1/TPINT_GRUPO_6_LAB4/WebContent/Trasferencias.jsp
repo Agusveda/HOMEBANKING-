@@ -45,14 +45,17 @@
         <label for="CbuDestino">Igresar CBU del destinatario </label>
         <input id="CbuDestino" type="number" placeholder="CbuDestino" required name="txtCbuDestino">
       </p>
-            <p>
+      
+      <p>
         <label for="Importe">Importe</label>
         <input id="Importe" type="number" placeholder="Ingrese su Importe" required name="txtImporte">
       </p>
-            <p>
+      
+      <p>
         <label for="Saldo">Saldo Actual</label>
         <input id="inputSaldo" readonly="true" type="number" required name="txtSaldo" value="40.000">
       </p>
+      
       <p>
         <input id="btnAceptar" type="submit" value="Transferir" required name="btnAceptar">
       </p>
