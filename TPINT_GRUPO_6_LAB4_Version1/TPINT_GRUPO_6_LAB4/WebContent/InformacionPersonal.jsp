@@ -1,3 +1,4 @@
+<%@page import="negocioImpl.ClienteNegocioImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
     <%@page import="daoImp.ClienteDaoImp"%>
@@ -28,11 +29,14 @@
 <jsp:include page="Navbar.jsp"/>
 
 <%
-	Cliente cli = (Cliente) session.getAttribute("IdCliente");
-	if(cli == null){
-		response.sendRedirect("Login.jsp"); // Redirigir al login si no hay sesión activa
-	    return;
-	}
+	
+	String clie = session.getAttribute("IdCliente").toString();
+	ClienteNegocioImpl cn = new ClienteNegocioImpl();
+	Cliente cli = cn.ObtenerDatosXid(Integer.parseInt(clie));
+	
+	if(cli==null){
+		System.out.println(" No se encontro informacion del cliente " );
+	}else{
 	
 %>
 
@@ -93,8 +97,9 @@
             
     </fieldset>
 </form>
-
-
+	<%
+        }
+    %>
 
  <jsp:include page="Footer.jsp"/>
 

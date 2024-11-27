@@ -31,6 +31,10 @@
     <div style="color: red; font-weight: bold;">
         ${mensajeError}
     </div>
+    
+    
+    
+    
 </c:if>
         <label for="username">Usuario:</label>
         <input type="text" id="username" placeholder="Username" required name="txtuser"><br><br>
@@ -54,6 +58,13 @@
 </div>
 </div>
 
+    <%
+    String username = request.getParameter("txtuser");
+    String password = request.getParameter("txtpass");
+
+    System.out.println("Usuario: " + username);
+    System.out.println("Contraseña: " + password);
+    %>
 
  <jsp:include page="Footer.jsp"/>
 </body>

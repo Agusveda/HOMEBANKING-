@@ -6,6 +6,11 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import Entidades.Cliente;
+import negocioImpl.ClienteNegocioImpl;
+import negocioImpl.UsuarioNagocionImp;
 
 /**
  * Servlet implementation class ServletUsuario
@@ -34,23 +39,29 @@ public class ServletUsuario extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idUsuarioStr = request.getParameter("IdCliente");
-		int idUsuario = Integer.parseInt(idUsuarioStr);
-		
-		UsuarioDaoImp usuarioDao = new UsuarioDaoImp();
-        Cliente cliente = usuarioDao.ObtenerDatosXidusuario(idUsuario);
+		/*
+		String idCli = request.getSession().getAttribute("IdCliente").toString();
+	    System.out.println("ID Cliente obtenido de la sesión: " + idCli);
+	    
+	    if(idCli == null) {
+	    	response.sendRedirect("Login.jsp");
+	    	return;
+	    }
+	    
+	    
+	    ClienteNegocioImpl usuarioNegocio = new ClienteNegocioImpl();
+	    Cliente cliente = usuarioNegocio.ObtenerDatosXid(Integer.parseInt(idCli));
         
         if(cliente != null) {
-        	HttpSession session = request.getSession();
-            session.setAttribute("Cliente", cliente);
-
-            // Redirigir al JSP que muestra los datos personales
+        	request.setAttribute("cliente", cliente);
             request.getRequestDispatcher("InformacionPersonal.jsp").forward(request, response);
+        
         }else {
         	request.setAttribute("Mensaje", "No se encontraron datos para el usuario.");
         }
 		
 		doGet(request, response);
+		*/
 	}
 
 }

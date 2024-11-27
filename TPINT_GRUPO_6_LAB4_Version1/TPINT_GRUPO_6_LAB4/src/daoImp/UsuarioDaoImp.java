@@ -26,7 +26,7 @@ public class UsuarioDaoImp implements UsuarioDao {
 	        String query = "SELECT c.*, u.NombreUsuario, u.Contraseña " +
 	                       "FROM cliente c " +
 	                       "INNER JOIN usuario u ON c.Id = u.IdCliente " +
-	                       "WHERE c.Id = ?";
+	                       "WHERE u.Id = ?";
 
 	        ps = cn.prepareStatement(query);
 	        ps.setInt(1, id);
