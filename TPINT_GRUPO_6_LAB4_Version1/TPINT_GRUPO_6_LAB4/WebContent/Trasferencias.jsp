@@ -31,15 +31,8 @@
     <fieldset>
       <legend>Transferencias</legend>
       
-      <p>
-              Cuenta: 
-		<select name="Cuentas" id="Cuentas" name="txtCuenta">
-            <option value="1">Cuenta 1(Debito)</option>
-            <option value="2">Cuenta 2(Credito)</option>
-            <option value="3">Cuenta 3(opcional)</option>
-        </select> <br><br>
-      </p>
-   
+      
+    
    	
       <p>
         <label for="CbuDestino">Igresar CBU del destinatario </label>
@@ -49,6 +42,10 @@
       <p>
         <label for="Importe">Importe</label>
         <input id="Importe" type="number" placeholder="Ingrese su Importe" required name="txtImporte">
+      </p>
+       <p>
+        <label for="Importe">Detalle</label>
+        <input id="Importe" type="text" placeholder="Ingrese El detalle " required name="txtDetalle">
       </p>
       
       <p>
