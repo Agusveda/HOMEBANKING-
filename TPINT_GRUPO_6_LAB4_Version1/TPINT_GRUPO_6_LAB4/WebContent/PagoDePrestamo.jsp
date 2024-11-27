@@ -8,7 +8,7 @@
 <link rel="stylesheet" type="text/css" href="css/PagoPrestamo.css">
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
+
 	<div class="container" >
 		<h2> Pago de prestamo </h2>
 		<form method="post" action="ServletBanco" >
@@ -42,7 +42,6 @@
 	        </a>
 	
 	</div>
- <jsp:include page="Footer.jsp"/>
 
 </body>
 

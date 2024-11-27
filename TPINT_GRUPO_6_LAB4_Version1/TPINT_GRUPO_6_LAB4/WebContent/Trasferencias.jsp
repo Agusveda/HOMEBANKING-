@@ -7,6 +7,12 @@
 <style>
 
 	<jsp:include page="css/Transferencias.css"></jsp:include>
+	
+    #inputSaldo 
+    {
+    	border: none; 
+    	outline: none; 
+    }
 </style>
 
 </head>
@@ -20,14 +26,14 @@
 
 
 
-<form method="get">
+<form method="post" action="ServletTransferencia">
 
     <fieldset>
       <legend>Transferencias</legend>
       
       <p>
               Cuenta: 
-		<select name="Cuentas" id="Cuentas">
+		<select name="Cuentas" id="Cuentas" name="txtCuenta">
             <option value="1">Cuenta 1(Debito)</option>
             <option value="2">Cuenta 2(Credito)</option>
             <option value="3">Cuenta 3(opcional)</option>
@@ -45,7 +51,7 @@
       </p>
             <p>
         <label for="Saldo">Saldo Actual</label>
-        <span> $ 40.000</span>
+        <input id="inputSaldo" readonly="true" type="number" required name="txtSaldo" value="40.000">
       </p>
       <p>
         <input id="btnAceptar" type="submit" value="Transferir" required name="btnAceptar">
