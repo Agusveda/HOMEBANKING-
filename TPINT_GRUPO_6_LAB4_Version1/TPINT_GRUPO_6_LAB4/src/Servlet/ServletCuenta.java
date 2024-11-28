@@ -72,33 +72,60 @@ public class ServletCuenta extends HttpServlet {
     	    return;
     	}
 
-
     	if (request.getParameter("btnModificarCuenta") != null) {
-    	    int idCuenta = Integer.parseInt(request.getParameter("txtIdCuenta"));
-    	    int tipoCuenta = Integer.parseInt(request.getParameter("txtTipoCuenta"));
-    	    int numeroCuenta = Integer.parseInt(request.getParameter("txtNumeroCuenta"));
-    	    int cbu = Integer.parseInt(request.getParameter("txtCBU"));
-    	    float saldo = Float.parseFloat(request.getParameter("txtSaldo"));
-    	  //  boolean activo = Boolean.parseBoolean(request.getParameter("txtActivo"));
+    	    try {
+    	        int idCuenta = Integer.parseInt(request.getParameter("txtIdCuenta"));
+    	        int tipoCuenta = Integer.parseInt(request.getParameter("txtTipoCuenta"));
+    	        int numeroCuenta = Integer.parseInt(request.getParameter("txtNumeroCuenta"));
+    	        int cbu = Integer.parseInt(request.getParameter("txtCBU"));
+    	        float saldo = Float.parseFloat(request.getParameter("txtSaldo"));
+    	        
+    	        // Validaciones	        
+    	        if(!(tipoCuenta == 1 || tipoCuenta == 2)) {
+    	        	String mensajeError = "El tipo de cuenta no puede ser distinto a 1. Corriente, 2. Ahorro.";
+    	        	request.setAttribute("mensajeError", mensajeError);
+    	            RequestDispatcher dispatcher = request.getRequestDispatcher("/ModificarCuenta.jsp");
+    	            dispatcher.forward(request, response);
+    	            return; // Detener el procesamiento
+    	        }
+    	        
+    	        if (saldo < 0) {
+    	            String mensajeError = "El saldo no puede ser negativo.";
+    	            request.setAttribute("mensajeError", mensajeError);
+    	            RequestDispatcher dispatcher = request.getRequestDispatcher("/ModificarCuenta.jsp");
+    	            dispatcher.forward(request, response);
+    	            return; // Detener el procesamiento
+    	        }
+    	        
+    	        if (cbu < 0) {
+    	            String mensajeError = "El CBU no puede ser negativo.";
+    	            request.setAttribute("mensajeError", mensajeError);
+    	            RequestDispatcher dispatcher = request.getRequestDispatcher("/ModificarCuenta.jsp");
+    	            dispatcher.forward(request, response);
+    	            return; // Detener el procesamiento
+    	        }
 
-    	    Cuenta cuenta = new Cuenta();
-    	    cuenta.setId(idCuenta);
-    	    cuenta.setTipoCuenta(tipoCuenta);
-    	    cuenta.setNumeroCuenta(numeroCuenta);
-    	    cuenta.setCbu(cbu);
-    	    cuenta.setSaldo(saldo);
-    	   // cuenta.setActivo(activo);
+    	        // Proceder con la modificación si cumple las validaciones
+    	        Cuenta cuenta = new Cuenta();
+    	        cuenta.setId(idCuenta);
+    	        cuenta.setTipoCuenta(tipoCuenta);
+    	        cuenta.setNumeroCuenta(numeroCuenta);
+    	        cuenta.setCbu(cbu);
+    	        cuenta.setSaldo(saldo);
 
-    	   //CuentaDaoImpl cuentadao = new CuentaDaoImpl();
-    	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
-    	    boolean modificada = cuentaNegocio.modificarCuenta(cuenta);
-    	    
-    	    String mensaje = modificada ? "Cuenta modificada exitosamente." : "Hubo un error al modificar la cuenta.";
-    	    request.setAttribute("mensaje", mensaje);
+    	        CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+    	        boolean modificada = cuentaNegocio.modificarCuenta(cuenta);
 
-    	    RequestDispatcher dispatcher = request.getRequestDispatcher("/ListarCuenta.jsp");
-    	    dispatcher.forward(request, response);
-    	    return; // Detener ejecución aquí
+    	        String mensaje = modificada ? "Cuenta modificada exitosamente." : "Error al modificar la cuenta.";
+    	        request.setAttribute("mensaje", mensaje);
+    	        RequestDispatcher dispatcher = request.getRequestDispatcher("/ListarCuenta.jsp");
+    	        dispatcher.forward(request, response);
+
+    	    } catch (NumberFormatException e) {
+    	        request.setAttribute("mensajeError", "Datos inválidos.");
+    	        RequestDispatcher dispatcher = request.getRequestDispatcher("/ModificarCuenta.jsp");
+    	        dispatcher.forward(request, response);
+    	    }
     	}
 
      }

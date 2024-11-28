@@ -20,10 +20,10 @@ public class CuentaDaoImpl implements CuentaDao {
     
     private static final String ListarCuenta = "SELECT cuenta.id AS ID,cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cliente.DNI = ?";
     
-    private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id";
+    private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id AND cuenta.Activo = 1";
     
     private static final String EliminarCuenta = "UPDATE cuenta SET Activo = 0 WHERE id = ?";
-    private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ?, Activo = ? WHERE Id = ?";
+    private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ? WHERE Id = ?";
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
 
@@ -283,8 +283,8 @@ public class CuentaDaoImpl implements CuentaDao {
             statement.setInt(2, cuenta.getNumeroCuenta());
             statement.setInt(3, cuenta.getCbu());
             statement.setFloat(4, cuenta.getSaldo());
-            statement.setBoolean(5, cuenta.isActivo());
-            statement.setInt(6, cuenta.getId());  // Usamos el ID para identificar la cuenta a modificar
+          //  statement.setBoolean(5, cuenta.isActivo());
+            statement.setInt(5, cuenta.getId());  // Usamos el ID para identificar la cuenta a modificar
 
             if (statement.executeUpdate() > 0) {
                 conexion.commit();

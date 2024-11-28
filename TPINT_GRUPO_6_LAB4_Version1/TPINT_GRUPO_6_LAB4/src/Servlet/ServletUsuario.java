@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import Entidades.Cliente;
+<<<<<<< HEAD
 import negocioImpl.ClienteNegocioImpl;
 import negocioImpl.UsuarioNagocionImp;
+=======
+import daoImp.UsuarioDaoImp;
 
-/**
- * Servlet implementation class ServletUsuario
- */
+>>>>>>> Pedro
+
 @WebServlet("/ServletUsuario")
 public class ServletUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -39,6 +41,7 @@ public class ServletUsuario extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+<<<<<<< HEAD
 		/*
 		String idCli = request.getSession().getAttribute("IdCliente").toString();
 	    System.out.println("ID Cliente obtenido de la sesión: " + idCli);
@@ -51,6 +54,13 @@ public class ServletUsuario extends HttpServlet {
 	    
 	    ClienteNegocioImpl usuarioNegocio = new ClienteNegocioImpl();
 	    Cliente cliente = usuarioNegocio.ObtenerDatosXid(Integer.parseInt(idCli));
+=======
+		String idUsuarioStr = request.getParameter("IdCliente");
+		int idUsuario = Integer.parseInt(idUsuarioStr);
+		
+		UsuarioDaoImp usuarioDao = new UsuarioDaoImp();
+        Cliente cliente = usuarioDao.ObtenerDatosXidUsuario(idUsuario);
+>>>>>>> Pedro
         
         if(cliente != null) {
         	request.setAttribute("cliente", cliente);
