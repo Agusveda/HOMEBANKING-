@@ -15,15 +15,10 @@ import dao.CuentaDao;
 public class CuentaDaoImpl implements CuentaDao {
 
     private static final String insertCuenta = "INSERT INTO cuenta ( IdCliente, TipoCuenta, FechaCreacion , NumeroCuenta, CBU, Saldo, Activo) VALUES ( ?, ?, CURDATE(), ?, ?, 10000, ?)";
-    //private static final String ListarCuenta = "select cuenta.id as id,  cuenta.idcliente as IdCliente , cuenta.tipocuenta as TipoCuenta, cuenta.FechaCreacion as FechaCreacion, cuenta.NumeroCuenta , cuenta.CBU as CBU, cuenta.Saldo as Saldo, cuenta.Activo as Activo from cuenta inner join cliente on cuenta.IdCliente = cliente.id where cliente.DNI = ?";
-    //private static final String ListarCuentaTodos = "select cuenta.id as id,  cuenta.idcliente as IdCliente , cuenta.tipocuenta as TipoCuenta, cuenta.FechaCreacion as FechaCreacion, cuenta.NumeroCuenta , cuenta.CBU as CBU, cuenta.Saldo as Saldo, cuenta.Activo as Activo from cuenta inner join cliente on cuenta.IdCliente = cliente.id";
-    
     private static final String ListarCuenta = "SELECT cuenta.id AS ID,cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cliente.DNI = ?";
-    
-    private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id";
-    
+    private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id AND cuenta.Activo = 1";
     private static final String EliminarCuenta = "UPDATE cuenta SET Activo = 0 WHERE id = ?";
-    private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ?, Activo = ? WHERE Id = ?";
+    private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ? WHERE Id = ?";
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
 
@@ -34,9 +29,9 @@ public class CuentaDaoImpl implements CuentaDao {
         boolean isInsertExitoso = false;
 
         try {
-            // Asegurarse de que la conexiÛn no estÈ cerrada
+            // Asegurarse de que la conexi√≥n no est√© cerrada
             if (conexion == null || conexion.isClosed()) {
-                throw new SQLException("La conexiÛn est· cerrada.");
+                throw new SQLException("La conexi√≥n est√° cerrada.");
             }
 
             conexion.setAutoCommit(false);
@@ -210,7 +205,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
    
         if (conexion != null) {
-            System.out.println("ConexiÛn a la base de datos establecida.");
+            System.out.println("Conexi√≥n a la base de datos establecida.");
         } else {
             System.out.println("Error al conectar con la base de datos.");
             return false;
@@ -224,7 +219,7 @@ public class CuentaDaoImpl implements CuentaDao {
         stmt = conexion.prepareStatement(query);
         stmt.setInt(1, id);
 
-        System.out.println("Ejecutando actualizaciÛn para eliminar cuenta con ID: " + id);
+        System.out.println("Ejecutando actualizaci√≥n para eliminar cuenta con ID: " + id);
         int rowsAffected = stmt.executeUpdate();
 
    
@@ -234,7 +229,7 @@ public class CuentaDaoImpl implements CuentaDao {
             System.out.println("cuenta eliminada exitosamente. Filas afectadas: " + rowsAffected);
             conexion.commit(); 
         } else {
-            System.out.println("No se encontrÛ ning˙n cliente con ID: " + id);
+            System.out.println("No se encontr√≥ ning√∫n cliente con ID: " + id);
             conexion.rollback(); 
         }
 
@@ -272,7 +267,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
         try {
             if (conexion == null || conexion.isClosed()) {
-                throw new SQLException("La conexiÛn est· cerrada.");
+                throw new SQLException("La conexiÔøΩn estÔøΩ cerrada.");
             }
 
             conexion.setAutoCommit(false);
@@ -283,8 +278,8 @@ public class CuentaDaoImpl implements CuentaDao {
             statement.setInt(2, cuenta.getNumeroCuenta());
             statement.setInt(3, cuenta.getCbu());
             statement.setFloat(4, cuenta.getSaldo());
-            statement.setBoolean(5, cuenta.isActivo());
-            statement.setInt(6, cuenta.getId());  // Usamos el ID para identificar la cuenta a modificar
+          //  statement.setBoolean(5, cuenta.isActivo());
+            statement.setInt(5, cuenta.getId());  // Usamos el ID para identificar la cuenta a modificar
 
             if (statement.executeUpdate() > 0) {
                 conexion.commit();
@@ -309,7 +304,7 @@ public class CuentaDaoImpl implements CuentaDao {
         }
         return exitoso;
     }
-
+    
     public Cuenta obtenerCuentaPorId(int id) {
         Cuenta cuenta = null;
         PreparedStatement statement = null;
@@ -318,7 +313,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
         try {
             if (conexion == null || conexion.isClosed()) {
-                throw new SQLException("La conexiÛn est· cerrada.");
+                throw new SQLException("La conexi√≥n est√° cerrada.");
             }
 
             statement = conexion.prepareStatement(ObtenerCuentaPorId);
@@ -359,7 +354,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
         try {
             if (conexion == null || conexion.isClosed()) {
-                throw new SQLException("La conexiÛn est· cerrada.");
+                throw new SQLException("La conexi√≥n est√° cerrada.");
             }
 
             statement = conexion.prepareStatement(ObtenerCuentaPorIdCliente);

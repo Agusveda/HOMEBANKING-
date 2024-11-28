@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
 encoding//WebContent/Login.jsp=UTF-8
+encoding//WebContent/ModificarCuenta.jsp=UTF-8
+encoding//src/Servlet/ServletCuenta.java=UTF-8
+encoding//src/daoImp/CuentaDaoImpl.java=UTF-8
