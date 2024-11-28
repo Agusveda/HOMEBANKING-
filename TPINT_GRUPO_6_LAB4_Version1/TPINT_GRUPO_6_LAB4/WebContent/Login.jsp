@@ -51,7 +51,7 @@
         <input type="submit" class="btnSec" value="Iniciar sesión">
       </fieldset>
     </form>
-    <input type="submit" class="btnCrearUsuario" value="Crear Usuario">
+    
 </div>
 </div>
 
