@@ -189,38 +189,42 @@ public class MovimientoDaoImp implements MovimientoDao
 
 	@Override
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
-	
-		
-		
-		        ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
-		        
-		        String query = TraerCuentasPorIdCliente; 
-		        
-		        Connection con = Conexion.getConexion().getSQLConexion();
-		                
-		        try {
-		        	PreparedStatement ps = con.prepareStatement(query); 
-		        	ps.setInt(1, idCliente );
-		        	ResultSet rs = ps.executeQuery();
-		        	
-		            while (rs.next()) {
-		            	
-		                  Cuenta cue = new Cuenta();
+	    ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
+	    System.out.println("Buscando cuentas para IdCliente: " + idCliente);
+	    
+	    String query = TraerCuentasPorIdCliente; 
+	    Connection con = Conexion.getConexion().getSQLConexion();
+	                
+	    try {
+	        PreparedStatement ps = con.prepareStatement(query); 
+	        ps.setInt(1, idCliente);
+	        ResultSet rs = ps.executeQuery();
+	        
+	        while (rs.next()) {
+	            Cuenta cue = new Cuenta();
+	            cue.setId(rs.getInt("Id")); 
+	            cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+	            cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+	            cue.setSaldo(rs.getFloat("Saldo"));
 
-		               
-		                  cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
-		                  cue.setTipoCuenta(rs.getInt("TipoCuenta"));
-		                  cue.setTipoCuenta(rs.getInt("Saldo"));
-		                  
-		                  CuentasCliente.add(cue);
-		            }
-		        }
-		        catch (SQLException e) {
-		            e.printStackTrace();
-		            
-		        }
-		        return CuentasCliente;
-		    }    
+	            System.out.println("Cuenta encontrada: Id=" + cue.getId() + 
+	                               ", NumeroCuenta=" + cue.getNumeroCuenta() +
+	                               ", Saldo=" + cue.getSaldo());
+	            
+	            CuentasCliente.add(cue);
+	        }
+
+	        if (CuentasCliente.isEmpty()) {
+	            System.out.println("No se encontraron cuentas para IdCliente: " + idCliente);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la consulta de cuentas.");
+	    }
+	    return CuentasCliente;
+	}
+
 		    	
 	}
 		

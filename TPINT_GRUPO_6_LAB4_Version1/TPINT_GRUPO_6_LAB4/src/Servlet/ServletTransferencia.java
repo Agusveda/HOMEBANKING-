@@ -1,6 +1,7 @@
 package Servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -9,7 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
+import Entidades.Cuenta;
 import Entidades.Movimiento;
 import negocio.MovimientoNegocio;
 import negocioImpl.CuentaNegocioImpl;
@@ -29,10 +30,22 @@ public class ServletTransferencia extends HttpServlet {
     }
 
 	
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // OBntengo el idcliente desde la sesion
+        int idCliente = Integer.parseInt(request.getSession().getAttribute("IdCliente").toString());
+        
+        // trae las cuentas por idcliente
+        MovimientoNegocioImpl movimientoDao = new MovimientoNegocioImpl();
+        ArrayList<Cuenta> cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
 
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-	}
+
+        request.setAttribute("cuentas", cuentas);
+        
+        
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/Transferencias.jsp");
+        dispatcher.forward(request, response);
+    }
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
