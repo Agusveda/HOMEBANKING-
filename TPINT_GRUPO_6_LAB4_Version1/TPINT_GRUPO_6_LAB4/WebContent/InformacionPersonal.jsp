@@ -37,9 +37,11 @@
 	if(cli==null){
 		System.out.println(" No se encontro informacion del cliente " );
 	}else{
+	
 %>
 
 <h1>INFORMACION DEL USUARIO</h1>
+<input type = "submit" class="btn-volver" name="btnVolver" value="volver" onclick="window.location.href='Cliente.jsp'; return false;">
 <form method="post" action="ServletUsuario">
 
     <fieldset>
@@ -95,14 +97,15 @@
       </p>
             
     </fieldset>
-    <input type = "submit" class="btn-volver" name="btnVolver" value="volver" onclick="window.location.href='Cliente.jsp'; return false;">
+    
     
 </form>
+
 	<%
         }
     %>
 
- <jsp:include page="Footer.jsp"/>
+ 
 
 </body>
 

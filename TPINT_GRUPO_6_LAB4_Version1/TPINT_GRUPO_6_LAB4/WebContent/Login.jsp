@@ -32,9 +32,6 @@
         ${mensajeError}
     </div>
     
-    
-    
-    
 </c:if>
         <label for="username">Usuario:</label>
         <input type="text" id="username" placeholder="Username" required name="txtuser"><br><br>
@@ -66,6 +63,6 @@
     System.out.println("Contraseña: " + password);
     %>
 
- <jsp:include page="Footer.jsp"/>
+<jsp:include page="Footer.jsp"/>
 </body>
 </html>
