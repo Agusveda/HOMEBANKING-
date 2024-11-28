@@ -6,10 +6,12 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-/**
- * Servlet implementation class ServletUsuario
- */
+import Entidades.Cliente;
+import daoImp.UsuarioDaoImp;
+
+
 @WebServlet("/ServletUsuario")
 public class ServletUsuario extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +40,7 @@ public class ServletUsuario extends HttpServlet {
 		int idUsuario = Integer.parseInt(idUsuarioStr);
 		
 		UsuarioDaoImp usuarioDao = new UsuarioDaoImp();
-        Cliente cliente = usuarioDao.ObtenerDatosXidusuario(idUsuario);
+        Cliente cliente = usuarioDao.ObtenerDatosXidUsuario(idUsuario);
         
         if(cliente != null) {
         	HttpSession session = request.getSession();

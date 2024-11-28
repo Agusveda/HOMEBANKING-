@@ -10,6 +10,7 @@
     <title>Listado de Cuentas</title>
    
     <link rel="stylesheet" type="text/css" href="css/ABMCuenta.css">
+        <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">   
 </head>
 
