@@ -9,7 +9,6 @@
 <head>
     <title>Listado de Clientes</title>
     <link rel="stylesheet" type="text/css" href="css/ABMCliente.css">
-    <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
     <style>
@@ -118,8 +117,6 @@
     <button type="button" class="button button-blue" onclick="modificarCliente()">Modificar Cliente</button>
     <button type="button" class="button button-red" onclick="eliminarCliente()">Eliminar Cliente</button>
 </div>
-
-<jsp:include page="Footer.jsp"/>
 
 <script>
     let selectedRow = null;

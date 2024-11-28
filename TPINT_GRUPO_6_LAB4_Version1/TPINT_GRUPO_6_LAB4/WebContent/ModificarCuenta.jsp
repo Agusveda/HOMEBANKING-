@@ -25,21 +25,15 @@
 <head>
     <meta charset="ISO-8859-1">
     <title>Modificar Cuenta</title>
-    <link rel="stylesheet" type="text/css" href="css/Footer.css">
-    <link rel="stylesheet" type="text/css" href="css/ABMCuenta.css">
-
-
+    <link rel="stylesheet" type="text/css" href="css/Cliente.css">
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
-<div class="encabezado">
-        <h1>Modificar Cuenta</h1>
-</div>
 
- 
+    <!-- Incluir la barra de navegación -->
+    <jsp:include page="Navbar.jsp"/>
 
     <div class="container">
- 
+        <h1>Modificar Cuenta</h1>
 
         <% if (cuenta != null) { %>
             <!-- Formulario para modificar la cuenta -->
@@ -61,7 +55,7 @@
                     </tr>
                     <tr>
                         <td><label for="txtSaldo">Saldo:</label></td>
-                        <td><input type="text" name="txtSaldo" value="<%= cuenta.getSaldo() %>" required /></td>
+                        <td><input type="number" name="txtSaldo" value="<%= cuenta.getSaldo() %>" required /></td>
                     </tr>
                 </table>
 
@@ -69,21 +63,10 @@
                 <button type="submit" name="btnModificarCuenta">Modificar Cuenta</button>
                 <button type="button" onclick="window.location.href='ListarCuenta.jsp'">Cancelar</button>
             </form>
-        <% } %> <!-- El bloque "else" que muestra el mensaje de cuenta no encontrada se eliminó -->
-
+        <% } else { %>
+            <p>La cuenta no existe o no se pudo encontrar.</p>
+        <% } %>
     </div>
-    
-<%-- Mostrar mensajes de error si existen --%>
-<%
-    String mensajeError = (String) request.getAttribute("mensajeError");
-    if (mensajeError != null) {
-%>
-    <div class="error">
-        <p><%= mensajeError %></p>
-    </div>
-<%
-    }
-%>
 
     <jsp:include page="Footer.jsp"/>
 
