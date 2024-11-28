@@ -25,6 +25,7 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String EliminarCuenta = "UPDATE cuenta SET Activo = 0 WHERE id = ?";
     private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ?, Activo = ? WHERE Id = ?";
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
+    private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
 
     @Override
     public boolean insertCuenta(Cuenta cuenta) {
@@ -321,6 +322,47 @@ public class CuentaDaoImpl implements CuentaDao {
             }
 
             statement = conexion.prepareStatement(ObtenerCuentaPorId);
+            statement.setInt(1, id);
+            rs = statement.executeQuery();
+
+            if (rs.next()) {
+                cuenta = new Cuenta();
+                cuenta.setId(rs.getInt("Id"));
+                cuenta.setIdCliente(rs.getInt("IdCliente"));
+                cuenta.setTipoCuenta(rs.getInt("TipoCuenta"));
+                cuenta.setFechaCreacion(rs.getString("FechaCreacion"));
+                cuenta.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+                cuenta.setCbu(rs.getInt("CBU"));
+                cuenta.setSaldo(rs.getFloat("Saldo"));
+                cuenta.setActivo(rs.getBoolean("Activo"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return cuenta;
+    }
+    
+    public Cuenta obtenerCuentaPorIdCliente(int id) {
+        Cuenta cuenta = null;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+
+        try {
+            if (conexion == null || conexion.isClosed()) {
+                throw new SQLException("La conexión está cerrada.");
+            }
+
+            statement = conexion.prepareStatement(ObtenerCuentaPorIdCliente);
             statement.setInt(1, id);
             rs = statement.executeQuery();
 

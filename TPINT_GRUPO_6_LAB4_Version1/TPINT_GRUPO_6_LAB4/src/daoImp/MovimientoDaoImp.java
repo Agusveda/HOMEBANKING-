@@ -50,14 +50,14 @@ public class MovimientoDaoImp implements MovimientoDao
 
 	        if (statementMovimientoP.executeUpdate() > 0) 
 	        {
-	            System.out.println("Inserción en Movimiento exitoso.");
+	            System.out.println("Inserción en Movimiento Positivo exitoso.");
 	            
 	            //INSERCION NEGATIVA DE LA TABLA CLIENTE
 	            
 	            statementMovimientoN = conexion.prepareStatement(IngresarMovimientoNegativo);
 			       
 	            statementMovimientoN.setFloat(1, movi.getImporte());
-	            statementMovimientoN.setInt(2, idCue); // SE DEBERIA OBTENER ID DE CUENTA
+	            statementMovimientoN.setInt(2, idCue); 
 	            statementMovimientoN.setString(3, movi.getDetalle());
 
 		        if (statementMovimientoN.executeUpdate() > 0) {

@@ -24,6 +24,10 @@
 
 </div>
 
+<%
+	String clie = session.getAttribute("IdCliente").toString();
+
+%>
 
 
 <form method="post" action="ServletTransferencia">
@@ -33,7 +37,7 @@
       
       
     
-   	
+   	  
       <p>
         <label for="CbuDestino">Igresar CBU del destinatario </label>
         <input id="CbuDestino" type="number" placeholder="CbuDestino" required name="txtCbuDestino">
@@ -43,14 +47,15 @@
         <label for="Importe">Importe</label>
         <input id="Importe" type="number" placeholder="Ingrese su Importe" required name="txtImporte">
       </p>
-       <p>
+      
+      <p>
         <label for="Importe">Detalle</label>
         <input id="Importe" type="text" placeholder="Ingrese El detalle " required name="txtDetalle">
       </p>
       
       <p>
         <label for="Saldo">Saldo Actual</label>
-        <input id="inputSaldo" readonly="true" type="number" required name="txtSaldo" value="40.000">
+        <input id="inputSaldo" readonly="true" type="number" required name="txtSaldo" value="<%=   %>">
       </p>
       
       <p>
