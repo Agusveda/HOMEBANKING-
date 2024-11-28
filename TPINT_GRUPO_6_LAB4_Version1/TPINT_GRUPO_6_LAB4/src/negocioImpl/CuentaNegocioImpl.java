@@ -60,5 +60,12 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		return cuentaDao.filtrarCuentaXTipoCuenta(tipoCuenta);
 
 	}
+
+
+	@Override
+	public Cuenta obtenerCuentaPorIdCliente(int id) {
+		
+		return cuentaDao.obtenerCuentaPorIdCliente(id);
+	}
 	
 }

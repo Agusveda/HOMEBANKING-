@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
+import Entidades.Cliente;
 import Entidades.Cuenta;
 import Entidades.Movimiento;
 import dao.MovimientoDao;
@@ -18,7 +20,7 @@ public class MovimientoDaoImp implements MovimientoDao
 	private static final String ModificarCuentaNegativo = "update cuenta SET Saldo = Saldo - ? where Id = ?";
 	private static final String ObtenerIdCuentaPorCBU = "select Id from cuenta where CBU = ?";
 	private static final String ObtenerIdCuentaPorIdCliente = "select Id from cuenta where IdCliente = ?";
-	
+	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
 	
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) 
@@ -181,11 +183,48 @@ public class MovimientoDaoImp implements MovimientoDao
 		        id = cuenta.getId();
 		        
 		        return id;
-	}		
+	}
+
+
+
+	@Override
+	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
+	
 		
+		
+		        ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
+		        
+		        String query = TraerCuentasPorIdCliente; 
+		        
+		        Connection con = Conexion.getConexion().getSQLConexion();
+		                
+		        try {
+		        	PreparedStatement ps = con.prepareStatement(query); 
+		        	ps.setInt(1, idCliente );
+		        	ResultSet rs = ps.executeQuery();
+		        	
+		            while (rs.next()) {
+		            	
+		                  Cuenta cue = new Cuenta();
+
+		               
+		                  cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+		                  cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+		                  cue.setTipoCuenta(rs.getInt("Saldo"));
+		                  
+		                  CuentasCliente.add(cue);
+		            }
+		        }
+		        catch (SQLException e) {
+		            e.printStackTrace();
+		            
+		        }
+		        return CuentasCliente;
+		    }    
+		    	
+	}
 		
 		
 		
 		
 	
-}

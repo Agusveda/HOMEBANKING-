@@ -14,4 +14,5 @@ public interface CuentaNegocio {
 	public boolean modificarCuenta(Cuenta cuenta);
 	public Cuenta obtenerCuentaPorId(int id);
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
+	public Cuenta obtenerCuentaPorIdCliente(int id);
 }

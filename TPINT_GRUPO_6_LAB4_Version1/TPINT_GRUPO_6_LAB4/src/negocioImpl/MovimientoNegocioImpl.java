@@ -1,5 +1,8 @@
 package negocioImpl;
 
+import java.util.ArrayList;
+
+import Entidades.Cuenta;
 import Entidades.Movimiento;
 import dao.MovimientoDao;
 import daoImp.MovimientoDaoImp;
@@ -26,6 +29,13 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	@Override
 	public int ObtenerIdCuentaPorIdCliente(int IdCliente) {
 		return MovimientoDao.ObtenerIdCuentaPorIdCliente(IdCliente);
+	}
+
+	@Override
+	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
+		
+		
+		return MovimientoDao.TraeCuentasPorIdCliente(idCliente);
 	}
 	
 }

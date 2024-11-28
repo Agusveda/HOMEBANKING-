@@ -1,6 +1,5 @@
-/Servlet/
-/daoImp/
-/Entidades/
 /dao/
+/daoImp/
 /negocio/
 /negocioImpl/
+/Servlet/
