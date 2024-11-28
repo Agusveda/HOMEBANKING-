@@ -9,7 +9,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <style>
 
-	<jsp:include page="css/Cliente.css"></jsp:include>
+	/*<jsp:include page="css/Cliente.css"></jsp:include>*/
 	
 	        .footer {
 		    background-color: #408080;
@@ -23,13 +23,13 @@
 		    border-radius: 0px 0px 10px 10px; 
 		}
 </style>
+<jsp:include page="css/Informacionpersonal.css"></jsp:include>
 
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>
 
 <%
-	
 	String clie = session.getAttribute("IdCliente").toString();
 	ClienteNegocioImpl cn = new ClienteNegocioImpl();
 	Cliente cli = cn.ObtenerDatosXid(Integer.parseInt(clie));
@@ -37,14 +37,13 @@
 	if(cli==null){
 		System.out.println(" No se encontro informacion del cliente " );
 	}else{
-	
 %>
 
 <h1>INFORMACION DEL USUARIO</h1>
 <form method="post" action="ServletUsuario">
 
     <fieldset>
-      <legend>Informacion personal</legend>
+      <legend>Informacion Personal</legend>
       <p>
         <label class="form-label" for="nombre">Nombre:</label>
         <input class="" id="nombre" readOnly="true" type="text" value="<%= cli.getNombre()%>" required name="txtNombre">
@@ -96,6 +95,8 @@
       </p>
             
     </fieldset>
+    <input type = "submit" class="btn-volver" name="btnVolver" value="volver" onclick="window.location.href='Cliente.jsp'; return false;">
+    
 </form>
 	<%
         }
