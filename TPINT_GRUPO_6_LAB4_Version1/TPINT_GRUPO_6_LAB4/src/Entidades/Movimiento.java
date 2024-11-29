@@ -13,7 +13,12 @@ public class Movimiento
 	
 	public Movimiento ()
 	{
-		
+		id=0;
+		TipoMovimiento = 0;
+		FechaMovimiento = "";
+		importe = 0;
+		idCuenta  = 0;
+		detalle  = "";
 	}
 	
 	public Movimiento(int id, int tipoMovimiento, String fechaMovimiento, float importe, int idCuenta, String detalle) {

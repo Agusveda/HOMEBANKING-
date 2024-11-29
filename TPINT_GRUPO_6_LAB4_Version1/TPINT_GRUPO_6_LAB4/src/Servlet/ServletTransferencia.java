@@ -32,16 +32,17 @@ public class ServletTransferencia extends HttpServlet {
 	
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	/**
         // OBntengo el idcliente desde la sesion
         int idCliente = Integer.parseInt(request.getSession().getAttribute("IdCliente").toString());
         
         // trae las cuentas por idcliente
         MovimientoNegocioImpl movimientoDao = new MovimientoNegocioImpl();
         ArrayList<Cuenta> cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
-
-
-        request.setAttribute("cuentas", cuentas);
-        
+        **/
+    	Cuenta cuenta = new Cuenta();
+    	
+    	request.setAttribute("cuentas", cuenta);
         
         RequestDispatcher dispatcher = request.getRequestDispatcher("/Transferencias.jsp");
         dispatcher.forward(request, response);

@@ -12,7 +12,19 @@ public class Cuenta {
 	private boolean activo;
 	private Cliente cliente; 
 	
-	public Cuenta(){}
+	public Cuenta()
+	{
+		id=0;
+		idTipoMovimiento=0;
+		idCliente=0;
+		tipoCuenta=1;
+		fechaCreacion = "";
+		numeroCuenta=0;
+		cbu=0;
+		saldo=0;
+		activo=true;
+		cliente = new Cliente();	
+	}
 
 	public Cuenta(int id, int idTipoMovimiento, int idCliente, int tipoCuenta, String fechaCreacion, int numeroCuenta,
 			int cbu, float saldo, boolean activo) {
