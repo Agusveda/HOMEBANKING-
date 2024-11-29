@@ -1,6 +1,6 @@
 <%@ page import="daoImp.CuentaDaoImpl" %>
 <%@ page import="Entidades.Cuenta" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
 
 <%
     String idCuentaParam = request.getParameter("idCuenta");
@@ -43,7 +43,7 @@
 
         <% if (cuenta != null) { %>
             <!-- Formulario para modificar la cuenta -->
-            <form method="post" action="ServletCuenta">
+            <form method="post" action="ServletCuenta" onsubmit="return confirmarModificacion(this)">
                 <input type="hidden" name="txtIdCuenta" value="<%= cuenta.getId() %>" />
 
                 <table>
@@ -65,11 +65,11 @@
                     </tr>
                 </table>
 
-                <!-- Botones de acci�n -->
+                <!-- Botones de acci n -->
                 <button type="submit" name="btnModificarCuenta">Modificar Cuenta</button>
                 <button type="button" onclick="window.location.href='ListarCuenta.jsp'">Cancelar</button>
             </form>
-        <% } %> <!-- El bloque "else" que muestra el mensaje de cuenta no encontrada se elimin� -->
+        <% } %> <!-- El bloque "else" que muestra el mensaje de cuenta no encontrada se elimin  -->
 
     </div>
     
@@ -86,6 +86,21 @@
 %>
 
     <jsp:include page="Footer.jsp"/>
+    
+    
+    
+    <script>
+    function confirmarModificacion(form) {
+        const confirmacion = confirm("¿Estás seguro de modificar la cuenta?");
+        if (confirmacion) {
+            console.log("Modificacion confirmada para el formulario:", form);
+            return true; // Permite enviar el formulario
+        } else {
+            console.log("Modificacion cancelada.");
+            return false; // Cancela el envío del formulario
+        }
+    }
+</script>
 
 </body>
 </html>
