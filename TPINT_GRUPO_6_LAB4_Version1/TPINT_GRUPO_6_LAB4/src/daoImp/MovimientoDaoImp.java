@@ -18,9 +18,10 @@ public class MovimientoDaoImp implements MovimientoDao
 	private static final String IngresarMovimientoNegativo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , -? , ? , ?)";
 	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
 	private static final String ModificarCuentaNegativo = "update cuenta SET Saldo = Saldo - ? where Id = ?";
-	private static final String ObtenerIdCuentaPorCBU = "select Id from cuenta where CBU = ?";
-	private static final String ObtenerIdCuentaPorIdCliente = "select Id from cuenta where IdCliente = ?";
+	private static final String ObtenerIdCuentaPorCBU = "select Id from cuenta where CBU = ? and Activo = 1";
+	private static final String ObtenerIdCuentaPorIdCliente = "select Id from cuenta where IdCliente = ? and Activo = 1";
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
+	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) 
@@ -223,6 +224,44 @@ public class MovimientoDaoImp implements MovimientoDao
 	        System.out.println("Error durante la consulta de cuentas.");
 	    }
 	    return CuentasCliente;
+	}
+	
+	public float ObtenerSaldoPorIdCuenta(int idCue) 
+	{
+				float saldo;
+		        Cuenta cuenta = null;
+		        PreparedStatement statement = null;
+		        ResultSet rs = null;
+		        Connection conexion = Conexion.getConexion().getSQLConexion();
+
+		        try {
+		            if (conexion == null || conexion.isClosed()) {
+		                throw new SQLException("La conexión está cerrada.");
+		            }
+
+		            statement = conexion.prepareStatement(ObtenerSaldoPorIdCuenta);
+		            statement.setInt(1, idCue);
+		            rs = statement.executeQuery();
+		            
+		            if (rs.next()) {
+		                cuenta = new Cuenta();
+		                cuenta.setSaldo(rs.getFloat("Saldo"));
+		            }
+
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        } finally {
+		            try {
+		                if (rs != null) rs.close();
+		                if (statement != null) statement.close();
+		            } catch (SQLException e) {
+		                e.printStackTrace();
+		            }
+		        }
+
+		        saldo = cuenta.getId();
+		        
+		        return saldo;
 	}
 
 		    	

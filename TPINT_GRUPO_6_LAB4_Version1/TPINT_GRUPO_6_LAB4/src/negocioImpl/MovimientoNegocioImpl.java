@@ -37,5 +37,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		
 		return MovimientoDao.TraeCuentasPorIdCliente(idCliente);
 	}
+
+	@Override
+	public float ObtenerSaldoPorIdCuenta(int idCue) {
+		return MovimientoDao.ObtenerSaldoPorIdCuenta(idCue);
+	}
 	
 }

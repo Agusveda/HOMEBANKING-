@@ -40,11 +40,20 @@
             <select id="ddlCuentasCliente" onchange="EventoSeleccionarCuenta()">
                 <option value="0">Selecciona una cuenta</option>
                 <% 
+                	String TipoCuenta = "";
                     if (cuentas != null && !cuentas.isEmpty()) {
                         for (Cuenta cue : cuentas) { 
+                        	if (cue.getTipoCuenta() == 1)
+                        	{
+                        		TipoCuenta = "CAJA AHORRO";
+                        	}
+                        	else
+                        	{
+                        		TipoCuenta = "CUENTA CORRIENTE";
+                        	}
                 %>
                             <option value="<%= cue.getId() %>">
-                                <%= cue.getNumeroCuenta() %>
+                                <%= cue.getNumeroCuenta() + TipoCuenta%>
                             </option>
                 <% 
                         }
