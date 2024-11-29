@@ -3,15 +3,17 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Movimiento de cuenta</title>
+    <title>Movimientos de Cuenta</title>
+    <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/VerMovimientos.css">
+    <link rel="stylesheet" type="text/css" href="css/Footer.css">
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>
 <div class="encabezado">
     <h1>Movimientos</h1>
 </div>
-
+<body>
 
 <fieldset>
         <legend>Movimientos actuales</legend>

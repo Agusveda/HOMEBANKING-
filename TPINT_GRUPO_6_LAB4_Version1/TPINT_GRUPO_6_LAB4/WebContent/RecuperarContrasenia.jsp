@@ -10,15 +10,16 @@
 	
 </style>
 <title>Recuperar contraseña</title>
+    <link rel="stylesheet" type="text/css" href="css/Navbar.css">
+    <link rel="stylesheet" type="text/css" href="css/Footer.css">
 
 </head>
 
 
 <body>
 <jsp:include page="Navbar.jsp"/>
-
-	
-
+<div class="encabezado">
+        <h1>Recuperar contraseña</h1>
 </div>
 
     
@@ -64,12 +65,13 @@
 		<% } %>
 
     <form method="post" action="">
-      <h2>¡Hola! ¿quieres recuperar la contraseña?</h2>
+      <h2>¡Hola! ¿Desea recuperar la contraseña?</h2>
+      
       <p class="subtitulo">Complete con el mail.</p>
       
       <fieldset>
       	<div class="mb-3">
-        <label for="">Mail:</label>
+        <label for="">Correo electronico:</label>
         <input type="text" id="valida_Mail" class = "controls" required name="txtEmail"><br><br>
         
         <label for="">Contraseña nueva:</label>
