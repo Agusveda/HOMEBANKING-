@@ -27,7 +27,7 @@
     <title>Modificar Cuenta</title>
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/ABMCuenta.css">
-        <link rel="stylesheet" type="text/css" href="css/Footer.css">
+    <link rel="stylesheet" type="text/css" href="css/Footer.css">
 
 
 </head>

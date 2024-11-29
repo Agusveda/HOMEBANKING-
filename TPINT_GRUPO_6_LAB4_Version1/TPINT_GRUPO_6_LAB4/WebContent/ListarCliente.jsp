@@ -8,7 +8,9 @@
 <html>
 <head>
     <title>Listado de Clientes</title>
+     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/ABMCliente.css">
+        <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
     <style>
@@ -29,7 +31,7 @@
 
 <form method="get" action="" id="filtroForm">
     <fieldset>
-        <legend>Buscar Cliente</legend>
+    <legend>Filtrar Clientes por Género</legend>
         <p>
             <label for="sexo">Género:</label>
             <select id="sexo" name="sexo" onchange="this.form.submit()">
@@ -117,7 +119,7 @@
     <button type="button" class="button button-blue" onclick="modificarCliente()">Modificar Cliente</button>
     <button type="button" class="button button-red" onclick="eliminarCliente()">Eliminar Cliente</button>
 </div>
-
+<jsp:include page="Footer.jsp"/>
 <script>
     let selectedRow = null;
     let selectedId = null;

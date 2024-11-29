@@ -4,13 +4,6 @@
     box-sizing: border-box;
 }
 
-.encabezado
-	{
-		background-color:#408080;
-		height:50px;
-		border-radius: 80px 20px 0px 0px; 
-	}
-
 body {
     background-size: cover;
     background-position: center;
@@ -18,12 +11,14 @@ body {
     color: #ffffff;
 }
 
+
 .form-register {
     width: 400px;
     background: #24303c;
     padding: 30px;
     margin: auto;
-    margin-top: 50px;
+    margin-top: 25px;
+    margin-bottom: 60px; /* Añadir margen inferior */
     border-radius: 4px;
     color: white;
     box-shadow: 7px 13px 37px #000;
@@ -85,7 +80,8 @@ body {
     padding: 12px;
     font-size: 16px;
     cursor: pointer;
-    width: 48%; /* Para que el botón no ocupe toda la línea */
+    width: 40%; /* Para que el botón no ocupe toda la línea */
+    margin-top: 15px;
 }
 
 .btnVolver:hover {

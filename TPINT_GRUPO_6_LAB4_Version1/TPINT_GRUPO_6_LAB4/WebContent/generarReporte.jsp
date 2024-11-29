@@ -4,11 +4,17 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+    <link rel="stylesheet" type="text/css" href="css/Navbar.css">
+    <link rel="stylesheet" type="text/css" href="css/Footer.css">
 <title>Reportes</title>
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>
-    <h2>Generar Reporte de Ingresos y Egresos</h2>
+
+<div class="encabezado">
+    <h1>Generar Reporte de Ingresos y Egresos</h1>
+</div>
+
     <form action="ServletReporte" method="post">
         <label for="fechaInicio">Fecha Inicio:</label>
         <input type="date" id="fechaInicio" name="fechaInicio" required>

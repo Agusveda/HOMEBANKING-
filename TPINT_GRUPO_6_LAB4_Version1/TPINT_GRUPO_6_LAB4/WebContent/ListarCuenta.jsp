@@ -33,7 +33,7 @@
 
 <form method="get" action="" id="filtroForm">
     <fieldset>
-        <legend>Filtrar por Tipo de Cuenta</legend>
+        <legend>Filtrar Cuentas por Tipo de Cuenta</legend>
         <p>
             <label for="tipoCuenta">Tipo de Cuenta:</label>
             <select id="tipoCuenta" name="tipoCuenta" onchange="this.form.submit()">
