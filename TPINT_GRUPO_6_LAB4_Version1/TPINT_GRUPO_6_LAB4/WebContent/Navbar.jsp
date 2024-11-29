@@ -6,19 +6,18 @@
     <title>CodeBank - Sistema Bancario</title>
     <link rel="stylesheet" href="css/Navbar.css">
 </head>
+<body>
     <!-- Navbar -->
     <div class="navegador">
-        <a class="nav-brand" href="home.jsp">CodeBank</a>
-
-        <a class="logoNav" href="Cliente.jsp" title="Ir a la página de inicio">
-            <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
-        </a>
-
-
+        <div class="nav-brand-container">
+            <a class="nav-brand" href="home.jsp">CodeBank</a>
+            <a class="logoNav" href="Cliente.jsp" title="Ir a la página de inicio">
+                <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
+            </a>
+        </div>
         <span class="time" id="time"></span>
     </div>
 
-
     <script src="js/scripts.js"></script>
-
+</body>
 </html>

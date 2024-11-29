@@ -1,42 +1,46 @@
-@charset "ISO-8859-1";
-
 /* ================== NAVBAR ================== */
 .navegador {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 15px 20px; /* Ajuste del padding */
+    font-family: Arial, sans-serif;
     background-color: #408080;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 10;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Distribuye los elementos entre los extremos */
+    padding: 10px 20px;
+    width: 100%;  /* Asegura que el navbar ocupe todo el ancho */
+    margin: 0;
+    box-sizing: border-box;
 }
 
+/* Asegurando que el logo y el texto "CodeBank" estén a la izquierda */
+.nav-brand-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Estilo de los enlaces */
 .navegador a {
     color: #fff;
     text-decoration: none;
     font-weight: 500;
     margin-right: 15px;
-    transition: color 0.3s ease;
 }
 
-.navegador a:hover {
-    color: #c0f0ff;
-}
-
+/* Estilo del nombre CodeBank */
 .nav-brand {
     font-size: 1.8rem;
     font-weight: bold;
     color: #c0f0ff;
-    margin-right: auto;
 }
 
+/* Estilo del ícono de la casa */
 .logoNav img {
     width: 28px;
     height: 28px;
-    margin: 0 10px;
+    margin-left: 10px;
     transition: transform 0.3s ease;
 }
 
@@ -45,43 +49,28 @@
     filter: brightness(1.2);
 }
 
-/* ================== TIME ================== */
+/* Estilo de la hora, siempre a la derecha */
 .time {
     color: #c0f0ff;
     font-size: 1rem;
     font-weight: 300;
-    margin-left: auto; /* Alinea la hora a la derecha */
-    margin-right: 15px; /* Asegura espacio desde el borde derecho */
-    white-space: nowrap; /* Evita que la hora se divida en varias líneas */
+    margin-left: auto; /* Esto asegura que la hora se quede a la derecha */
 }
 
-/* ================== ENCABEZADO ================== */
-.encabezado {
-    text-align: center;
-    padding: 20px;
-    background-color: #3f51b5;
-    color: white;
-}
-
-.encabezado h1 {
-    margin: 0;
-    font-size: 24px;
-}
-
-/* ================== MEDIA QUERIES ================== */
+/* Ajustes para dispositivos móviles */
 @media (max-width: 768px) {
     .navegador {
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .nav-brand {
+    .nav-brand-container {
         margin-bottom: 10px;
     }
 
     .time {
-        margin-top: 10px; /* Añade espacio superior */
-        margin-left: 0; /* Elimina alineación hacia la derecha */
-        text-align: center; /* Centra la hora en la línea */
-        width: 100%; /* Asegura que ocupe toda la línea */
+        margin-left: 0;
+        text-align: center;
+        width: 100%;
     }
 }

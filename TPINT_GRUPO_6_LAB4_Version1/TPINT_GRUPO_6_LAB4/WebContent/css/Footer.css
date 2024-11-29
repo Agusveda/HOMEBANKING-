@@ -1,15 +1,12 @@
-
-	.footer {
+.footer {
     background-color: #408080;
     color: #fff;
     text-align: center;
     padding: 10px;
-    position: fixed;
+    position: fixed; /* Asegura que el footer esté fijo */
     bottom: 0;
     width: 100%;
     font-size: 0.9em;
     z-index: 100; /* Asegura que esté encima */
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Sombra opcional */
-    position: relative;
 }
-	
