@@ -747,6 +747,7 @@ public boolean existeEmail(String Mail) {
 public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena) {
 	Connection cn = null;
     PreparedStatement ps = null;
+    ResultSet rs = null;
 
     try {
         // Obtener la conexión

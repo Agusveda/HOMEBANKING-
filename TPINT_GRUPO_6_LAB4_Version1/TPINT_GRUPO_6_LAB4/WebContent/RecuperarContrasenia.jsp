@@ -10,7 +10,10 @@
 	
 </style>
 <title>Recuperar contraseña</title>
+
 </head>
+
+
 <body>
 <jsp:include page="Navbar.jsp"/>
 
@@ -41,9 +44,9 @@
 	            boolean result = clientNegocio.actualizarContrasenaPorEmail(mail, nuevaContraseña);
 
 	            if (result) {
-	                mensaje = "Contraseña actualizada exitosamente.";
+	            	 mensaje = "Contraseña actualizada exitosamente.";
 	            } else {
-	                mensajeError = "Error al actualizar la contraseña. Intente nuevamente.";
+	            	 mensajeError = "Error al actualizar la contraseña. Intente nuevamente.";
 	            }
 	        } else {
 	            mensajeError = "No se encontró un usuario con ese correo.";
@@ -75,7 +78,8 @@
         <br>
 
         <input type="submit" class="btnCambiar" value="Cambiar">
-        <input type="submit" class="btnVolver" value="Volver" id="btnVolver" onclick="window.location.href='Login.jsp'; return false;">
+        <a href="Login.jsp" class="btnVolver" id="btnVolver" onclick="reloadPage(); return false;">Volver</a>
+
         </div>
       </fieldset>
     </form>
@@ -84,5 +88,15 @@
  <jsp:include page="Footer.jsp"/>
 
 </body>
+
+<script>
+
+function reloadPage() {
+	ocation.reload(); // Recargar la página
+    setTimeout(function() {
+        window.location.href = 'Login.jsp'; // Redirigir después de la recarga
+    }, 300);
+}
+</script>
 
 </html>
