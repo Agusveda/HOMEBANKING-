@@ -121,7 +121,7 @@ Accesos Rapidos
 
 	<div class="Opciones">
 	
-	<a href="Trasferencias.jsp" > 
+	<a href="Transferencias.jsp" > 
 	<input type="submit" class="BtnOpciones"  name="btnTransferencias" value="Transferencias"/>
 	</a>
 	

@@ -61,7 +61,7 @@ public class ServletTransferencia extends HttpServlet {
         }
         
    
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/Trasferencias.jsp");
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/Transferencias.jsp");
         dispatcher.forward(request, response);
     }
 
@@ -97,12 +97,18 @@ public class ServletTransferencia extends HttpServlet {
 			int idCue = movimientoNegocio.ObtenerIdCuentaPorIdCliente(Integer.parseInt(idCli));
 	    	    
 	   	    boolean insertado = movimientoNegocio.insertar(movimiento, idCue);
-	    	    
-	   	    String mensaje = insertado ? "Transferencia enviada exitosamente." : "Hubo un error al crear la cuenta.";
-    	    request.setAttribute("mensaje", mensaje);
-
-	   	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Trasferencias.jsp");
+	   	    
+            if (insertado) {
+                request.setAttribute("mensaje", "Transferencia realizada exitosamente.");
+            } else {
+                request.setAttribute("mensajeError", "Hubo un error en la transferencia");
+            }
+            request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+            
+            /**
+	   	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Transferencias.jsp");
 	   	    dispatcher.forward(request, response);
+	   	    **/
 	   	    return; 
 			
 		}

@@ -34,6 +34,19 @@ function EventoSeleccionarCuenta()
     <div class="encabezado">
         <h1>Cuentas</h1>
     </div>
+    
+        <% 
+	    String mensaje = (String) request.getAttribute("mensaje");
+	    String mensajeError = (String) request.getAttribute("mensajeError");
+	    %>
+        
+        <!-- Mensajes de éxito o error -->
+	    <% if (mensaje != null) { %>
+	    <div class="mensaje mensaje-exito"><%= mensaje %></div>
+		<% } %>
+		<% if (mensajeError != null) { %>
+		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
+		<% } %>
 	
     <form method="post" action="ServletTransferencia">
         <fieldset>

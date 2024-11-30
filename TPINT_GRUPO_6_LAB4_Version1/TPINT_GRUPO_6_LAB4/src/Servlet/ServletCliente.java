@@ -198,7 +198,7 @@ public class ServletCliente extends HttpServlet {
             cli.setProvincia(request.getParameter("txtProvincia"));
             cli.setCorreoElectronico(request.getParameter("txtEmail"));
             cli.setTelefono(Integer.parseInt(request.getParameter("txtTelefono")));
-
+            
             usu.setUsuario(request.getParameter("txtUsuario"));
             usu.setContraseña(contrasena1);
             int tipoUsuario = 0;
