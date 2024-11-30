@@ -72,19 +72,12 @@
                 <label class="form-label" for="cuil">CUIL</label>
                 <input class="controls" id="cuil" type="number" placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL">
             </p>
-            <p>
-                <label class="form-label" for="sexo">Género</label>
-                <select class="controls" id="sexo" Value="<%= cli.getSexo() %>" required name="txtSexo">
-                    <option value="">Seleccione</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Femenino">Femenino</option>
-                    <option value="Otro">Otro</option>
-                </select>
-            </p>
-            <p>
-                <label class="form-label" for="nacionalidad">Nacionalidad</label>
-                <input class="controls" id="nacionalidad" type="text" placeholder="Ingrese la nacionalidad" Value="<%= cli.getNacionalidad() %>" required name="txtNacionalidad">
-            </p>
+           <select class="controls" id="sexo" required name="txtSexo">
+    <option value="">Seleccione</option>
+    <option value="Masculino" <%= "Masculino".equals(cli.getSexo()) ? "selected" : "" %>>Masculino</option>
+    <option value="Femenino" <%= "Femenino".equals(cli.getSexo()) ? "selected" : "" %>>Femenino</option>
+    <option value="Otro" <%= "Otro".equals(cli.getSexo()) ? "selected" : "" %>>Otro</option>
+</select>
             <p>
                 <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
                 <input class="controls" id="fechaNacimiento" type="date" Value="<%= cli.getFechaNacimiento() %>" required name="txtFechaNacimiento">
@@ -95,12 +88,16 @@
                 <input class="controls" id="direccion" type="text" placeholder="Ingrese la dirección" Value="<%= cli.getDireccion() %>" required name="txtDireccion">
             </p>
             <p>
-                <label class="form-label" for="localidad">Localidad</label>
-                <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" Value="<%= cli.getLocalidad() %>" required name="txtLocalidad">
+                <label class="form-label" for="nacionalidad">Nacionalidad</label>
+                <input class="controls" id="nacionalidad" type="text" placeholder="Ingrese la nacionalidad" Value="<%= cli.getNacionalidad() %>" required name="txtNacionalidad">
             </p>
             <p>
                 <label class="form-label" for="provincia">Provincia</label>
                 <input class="controls" id="provincia" type="text" placeholder="Ingrese la provincia" Value="<%= cli.getProvincia() %>" required name="txtProvincia">
+            </p>
+            <p>
+                <label class="form-label" for="localidad">Localidad</label>
+                <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" Value="<%= cli.getLocalidad() %>" required name="txtLocalidad">
             </p>
             <p>
                 <label class="form-label" for="email">Correo Electrónico</label>
