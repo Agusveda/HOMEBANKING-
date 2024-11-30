@@ -404,14 +404,15 @@ public Usuario verificarCredenciales(String username, String password) {
         rs = stmt.executeQuery();
 
         if (rs.next()) {
+        	try {
             usuario = new Usuario();
             usuario.setUsuario(rs.getString("NombreUsuario"));
             usuario.setContraseña(rs.getString("Contraseña"));
             usuario.setIdCliente(rs.getInt("IdCliente"));
 
-            try {
                 usuario.setTipoUsuario(rs.getInt("TipoUsario"));
             } catch (SQLException e) {
+            	e.printStackTrace();
                 // Manejo de error al obtener tipoUsuario
             }
         }

@@ -13,4 +13,5 @@ public interface MovimientoNegocio
 	public int ObtenerIdCuentaPorIdCliente(int IdCliente); 
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
 	public float ObtenerSaldoPorIdCuenta(int idCue);
+	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue);
 }

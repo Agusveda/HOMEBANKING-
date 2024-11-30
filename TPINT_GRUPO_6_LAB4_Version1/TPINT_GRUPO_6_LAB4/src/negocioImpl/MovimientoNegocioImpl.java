@@ -42,5 +42,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	public float ObtenerSaldoPorIdCuenta(int idCue) {
 		return MovimientoDao.ObtenerSaldoPorIdCuenta(idCue);
 	}
+
+	@Override
+	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue) {
+		return MovimientoDao.ListarMovimientosPorCuenta(idCue);
+	}
 	
 }

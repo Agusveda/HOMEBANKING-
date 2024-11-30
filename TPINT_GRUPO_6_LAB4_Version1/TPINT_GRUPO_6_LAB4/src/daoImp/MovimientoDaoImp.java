@@ -14,6 +14,7 @@ import dao.MovimientoDao;
 
 public class MovimientoDaoImp implements MovimientoDao
 {
+	private static final String ListarMovimientosPorCuenta = "Select * from movimiento where IdCuenta = ? and Activo=1";
 	private static final String IngresarMovimientoPositivo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , ? , ? , ?)";
 	private static final String IngresarMovimientoNegativo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , -? , ? , ?)";
 	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
@@ -263,6 +264,48 @@ public class MovimientoDaoImp implements MovimientoDao
 		        saldo = cuenta.getId();
 		        
 		        return saldo;
+	}
+	
+	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue) 
+	{
+				ArrayList<Movimiento> ListaMovimiento = new ArrayList<Movimiento>();
+		        Movimiento movi = new Movimiento();
+		        PreparedStatement statement = null;
+		        ResultSet rs = null;
+		        Connection conexion = Conexion.getConexion().getSQLConexion();
+
+		        try {
+		            if (conexion == null || conexion.isClosed()) {
+		                throw new SQLException("La conexión está cerrada.");
+		            }
+
+		            statement = conexion.prepareStatement(ListarMovimientosPorCuenta);
+		            statement.setInt(1, idCue);
+		            rs = statement.executeQuery();
+		            
+		            if (rs.next()) {
+		                movi = new Movimiento();
+		                movi.setId(rs.getInt("Id"));
+		                movi.setTipoMovimiento(rs.getInt("TipoMovimiento"));
+		                movi.setFechaMovimiento(rs.getString("FechaMovimiento"));
+		                movi.setImporte(rs.getFloat("Importe"));
+		                movi.setIdCuenta(rs.getInt("IdCuenta"));
+		                movi.setDetalle(rs.getString("Dtealle"));
+		                ListaMovimiento.add(movi);
+		            }
+
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        } finally {
+		            try {
+		                if (rs != null) rs.close();
+		                if (statement != null) statement.close();
+		            } catch (SQLException e) {
+		                e.printStackTrace();
+		            }
+		        }
+		        
+		        return ListaMovimiento;
 	}
 
 		    	

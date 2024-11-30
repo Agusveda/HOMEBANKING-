@@ -23,7 +23,8 @@
     </style>
 </head>
 <script type="text/javascript">
-function EventoSeleccionarCuenta() {
+function EventoSeleccionarCuenta() 
+{
     var idCuenta = document.getElementById("ddlCuentasCliente").value;
     window.location.href = "ServletTransferencia?CargarSaldo=true&idCuenta=" + idCuenta;
 }
@@ -33,7 +34,7 @@ function EventoSeleccionarCuenta() {
     <div class="encabezado">
         <h1>Cuentas</h1>
     </div>
-
+	
     <form method="post" action="ServletTransferencia">
         <fieldset>
             <legend>Transferencias</legend>
@@ -65,7 +66,7 @@ function EventoSeleccionarCuenta() {
                     }
                 %>
             </select>
-
+			
             <p>
                 <label for="CbuDestino">Ingresar CBU del destinatario</label>
                 <input id="CbuDestino" type="number" placeholder="CBU Destino" required name="txtCbuDestino">
@@ -88,7 +89,7 @@ function EventoSeleccionarCuenta() {
             </p>
         </fieldset>
     </form>
-
+	
     <a href="Cliente.jsp">
         <input class="btnAtras" type="button" value="Atrás" name="btnAtras">
     </a>
