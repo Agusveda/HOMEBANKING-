@@ -22,6 +22,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerIdCuentaPorIdCliente = "select Id from cuenta where IdCliente = ? and Activo = 1";
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
+	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
@@ -296,6 +297,51 @@ public class MovimientoDaoImp implements MovimientoDao {
 		}
 
 		return ListaMovimiento;
+	}
+	
+	
+	///SECCION DE VALIDACIONES
+	public boolean ExisteCBU(int Cbu) 
+	{
+		
+		boolean exists = false;
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+
+	    try {
+	        
+	        connection = Conexion.getConexion().getSQLConexion();
+	        if (connection == null) {
+	            throw new SQLException("Conexión a la base de datos es nula");
+	        }
+
+	        
+	        String query = ExisteCBU;
+	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setInt(1, Cbu);
+
+	        
+	        resultSet = preparedStatement.executeQuery();
+
+	        
+	        if (resultSet.next()) {
+	            exists = resultSet.getInt(1) > 0;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace(); 
+	    } finally {
+	        
+	        try {
+	            if (resultSet != null) resultSet.close();
+	            if (preparedStatement != null) preparedStatement.close();
+	            // NO cierres la conexión aquí si usas un pool de conexiones
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return exists;
 	}
 
 }

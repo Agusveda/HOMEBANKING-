@@ -47,5 +47,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue) {
 		return MovimientoDao.ListarMovimientosPorCuenta(idCue);
 	}
+
+	@Override
+	public boolean ExisteCBU(int Cbu) {
+		return MovimientoDao.ExisteCBU(Cbu);
+	}
 	
 }

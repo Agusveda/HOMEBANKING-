@@ -72,11 +72,32 @@ public class ServletTransferencia extends HttpServlet {
 
 		if (request.getParameter("btnAceptar") != null)
 		{
-			String idCli = request.getSession().getAttribute("IdCliente").toString();	
-            			
 			//declaracion de objetos
 			Movimiento movimiento = new Movimiento();
 			MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+			
+			
+			
+			///VALIDACIONES
+            if (Float.parseFloat(request.getParameter("txtImporte")) > Float.parseFloat(request.getParameter("txtSaldo")) ) 
+            {
+                request.setAttribute("mensajeError", "El importe es mayor a su sueldo.");
+                request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                return;
+            }
+            
+            if (movimientoNegocio.ExisteCBU(Integer.parseInt(request.getParameter("txtCbuDestino"))) == false)
+            {
+                request.setAttribute("mensajeError", "El CBU no existe.");
+                request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                return;
+            }
+
+            
+            
+            /// -------------------------------------------------------------------
+			String idCli = request.getSession().getAttribute("IdCliente").toString();	
+            			
 	    	    
 			
 			//  Traigo al cuenta de destino (donde envio el importe/transferencia)
