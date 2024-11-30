@@ -23,10 +23,10 @@
     </style>
 </head>
 <script type="text/javascript">
-    function EventoSeleccionarCuenta() {
-        var x = document.getElementById("ddlCuentasCliente").value;
-        window.location.replace("ServletTransferencia?CargarSaldo=" + x);
-    }
+function EventoSeleccionarCuenta() {
+    var idCuenta = document.getElementById("ddlCuentasCliente").value;
+    window.location.href = "ServletTransferencia?CargarSaldo=true&idCuenta=" + idCuenta;
+}
 </script>
 <body>
     <jsp:include page="Navbar.jsp" />
@@ -37,23 +37,24 @@
     <form method="post" action="ServletTransferencia">
         <fieldset>
             <legend>Transferencias</legend>
+            
+            <% 
+                // Obtener el idCuenta  si existe
+                Integer cuentaSeleccionada = (Integer) session.getAttribute("idCuenta");
+            %>
             <select id="ddlCuentasCliente" onchange="EventoSeleccionarCuenta()">
-                <option value="0">Selecciona una cuenta</option>
+                <option value="0" <%= (cuentaSeleccionada == null || cuentaSeleccionada == 0) ? "selected" : "" %>>
+                    Selecciona una cuenta
+                </option>
                 <% 
-                	String TipoCuenta = "";
+                    String TipoCuenta;
                     if (cuentas != null && !cuentas.isEmpty()) {
                         for (Cuenta cue : cuentas) { 
-                        	if (cue.getTipoCuenta() == 1)
-                        	{
-                        		TipoCuenta = "CAJA AHORRO";
-                        	}
-                        	else
-                        	{
-                        		TipoCuenta = "CUENTA CORRIENTE";
-                        	}
+                            TipoCuenta = (cue.getTipoCuenta() == 1) ? " (CAJA AHORRO)" : " (CUENTA CORRIENTE)";
                 %>
-                            <option value="<%= cue.getId() %>">
-                                <%= cue.getNumeroCuenta() + TipoCuenta%>
+                            <option value="<%= cue.getId() %>" 
+                                <%= (cuentaSeleccionada != null && cuentaSeleccionada == cue.getId()) ? "selected" : "" %>>
+                                <%= cue.getNumeroCuenta() + TipoCuenta %>
                             </option>
                 <% 
                         }
@@ -79,7 +80,8 @@
             </p>
             <p>
                 <label for="Saldo">Saldo Actual</label>
-                <input id="inputSaldo" readonly="true" type="number" required name="txtSaldo">
+                <input id="inputSaldo" readonly="true" type="number" name="txtSaldo"
+              value="<%= request.getAttribute("saldoActual") != null ? request.getAttribute("saldoActual") : "" %>">
             </p>
             <p>
                 <input id="btnAceptar" type="submit" value="Transferir" required name="btnAceptar">

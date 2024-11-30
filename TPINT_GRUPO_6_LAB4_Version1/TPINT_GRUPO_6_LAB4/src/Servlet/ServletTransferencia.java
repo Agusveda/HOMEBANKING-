@@ -29,24 +29,43 @@ public class ServletTransferencia extends HttpServlet {
         super();
     }
 
-	
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	/**
-        // OBntengo el idcliente desde la sesion
-        int idCliente = Integer.parseInt(request.getSession().getAttribute("IdCliente").toString());
+        String idCuentaStr = request.getParameter("idCuenta");
         
-        // trae las cuentas por idcliente
-        MovimientoNegocioImpl movimientoDao = new MovimientoNegocioImpl();
-        ArrayList<Cuenta> cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
-        **/
-    	Cuenta cuenta = new Cuenta();
-    	
-    	request.setAttribute("cuentas", cuenta);
         
-        RequestDispatcher dispatcher = request.getRequestDispatcher("/Transferencias.jsp");
+        System.out.println("Parámetro idCuenta recibido: " + idCuentaStr);
+        
+        if (idCuentaStr != null && request.getParameter("CargarSaldo") != null) {
+            int idCuenta = Integer.parseInt(idCuentaStr);
+
+           
+            request.getSession().setAttribute("idCuenta", idCuenta);
+            System.out.println("idCuenta almacenado en sesión: " + idCuenta);
+
+            MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+            CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+            Cuenta cuenta = cuentaNegocio.obtenerCuentaPorId(idCuenta); // Implementa este método
+            
+            if (cuenta != null) {
+                float saldoActual = cuenta.getSaldo();
+                request.setAttribute("saldoActual", saldoActual);
+
+                System.out.println("Saldo actual obtenido: " + saldoActual);
+            } else {
+                System.out.println("No se encontró ninguna cuenta con id: " + idCuenta);
+            }
+        } else {
+            System.out.println("Parámetro CargarSaldo o idCuentaStr es nulo.");
+        }
+        
+   
+        RequestDispatcher dispatcher = request.getRequestDispatcher("/Trasferencias.jsp");
         dispatcher.forward(request, response);
     }
+
+
 
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
