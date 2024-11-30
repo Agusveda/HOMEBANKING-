@@ -5,14 +5,14 @@ public class Provincia {
     private int IdNacionalidad;
     private String Provincia;
 
-    // Constructor
+  
     public Provincia(int id, String Provincia) {
         this.Id = id;
         this.Provincia = Provincia;
     }
     public Provincia() {}
 
-    // Getters y Setters
+  
     public int getId() {
         return Id;
     }
@@ -40,3 +40,4 @@ public class Provincia {
         return Provincia; 
     }
 }
+

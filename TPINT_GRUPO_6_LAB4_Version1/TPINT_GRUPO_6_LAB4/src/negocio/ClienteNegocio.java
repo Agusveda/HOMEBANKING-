@@ -19,7 +19,7 @@ public interface ClienteNegocio {
 	public boolean ValidacionCuil (int cuil);
 	public Usuario verificarCredenciales(String username, String password);
 	public boolean ValidacionUsuario (String usu);
-	public ArrayList<Nacionalidades> ListNacionaliadaes ();
+	public ArrayList<Nacionalidades> ListNacionalidades();
 	public ArrayList<Provincia> listProvincias (int idNacionalidad);
 	public ArrayList<Localidad> listLocalidades (int idProvincias);
 	public boolean existeEmail(String Mail);

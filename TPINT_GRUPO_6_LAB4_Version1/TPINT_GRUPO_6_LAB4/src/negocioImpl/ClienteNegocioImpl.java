@@ -66,8 +66,8 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
-	public ArrayList<Nacionalidades> ListNacionaliadaes() {
-		return clienteDao.ListNacionaliadaes();
+	public ArrayList<Nacionalidades> ListNacionalidades() {
+		return clienteDao.ListNacionalidades();
 	}
 
 	@Override

@@ -4,6 +4,7 @@
 <%@page import="org.apache.jasper.tagplugins.jstl.core.ForEach"%>
 <%@page import="Entidades.Nacionalidades"%>
 <%@page import="Entidades.Localidad"%>
+<%@page import="Entidades.Provincia"%>
 
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
@@ -34,10 +35,64 @@
 		<% } %>
 
         <!-- Formulario para registrar cliente -->
-        <form method="post" action="ServletBanco">
-            <fieldset>
-                <legend>Datos del Cliente</legend>
+        <form method="POST" action="ServletBanco">
+        
+           <p>
+    <label class="form-label" for="nacionalidad">Nacionalidad</label>
+    <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
+        <option value="">Seleccione</option>
+        <option value="1" <%= "1".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Argentina</option>
+        <option value="2" <%= "2".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Brasil</option>
+        <option value="3" <%= "3".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Chile</option>
+        <option value="4" <%= "4".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Uruguay</option>
+        <option value="5" <%= "5".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Paraguay</option>
+    </select>
+</p>
 
+   <p>
+    <label class="form-label" for="provincia">Provincia</label>
+    <select class="controls" id="provincia" name="txtProvincia" required onchange="this.form.submit()">
+        <option value="">Seleccione</option>
+        <%
+            if (request.getAttribute("provincias") != null) {
+                ArrayList<Provincia> provincias = (ArrayList<Provincia>) request.getAttribute("provincias");
+                String provinciaSeleccionada = request.getParameter("txtProvincia"); // Obtener el valor de la provincia seleccionada
+
+                for (Provincia provincia : provincias) {
+        %>
+        <option value="<%= provincia.getId() %>" <%= provinciaSeleccionada != null && provinciaSeleccionada.equals(String.valueOf(provincia.getId())) ? "selected" : "" %>>
+    <%= provincia.getProvincia() %>
+</option>
+        <% 
+                }
+            }
+        %>
+    </select>
+  
+</p>
+<p>
+    <label class="form-label" for="localidad">Localidad</label>
+    <select class="controls" id="localidad" name="txtLocalidad" required required onchange="this.form.submit()">
+        <option value="">Seleccione</option>
+        <%
+            if (request.getAttribute("localidades") != null) {
+                ArrayList<Localidad> localidades = (ArrayList<Localidad>) request.getAttribute("localidades");
+                String localidadSeleccionada = request.getParameter("txtLocalidad"); // Obtener el valor de la localidad seleccionada
+
+                for (Localidad localidad : localidades) {
+        %>
+        <option value="<%= localidad.getIdLocalidad() %>" <%= localidadSeleccionada != null && localidadSeleccionada.equals(String.valueOf(localidad.getIdLocalidad())) ? "selected" : "" %>>
+            <%= localidad.getLocalidad() %>
+        </option>
+        <% 
+                }
+            }
+        %>
+    </select>
+  
+</p>
+<fieldset>
+                <legend>Datos del Cliente</legend>
                 <p>
                     <label class="form-label" for="nombre">Nombre</label>
                     <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" required name="txtNombre">
@@ -65,23 +120,7 @@
                     </select>
                 </p>
     <p>
-    <p>
-                    <label class="form-label" for="nacionalidad">Nacionalidad</label>
-                    <input class="controls" id="nacionalidad" type="text" placeholder="Ingrese la nacionalidad" required name="txtNacionalidad">
-                </p>
-                
-         
-                <p>
-                    <label class="form-label" for="provincia">Provincia</label>
-                    <input class="controls" id="provincia" type="text" placeholder="Ingrese la provincia" required name="txtProvincia">
-                </p>
-                
     
-                <p>
-                    <label class="form-label" for="localidad">Localidad</label>
-                    <input class="controls" id="localidad" type="text" placeholder="Ingrese la localidad" required name="txtLocalidad">
-                </p>
-
                 <p>
                     <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
                     <input class="controls" id="fechaNacimiento" type="date" required name="txtFechaNacimiento">

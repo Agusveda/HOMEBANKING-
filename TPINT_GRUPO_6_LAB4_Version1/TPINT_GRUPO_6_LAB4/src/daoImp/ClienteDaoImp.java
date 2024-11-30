@@ -44,7 +44,38 @@ public boolean insertCliente(Cliente cli, Usuario usu) {
     boolean isInsertExitoso = false;
     usu.setActivo(true);
     
+    String nacionalidad = null;
+    String provincia = null;
+    String localidad = null;
+    
     try {
+    	
+    	 String sqlNacionalidad = "SELECT Pais FROM Nacionalidades WHERE IdNacionalidad = ?";
+         PreparedStatement statementNacionalidad = conexion.prepareStatement(sqlNacionalidad);
+         statementNacionalidad.setString(1, cli.getNacionalidad());  // Usar el ID de la nacionalidad
+         ResultSet rsNacionalidad = statementNacionalidad.executeQuery();
+         if (rsNacionalidad.next()) {
+             nacionalidad = rsNacionalidad.getString("Pais");
+         }
+
+         // Obtener el nombre de la provincia a partir de su ID
+         String sqlProvincia = "SELECT Provincia FROM Provincias WHERE IDProvincia = ?";
+         PreparedStatement statementProvincia = conexion.prepareStatement(sqlProvincia);
+         statementProvincia.setString(1, cli.getProvincia());  // Usar el ID de la provincia
+         ResultSet rsProvincia = statementProvincia.executeQuery();
+         if (rsProvincia.next()) {
+             provincia = rsProvincia.getString("Provincia");
+         }
+
+         // Obtener el nombre de la localidad a partir de su ID
+         String sqlLocalidad = "SELECT Localiadad FROM localidades WHERE IDLocalidad = ?";
+         PreparedStatement statementLocalidad = conexion.prepareStatement(sqlLocalidad);
+         statementLocalidad.setString(1, cli.getLocalidad());  // Usar el ID de la localidad
+         ResultSet rsLocalidad = statementLocalidad.executeQuery();
+         if (rsLocalidad.next()) {
+             localidad = rsLocalidad.getString("Localiadad");
+         }
+         
         // Inserción en la tabla Cliente con generación de ID
         System.out.println("Preparando declaración de inserción para Cliente...");
 
@@ -54,11 +85,11 @@ public boolean insertCliente(Cliente cli, Usuario usu) {
         statementCliente.setString(3, cli.getNombre());
         statementCliente.setString(4, cli.getApellido());
         statementCliente.setString(5, cli.getSexo());
-        statementCliente.setString(6, cli.getNacionalidad());
+        statementCliente.setString(6, nacionalidad);
         statementCliente.setString(7, cli.getFechaNacimiento());
         statementCliente.setString(8, cli.getDireccion());
-        statementCliente.setString(9, cli.getLocalidad());
-        statementCliente.setString(10, cli.getProvincia());
+        statementCliente.setString(9, localidad);
+        statementCliente.setString(10,  provincia);
         statementCliente.setString(11, cli.getCorreoElectronico());
         statementCliente.setInt(12, cli.getTelefono());
         statementCliente.setInt(13,1);
@@ -588,87 +619,45 @@ public boolean ValidacionUsuario(String usu) {
     return exists;
 }
 
+
+
 @Override
-public ArrayList<Nacionalidades> ListNacionaliadaes() {
-	
-	try {
-        Class.forName("com.mysql.jdbc.Driver");
-        System.out.println("Driver cargado exitosamente.");
-    } catch (ClassNotFoundException e) {
-        System.out.println("Error al cargar el driver: " + e.getMessage());
-        e.printStackTrace();
-    }
-    
-    ArrayList<Nacionalidades> ListaPais = new ArrayList<Nacionalidades>();
-    String query = "SELECT IdNacionalidad, Pais FROM Nacionalidades";
+public ArrayList<Provincia> listProvincias(int idNacionalidad) {
+	ArrayList<Provincia> ListaProv = new ArrayList<Provincia>();
+    String query = "SELECT IDProvincia, IdNacionalidad, Provincia FROM provincias WHERE IdNacionalidad = ?";
     Connection con = Conexion.getConexion().getSQLConexion();
-    
+
     if (con == null) {
         System.out.println("No se pudo obtener la conexión a la base de datos.");
-        return ListaPais;
+        return ListaProv;
     } else {
         System.out.println("Conexión a la base de datos establecida.");
     }
-    
-    try (PreparedStatement ps = con.prepareStatement(query);
-         ResultSet rs = ps.executeQuery()) {
-        
-        while (rs.next()) {
-            Nacionalidades nac = new Nacionalidades();
-            nac.setId(rs.getInt("IdNacionalidad"));
-            nac.setNombre(rs.getString("Pais"));
-     
-            ListaPais.add(nac);
-            
+
+    try (PreparedStatement ps = con.prepareStatement(query)) {
+        // Filtrar por nacionalidad
+        ps.setInt(1, idNacionalidad);
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Provincia pro = new Provincia();
+                pro.setId(rs.getInt("IDProvincia"));
+                pro.setIdNacionalidad(rs.getInt("IdNacionalidad"));
+                pro.setProvincia(rs.getString("Provincia"));
+                ListaProv.add(pro);
+            }
         }
-        
-        
     } catch (SQLException e) {
         System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         e.printStackTrace();
     }
-    
-    
-    return ListaPais;
-}
 
-@Override
-public ArrayList<Provincia> listProvincias(int idNacionalidad) {
-	  ArrayList<Provincia> ListaProv = new ArrayList<Provincia>();
-	    String query = "SELECT IDProvincia, IdNacionalidad, Provincia FROM provincias WHERE IdNacionalidad = ?";
-	    Connection con = Conexion.getConexion().getSQLConexion();
-
-	    if (con == null) {
-	        System.out.println("No se pudo obtener la conexión a la base de datos.");
-	        return ListaProv;
-	    } else {
-	        System.out.println("Conexión a la base de datos establecida.");
-	    }
-
-	    try (PreparedStatement ps = con.prepareStatement(query)) {
-	        // Filtrar por nacionalidad
-	        ps.setInt(1, idNacionalidad);
-
-	        try (ResultSet rs = ps.executeQuery()) {
-	            while (rs.next()) {
-	                Provincia pro = new Provincia();
-	                pro.setId(rs.getInt("IDProvincia"));
-	                pro.setIdNacionalidad(rs.getInt("IdNacionalidad"));
-	                pro.setProvincia(rs.getString("Provincia"));
-	                ListaProv.add(pro);
-	            }
-	        }
-	    } catch (SQLException e) {
-	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-
-	    return ListaProv;
+    return ListaProv;
 	}
 
 	
 public ArrayList<Localidad> listLocalidades(int idProvincia) {
-    ArrayList<Localidad> listaLoc = new ArrayList<Localidad>();
+	ArrayList<Localidad> listaLoc = new ArrayList<Localidad>();
     String query = "SELECT IDLocalidad, IdProvincia, Localiadad FROM localidades WHERE IdProvincia = ?";
     Connection con = Conexion.getConexion().getSQLConexion();
 
@@ -934,6 +923,49 @@ public boolean ValidacionUsuarioModificar(String usu, int id) {
     }
 
     return exists;
+}
+
+@Override
+public ArrayList<Nacionalidades> ListNacionalidades() {
+	try {
+        Class.forName("com.mysql.jdbc.Driver");
+        System.out.println("Driver cargado exitosamente.");
+    } catch (ClassNotFoundException e) {
+        System.out.println("Error al cargar el driver: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    ArrayList<Nacionalidades> ListaPais = new ArrayList<Nacionalidades>();
+    String query = "SELECT IdNacionalidad, Pais FROM Nacionalidades";
+    Connection con = Conexion.getConexion().getSQLConexion();
+    
+    if (con == null) {
+        System.out.println("No se pudo obtener la conexión a la base de datos.");
+        return ListaPais;
+    } else {
+        System.out.println("Conexión a la base de datos establecida.");
+    }
+    
+    try (PreparedStatement ps = con.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+        
+        while (rs.next()) {
+            Nacionalidades nac = new Nacionalidades();
+            nac.setId(rs.getInt("IdNacionalidad"));
+            nac.setNombre(rs.getString("Pais"));
+     
+            ListaPais.add(nac);
+            
+        }
+        
+        
+    } catch (SQLException e) {
+        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+        e.printStackTrace();
+    }
+    
+    
+    return ListaPais;
 }
 
 
