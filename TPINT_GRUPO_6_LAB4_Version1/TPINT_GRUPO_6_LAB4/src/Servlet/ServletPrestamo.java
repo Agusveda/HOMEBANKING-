@@ -71,6 +71,7 @@ public class ServletPrestamo extends HttpServlet {
 	            System.out.println("No se encontró sesión activa para el cliente.");
 	            response.sendRedirect("prestamoCliente.jsp");
 	        }
+	        //PRUEVA
 	}
 
 }
