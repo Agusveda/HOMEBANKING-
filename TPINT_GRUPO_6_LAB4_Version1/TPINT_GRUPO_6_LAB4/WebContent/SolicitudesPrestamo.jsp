@@ -29,8 +29,6 @@
     </fieldset>
 </form>
 
-
-
 <%
 	MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
 	ArrayList<Prestamo> lista = mov.ListPrestamosPedidos();
