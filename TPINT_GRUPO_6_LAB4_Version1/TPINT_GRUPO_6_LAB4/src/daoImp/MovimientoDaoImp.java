@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import Entidades.Cliente;
 import Entidades.Cuenta;
 import Entidades.Movimiento;
+import Entidades.Nacionalidades;
+import Entidades.Prestamo;
 import dao.MovimientoDao;
 
 public class MovimientoDaoImp implements MovimientoDao {
@@ -23,7 +25,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
-	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas) " + "VALUES (?, ?, NOW(), ?, ?, ?)";
+	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?, ?, NOW(), ?, ?, ?,?)";
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -343,62 +345,114 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return exists;
 	}
-	
-	
-	public boolean insertarPrestamo(int idCliente, float importePedido, int plazoPago, float importePagarXmes, int cantidadCuotas) {
+
+	@Override
+	public boolean insertarPrestamo(Prestamo prestamo) {
 		 
-   Connection connection = null;
-   PreparedStatement statement = null;
-   boolean isInsertExitoso = false;
-   
-   try {
-       connection = Conexion.getConexion().getSQLConexion();
-       if (connection == null) {
-           System.out.println("No se pudo obtener la conexión a la base de datos.");
-           return false;
-       }
-       connection.setAutoCommit(false); 
+		   Connection connection = null;
+		   PreparedStatement statement = null;
+		   boolean isInsertExitoso = false;
+		   
+		   try {
+		       connection = Conexion.getConexion().getSQLConexion();
+		       if (connection == null) {
+		           System.out.println("No se pudo obtener la conexión a la base de datos.");
+		           return false;
+		       }
+		       connection.setAutoCommit(false); 
+		
+		       statement = connection.prepareStatement(InsertarPrestamo);
+		       statement.setInt(1, prestamo.getIdCliente());
+		       statement.setFloat(2, prestamo.getImporteCliente());
+		       statement.setInt(3, prestamo.getPlazoPago());
+		       statement.setFloat(4, prestamo.getImpxmes());
+		       statement.setInt(5, prestamo.getCantCuo());
+		       statement.setInt(6,0);
+		
+		       int rowsAffected = statement.executeUpdate();
+		       
+		       if (rowsAffected > 0) {
+		           connection.commit(); 
+		           System.out.println("El préstamo se ha insertado correctamente. Filas afectadas: " + rowsAffected); 
+		           isInsertExitoso = true;
+		       }
+		
+		   } catch (SQLException e) {
+		       e.printStackTrace();
+		       System.out.println("Error durante la inserción.");
+		       if (connection != null) {
+		           try {
+		               connection.rollback(); 
+		           } catch (SQLException e1) {
+		               e1.printStackTrace();
+		           }
+		       }
+		   } finally {
+		     
+		       try {
+		           if (statement != null) {
+		               statement.close();
+		           }
+		           if (connection != null) {
+		               connection.setAutoCommit(true); 
+		               connection.close();
+		           }
+		       } catch (SQLException e) {
+		           e.printStackTrace();
+		       }
+		   }
+		   return isInsertExitoso;
+	}
 
-       statement = connection.prepareStatement(InsertarPrestamo);
-       statement.setInt(1, idCliente);
-       statement.setFloat(2, importePedido);
-       statement.setInt(3, plazoPago);
-       statement.setFloat(4, importePagarXmes);
-       statement.setInt(5, cantidadCuotas);
+	@Override
+	public ArrayList<Prestamo> ListPrestamosPedidos() {
+		try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	        System.out.println("Driver cargado exitosamente.");
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("Error al cargar el driver: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    
+	    ArrayList<Prestamo> ListaPrestamos = new ArrayList<Prestamo>();
+	    
+	    String query = "SELECT IdCliente, ImportePedidoCliente,FechaAlta,PlazoPago,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo";
+	    
+	    Connection con = Conexion.getConexion().getSQLConexion();
+	    
+	    if (con == null) {
+	        System.out.println("No se pudo obtener la conexión a la base de datos.");
+	        return ListaPrestamos;
+	    } else {
+	        System.out.println("Conexión a la base de datos establecida.");
+	    }
+	    
+	    try (PreparedStatement ps = con.prepareStatement(query);
+	         ResultSet rs = ps.executeQuery()) {
+	        
+	        while (rs.next()) {
+	            Prestamo pre = new Prestamo();
+	            pre.setId(rs.getInt("IdCliente"));
+	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
+	            pre.setFechaAlta(rs.getDate("FechaAlta"));
+	            pre.setPlazoPago(rs.getInt("PlazoPago"));
+	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
+	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
+	            pre.setconfimacion(rs.getBoolean("confirmacion"));
+	          
+	            ListaPrestamos.add(pre);
+	            
+	        }
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    
+	    
+	    return ListaPrestamos;
+	}
+	
+	
 
-       int rowsAffected = statement.executeUpdate();
-       
-       if (rowsAffected > 0) {
-           connection.commit(); 
-           System.out.println("El préstamo se ha insertado correctamente. Filas afectadas: " + rowsAffected); 
-           isInsertExitoso = true;
-       }
-
-   } catch (SQLException e) {
-       e.printStackTrace();
-       System.out.println("Error durante la inserción.");
-       if (connection != null) {
-           try {
-               connection.rollback(); 
-           } catch (SQLException e1) {
-               e1.printStackTrace();
-           }
-       }
-   } finally {
-     
-       try {
-           if (statement != null) {
-               statement.close();
-           }
-           if (connection != null) {
-               connection.setAutoCommit(true); 
-               connection.close();
-           }
-       } catch (SQLException e) {
-           e.printStackTrace();
-       }
-   }
-   return isInsertExitoso;
-
-}
 }

@@ -1,4 +1,8 @@
+<%@page import="negocioImpl.MovimientoNegocioImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="daoImp.MovimientoDaoImp"%>
+<%@ page import="Entidades.Prestamo"%>
+<%@ page import="java.util.ArrayList"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,21 +29,46 @@
     </fieldset>
 </form>
 
-<table border="1">
+
+
+<%
+	MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
+	ArrayList<Prestamo> lista = mov.ListPrestamosPedidos();
+%>
+
+<table border="solicitud_table" class="display">
     <thead>
         <tr>
-            <th>ID Préstamo</th>
-            <th>Nombre del Cliente</th>
-            <th>Documento</th>
-            <th>Monto Solicitado</th>
-            <th>Estado</th>
-            <th>Acciones</th>
+            <th>CLIENTE</th>
+            <th>IMPORTE DEL CLIENTE</th>
+            <th>FECHA ALTA</th>
+            <th>PLAZO DEL PAGO</th>
+            <th>IMPORTE POR MES</th>
+            <th>CANTIDAD DE CUOTAS</th>
+            <th>CONFIRMACION</th>
         </tr>
     </thead>
     <tbody>
-   
+        <% if (lista != null && !lista.isEmpty()) {
+            for (Prestamo pre : lista) { %>
+                <tr onclick="selectRow(this)">
+                    <td><%= pre.getIdCliente() %></td>
+                    <td><%= pre.getImporteCliente()%></td>
+                    <td><%= pre.getFechaAlta()%></td>
+                    <td><%= pre.getPlazoPago()%></td>
+                    <td><%= pre.getImpxmes() %></td>
+                    <td><%= pre.getCantCuo() %></td>
+                    <td><%= pre.getConfimarcion()%></td>
+                </tr>
+            <% }
+        } else { %>
+            <tr>
+                <td colspan="13" style="text-align: center;">No se encontraron Prestamos :(</td>
+            </tr>
+        <% } %>
     </tbody>
 </table>
+
 
  <jsp:include page="Footer.jsp"/>
 

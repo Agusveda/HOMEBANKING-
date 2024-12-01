@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Entidades.Cliente;
 import Entidades.Cuenta;
+import Entidades.Prestamo;
 import dao.CuentaDao;
 import daoImp.CuentaDaoImpl;
 import negocio.CuentaNegocio;
@@ -67,5 +68,6 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		
 		return cuentaDao.obtenerCuentaPorIdCliente(id);
 	}
+
 	
 }

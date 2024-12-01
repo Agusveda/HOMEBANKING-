@@ -3,6 +3,7 @@ package negocio;
 import java.util.ArrayList;
 
 import Entidades.Cuenta;
+import Entidades.Prestamo;
 
 public interface CuentaNegocio {
 	public boolean insertCuenta(Cuenta cuenta);
@@ -15,4 +16,5 @@ public interface CuentaNegocio {
 	public Cuenta obtenerCuentaPorId(int id);
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 	public Cuenta obtenerCuentaPorIdCliente(int id);
+	public ArrayList<Prestamo> ListPrestamosPedidos();
 }
