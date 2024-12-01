@@ -23,7 +23,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
-
+	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas) " + "VALUES (?, ?, NOW(), ?, ?, ?)";
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -343,5 +343,62 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return exists;
 	}
+	
+	
+	public boolean insertarPrestamo(int idCliente, float importePedido, int plazoPago, float importePagarXmes, int cantidadCuotas) {
+		 
+   Connection connection = null;
+   PreparedStatement statement = null;
+   boolean isInsertExitoso = false;
+   
+   try {
+       connection = Conexion.getConexion().getSQLConexion();
+       if (connection == null) {
+           System.out.println("No se pudo obtener la conexión a la base de datos.");
+           return false;
+       }
+       connection.setAutoCommit(false); 
 
+       statement = connection.prepareStatement(InsertarPrestamo);
+       statement.setInt(1, idCliente);
+       statement.setFloat(2, importePedido);
+       statement.setInt(3, plazoPago);
+       statement.setFloat(4, importePagarXmes);
+       statement.setInt(5, cantidadCuotas);
+
+       int rowsAffected = statement.executeUpdate();
+       
+       if (rowsAffected > 0) {
+           connection.commit(); 
+           System.out.println("El préstamo se ha insertado correctamente. Filas afectadas: " + rowsAffected); 
+           isInsertExitoso = true;
+       }
+
+   } catch (SQLException e) {
+       e.printStackTrace();
+       System.out.println("Error durante la inserción.");
+       if (connection != null) {
+           try {
+               connection.rollback(); 
+           } catch (SQLException e1) {
+               e1.printStackTrace();
+           }
+       }
+   } finally {
+     
+       try {
+           if (statement != null) {
+               statement.close();
+           }
+           if (connection != null) {
+               connection.setAutoCommit(true); 
+               connection.close();
+           }
+       } catch (SQLException e) {
+           e.printStackTrace();
+       }
+   }
+   return isInsertExitoso;
+
+}
 }

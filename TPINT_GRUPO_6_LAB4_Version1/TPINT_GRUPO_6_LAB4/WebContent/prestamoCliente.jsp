@@ -28,7 +28,7 @@
             ArrayList<Cuenta> cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
     %>
     
-    <form method="post" action="ServletBanco">
+    <form method="post" action="ServletPrestamo">
         <label for="monto">Monto del Préstamo:</label>
         <input type="number" id="monto" name="monto" placeholder="Ingrese el monto" required>
         <br>

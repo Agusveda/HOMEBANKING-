@@ -14,4 +14,6 @@ public interface MovimientoDao
 	public float ObtenerSaldoPorIdCuenta(int idCue); 
 	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue);
 	public boolean ExisteCBU(int Cbu);
+    public boolean insertarPrestamo(int idCliente, float importePedido, int plazoPago, float importePagarXmes, int cantidadCuotas);
+
 }

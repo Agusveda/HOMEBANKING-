@@ -10,6 +10,9 @@ public class Movimiento
 	private float importe;
 	private int idCuenta;
 	private String detalle;
+	private boolean esPrestamo;  
+    private int cantidadCuotas;   
+    private float saldoPrestamo; 
 	
 	public Movimiento ()
 	{
@@ -68,4 +71,28 @@ public class Movimiento
 	public void setDetalle(String detalle) {
 		this.detalle = detalle;
 	}
+	
+	  public boolean isEsPrestamo() {
+	        return esPrestamo;
+	    }
+
+	    public void setEsPrestamo(boolean esPrestamo) {
+	        this.esPrestamo = esPrestamo;
+	    }
+
+	    public int getCantidadCuotas() {
+	        return cantidadCuotas;
+	    }
+
+	    public void setCantidadCuotas(int cantidadCuotas) {
+	        this.cantidadCuotas = cantidadCuotas;
+	    }
+
+	    public float getSaldoPrestamo() {
+	        return saldoPrestamo;
+	    }
+
+	    public void setSaldoPrestamo(float saldoPrestamo) {
+	        this.saldoPrestamo = saldoPrestamo;
+	    }
 }

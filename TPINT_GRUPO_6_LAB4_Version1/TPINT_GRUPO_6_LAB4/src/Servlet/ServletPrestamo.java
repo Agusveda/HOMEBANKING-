@@ -7,6 +7,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import daoImp.MovimientoDaoImp;
+
 /**
  * Servlet implementation class ServletPrestamo
  */
@@ -36,25 +38,39 @@ public class ServletPrestamo extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		 Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
-		    
-		 
-		    if (idCliente != null) {
-		        System.out.println("Cliente autenticado. ID del cliente: " + idCliente);
-		        String monto = request.getParameter("monto");
-		        String cuotas = request.getParameter("cuotas");
-		        String cuenta = request.getParameter("cuenta");
-		        
-		        System.out.println("Monto solicitado: " + monto);
-		        System.out.println("Cuotas seleccionadas: " + cuotas);
-		        System.out.println("Cuenta de depósito: " + cuenta);
-		        
-		    
-		     
-		    } else {
-		      
-		        System.out.println("No se encontró sesión activa para el cliente.");
-		        response.sendRedirect("login.jsp");
-		    }
+
+	        if (idCliente != null) {
+	            System.out.println("Cliente autenticado. ID del cliente: " + idCliente);
+
+	            String monto = request.getParameter("monto");
+	            String cuotas = request.getParameter("cuotas");
+	            String cuenta = request.getParameter("cuenta");
+
+	            System.out.println("Monto solicitado: " + monto);
+	            System.out.println("Cuotas seleccionadas: " + cuotas);
+	            System.out.println("Cuenta de depósito: " + cuenta);
+
+	         
+	            float importePedido = Float.parseFloat(monto);
+	            int cantidadCuotas = Integer.parseInt(cuotas);
+	            int plazoPago = 12;  
+	            float importePagarXmes = importePedido / cantidadCuotas;  
+
+	            
+	            MovimientoDaoImp prestamoDao = new MovimientoDaoImp();
+	            boolean exito = prestamoDao.insertarPrestamo(idCliente, importePedido, plazoPago, importePagarXmes, cantidadCuotas);
+
+	            if (exito) {
+	                System.out.println("Préstamo registrado exitosamente.");
+	                response.sendRedirect("PrestamoCliente.jsp");  
+	            } else {
+	                System.out.println("Error al registrar el préstamo.");
+	                response.sendRedirect("error.jsp"); 
+	            }
+	        } else {
+	            System.out.println("No se encontró sesión activa para el cliente.");
+	            response.sendRedirect("prestamoCliente.jsp");
+	        }
 	}
 
 }
