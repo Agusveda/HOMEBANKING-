@@ -36,6 +36,7 @@
 
         <!-- Formulario para registrar cliente -->
         <form method="POST" action="ServletBanco">
+        <input type="hidden" name="action" value="loadProvinces">
         
            <p>
     <label class="form-label" for="nacionalidad">Nacionalidad</label>

@@ -66,8 +66,9 @@ public class ServletCliente extends HttpServlet {
 
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    	String action = request.getParameter("action");
 
-    	 
+    	if ("loadProvinces".equals(action)) {	 
  	   // Obtener el id de la nacionalidad seleccionada
      String nacionalidadId = request.getParameter("txtNacionalidad");
      String provinciaId = request.getParameter("txtProvincia");
@@ -120,6 +121,7 @@ public class ServletCliente extends HttpServlet {
      request.getRequestDispatcher("AltaCliente.jsp").forward(request, response);
      
 
+    	}
     	
     	// Modificar de Cliente
         if (request.getParameter("btnModificarCliente") != null) {
