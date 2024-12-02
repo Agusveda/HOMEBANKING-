@@ -69,5 +69,8 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 		return cuentaDao.obtenerCuentaPorIdCliente(id);
 	}
 
+
+	
+
 	
 }

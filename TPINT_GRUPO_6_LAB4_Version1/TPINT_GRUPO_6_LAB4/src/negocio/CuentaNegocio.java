@@ -16,5 +16,5 @@ public interface CuentaNegocio {
 	public Cuenta obtenerCuentaPorId(int id);
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 	public Cuenta obtenerCuentaPorIdCliente(int id);
-	public ArrayList<Prestamo> ListPrestamosPedidos();
+	
 }
