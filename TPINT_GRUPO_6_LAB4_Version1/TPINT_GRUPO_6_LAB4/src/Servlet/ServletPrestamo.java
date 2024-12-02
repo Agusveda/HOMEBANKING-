@@ -1,6 +1,8 @@
 package Servlet;
 
 import java.io.IOException;
+import java.util.ArrayList;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,8 +30,7 @@ public class ServletPrestamo extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		  
 	}
 
 	/**
@@ -37,59 +38,75 @@ public class ServletPrestamo extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		 Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
+		  
+	        if (request.getParameter("monto") != null && request.getParameter("cuotas") != null && request.getParameter("cuenta") != null) {
+	            procesarSolicitudPrestamo(request, response);
+	        } 
+	        else if (request.getParameter("idPrestamo") != null && request.getParameter("confirmacion") != null) {
+	            procesarAprobacionPrestamo(request, response);
+	        }
+	    }
 
-		    if (idCliente != null) {
-		        System.out.println("Cliente autenticado. ID del cliente: " + idCliente);
+	    private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	        Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
 
-		        String monto = request.getParameter("monto");
-		        String cuotas = request.getParameter("cuotas");
-		        String cuenta = request.getParameter("cuenta");
-		        boolean confirmacion = false; 
+	        //El cliente pide el prestamo
+	        if (idCliente != null) {
+	            String monto = request.getParameter("monto");
+	            String cuotas = request.getParameter("cuotas");
+	            String cuenta = request.getParameter("cuenta");
+	            boolean confirmacion = false; 
 
-		        System.out.println("Monto solicitado: " + monto);
-		        System.out.println("Cuotas seleccionadas: " + cuotas);
-		        System.out.println("Cuenta de depósito: " + cuenta);
+	            try {
+	                float importeCliente = Float.parseFloat(monto);
+	                int cantCuo = Integer.parseInt(cuotas);
+	                int plazoPago = 12; 
+	                float impxmes = importeCliente / cantCuo;
 
-		        try {
-		            
-		            float importeCliente = Float.parseFloat(monto);
-		            int cantCuo = Integer.parseInt(cuotas);
-		            int plazoPago = 12; 
-		            float impxmes = importeCliente / cantCuo;
+	                java.sql.Date fechaAlta = new java.sql.Date(System.currentTimeMillis());
 
-		           
-		            java.sql.Date fechaAlta = new java.sql.Date(System.currentTimeMillis());
+	                Prestamo prestamo = new Prestamo();
+	                prestamo.setIdCliente(idCliente);
+	                prestamo.setImporteCliente(importeCliente);
+	                prestamo.setFechaAlta(fechaAlta);
+	                prestamo.setPlazoPago(plazoPago);
+	                prestamo.setImpxmes(impxmes);
+	                prestamo.setCantCuo(cantCuo);
+	                prestamo.setconfimacion(confirmacion);
 
-		       
-		            Prestamo prestamo = new Prestamo();
-		            prestamo.setIdCliente(idCliente);
-		            prestamo.setImporteCliente(importeCliente);
-		            prestamo.setFechaAlta(fechaAlta);
-		            prestamo.setPlazoPago(plazoPago);
-		            prestamo.setImpxmes(impxmes);
-		            prestamo.setCantCuo(cantCuo);
-		            prestamo.setconfimacion(confirmacion);
+	                MovimientoDaoImp prestamoDao = new MovimientoDaoImp();
+	                boolean exito = prestamoDao.insertarPrestamo(prestamo);
 
-		         
-		            MovimientoDaoImp prestamoDao = new MovimientoDaoImp();
-		            boolean exito = prestamoDao.insertarPrestamo(prestamo);
+	                if (exito) {
+	                    response.sendRedirect("prestamoCliente.jsp"); 
+	                } else {
+	                    response.sendRedirect("error.jsp"); 
+	                }
+	            } catch (NumberFormatException e) {
+	                response.sendRedirect("error.jsp"); 
+	            }
+	        } else {
+	            response.sendRedirect("login.jsp");
+	        }
+	    }
 
-		            if (exito) {
-		                System.out.println("Préstamo registrado exitosamente.");
-		                response.sendRedirect("PrestamoCliente.jsp");
-		            } else {
-		                System.out.println("Error al registrar el préstamo.");
-		                response.sendRedirect("error.jsp");
-		            }
-		        } catch (NumberFormatException e) {
-		            System.out.println("Error al convertir parámetros: " + e.getMessage());
-		            response.sendRedirect("error.jsp");
-		        }
-		    } else {
-		        System.out.println("Cliente no autenticado.");
-		        response.sendRedirect("login.jsp");
-		    }
+	    //Solicitudes para el administrador para Aceptar o denegar
+	    private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	        try {
+	            int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
+	            int confirmacion = Integer.parseInt(request.getParameter("confirmacion"));
 
-}
-}
+	            MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
+	            boolean exito = movimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
+
+	            if (exito) {
+	                response.sendRedirect("SolicitudesPrestamo.jsp"); 
+	            } else {
+	                response.sendRedirect("error.jsp"); 
+	            }
+	        } catch (NumberFormatException e) {
+	            response.sendRedirect("error.jsp"); 
+	        }
+	    }
+	}
+

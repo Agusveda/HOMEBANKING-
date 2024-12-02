@@ -17,4 +17,5 @@ public interface MovimientoDao
 	public boolean ExisteCBU(int Cbu);
     public boolean insertarPrestamo(Prestamo prestamo);
     public ArrayList<Prestamo> ListPrestamosPedidos();
+    public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
 }

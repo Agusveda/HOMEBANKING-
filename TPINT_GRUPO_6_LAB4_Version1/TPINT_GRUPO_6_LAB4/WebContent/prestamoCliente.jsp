@@ -19,10 +19,10 @@
     <h2>Solicitud de Préstamos</h2>
     
     <% 
-        // Recuperar el ID del cliente desde la sesión
+        
         Integer idCliente = (Integer) session.getAttribute("IdCliente");
         
-        // Verificar si el cliente está autenticado
+  
         if (idCliente != null) {
             MovimientoDao movimientoDao = new MovimientoDaoImp();
             ArrayList<Cuenta> cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);

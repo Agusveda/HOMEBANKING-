@@ -52,31 +52,28 @@ public boolean insertCliente(Cliente cli, Usuario usu) {
     	
     	 String sqlNacionalidad = "SELECT Pais FROM Nacionalidades WHERE IdNacionalidad = ?";
          PreparedStatement statementNacionalidad = conexion.prepareStatement(sqlNacionalidad);
-         statementNacionalidad.setString(1, cli.getNacionalidad());  // Usar el ID de la nacionalidad
+         statementNacionalidad.setString(1, cli.getNacionalidad());  
          ResultSet rsNacionalidad = statementNacionalidad.executeQuery();
          if (rsNacionalidad.next()) {
              nacionalidad = rsNacionalidad.getString("Pais");
          }
 
-         // Obtener el nombre de la provincia a partir de su ID
          String sqlProvincia = "SELECT Provincia FROM Provincias WHERE IDProvincia = ?";
          PreparedStatement statementProvincia = conexion.prepareStatement(sqlProvincia);
-         statementProvincia.setString(1, cli.getProvincia());  // Usar el ID de la provincia
+         statementProvincia.setString(1, cli.getProvincia());  
          ResultSet rsProvincia = statementProvincia.executeQuery();
          if (rsProvincia.next()) {
              provincia = rsProvincia.getString("Provincia");
          }
 
-         // Obtener el nombre de la localidad a partir de su ID
          String sqlLocalidad = "SELECT Localiadad FROM localidades WHERE IDLocalidad = ?";
          PreparedStatement statementLocalidad = conexion.prepareStatement(sqlLocalidad);
-         statementLocalidad.setString(1, cli.getLocalidad());  // Usar el ID de la localidad
+         statementLocalidad.setString(1, cli.getLocalidad());  
          ResultSet rsLocalidad = statementLocalidad.executeQuery();
          if (rsLocalidad.next()) {
              localidad = rsLocalidad.getString("Localiadad");
          }
          
-        // Inserción en la tabla Cliente con generación de ID
         System.out.println("Preparando declaración de inserción para Cliente...");
 
         statementCliente = conexion.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
@@ -98,14 +95,12 @@ public boolean insertCliente(Cliente cli, Usuario usu) {
         if (statementCliente.executeUpdate() > 0) {
             System.out.println("Inserción en Cliente exitosa.");
 
-            // Obtener el ID generado para Cliente
             ResultSet generatedKeys = statementCliente.getGeneratedKeys();
             if (generatedKeys.next()) {
                 int clienteId = generatedKeys.getInt(1);
                 System.out.println("ID generado para cliente: " + clienteId);
 
 
-                // Inserción en la tabla Usuario 
                 
                 statementUsuario = conexion.prepareStatement(insertUsuario);
                 statementUsuario.setString(1, usu.getUsuario());
@@ -115,7 +110,6 @@ public boolean insertCliente(Cliente cli, Usuario usu) {
                 statementUsuario.setBoolean(5, usu.getActivo()); 
 
 
-                // Ejecutar la inserción de Usuario
                 if (statementUsuario.executeUpdate() > 0) {
                     System.out.println("Inserción en Usuario exitosa.");
 

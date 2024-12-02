@@ -11,9 +11,20 @@
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <link rel="stylesheet" type="text/css" href="css/AMPrestamos.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+    <style>
+        .selected-row {
+            background-color: #d3e0ea;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>
+
 <div class="encabezado">
     <h1>Solicitudes de Préstamo</h1>
 </div>
@@ -30,46 +41,88 @@
 </form>
 
 <%
-	MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
-	ArrayList<Prestamo> lista = mov.ListPrestamosPedidos();
+    
+    MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
+    ArrayList<Prestamo> prestamos = mov.ListPrestamosPedidos();
+
+    if (prestamos == null || prestamos.isEmpty()) {
+        System.out.println("No se encontraron préstamos.");
+    } else {
+        System.out.println("Cantidad de préstamos encontrados: " + prestamos.size());
+    }
+
+    request.setAttribute("prestamos", prestamos);
 %>
 
-<table border="solicitud_table" class="display">
+<table id="prestamos_table" class="display">
     <thead>
         <tr>
-            <th>CLIENTE</th>
-            <th>IMPORTE DEL CLIENTE</th>
-            <th>FECHA ALTA</th>
-            <th>PLAZO DEL PAGO</th>
-            <th>IMPORTE POR MES</th>
-            <th>CANTIDAD DE CUOTAS</th>
-            <th>CONFIRMACION</th>
+        	<th>ID Prestamo</th>
+            <th>ID Cliente</th>
+            <th>Importe Pedido</th>
+            <th>Fecha Alta</th>
+            <th>Plazo Pago</th>
+            <th>Importe Mensual</th>
+            <th>Cantidad Cuotas</th>
+            <th>Confirmado</th>
+            <th>Acciones</th>
         </tr>
     </thead>
     <tbody>
-        <% if (lista != null && !lista.isEmpty()) {
-            for (Prestamo pre : lista) { %>
+        <% if (prestamos != null && !prestamos.isEmpty()) {
+            for (Prestamo prestamo : prestamos) { %>
                 <tr onclick="selectRow(this)">
-                    <td><%= pre.getIdCliente() %></td>
-                    <td><%= pre.getImporteCliente()%></td>
-                    <td><%= pre.getFechaAlta()%></td>
-                    <td><%= pre.getPlazoPago()%></td>
-                    <td><%= pre.getImpxmes() %></td>
-                    <td><%= pre.getCantCuo() %></td>
-                    <td><%= pre.getConfimarcion()%></td>
+                	<td><%= prestamo.getId() %></td>
+                    <td><%= prestamo.getIdCliente() %></td>
+                    <td><%= prestamo.getImporteCliente() %></td>
+                    <td><%= prestamo.getFechaAlta() %></td>
+                    <td><%= prestamo.getPlazoPago() %></td>
+                    <td><%= prestamo.getImpxmes() %></td>
+                    <td><%= prestamo.getCantCuo() %></td>
+                    <td><%= prestamo.getConfimarcion() ? "Sí" : "No" %></td>
+                    <td>
+                        <!-- Formulario para aprobar el préstamo -->
+                        <form action="ServletPrestamo" method="post" style="display:inline;">
+                            <input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>">
+                            <input type="hidden" name="confirmacion" value="1">
+                            <button type="submit" class="acciones-btn">Aprobar</button>
+                        </form>
+                        <!-- Formulario para denegar el préstamo -->
+                        <form action="ServletPrestamo" method="post" style="display:inline;">
+                            <input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>">
+                            <input type="hidden" name="confirmacion" value="0">
+                            <button type="submit" class="acciones-btn">Denegar</button>
+                        </form>
+                    </td>
                 </tr>
             <% }
         } else { %>
             <tr>
-                <td colspan="13" style="text-align: center;">No se encontraron Prestamos :(</td>
+                <td colspan="8" style="text-align: center;">No se encontraron préstamos.</td>
             </tr>
         <% } %>
     </tbody>
 </table>
 
+<jsp:include page="Footer.jsp"/>
 
- <jsp:include page="Footer.jsp"/>
+<script>
+    let selectedRow = null;
+
+    $(document).ready(function() {
+       
+        $('#prestamos_table').DataTable().destroy();
+        $('#prestamos_table').DataTable();          
+    });
+
+    function selectRow(row) {
+        if (selectedRow) {
+            selectedRow.classList.remove("selected-row");
+        }
+        row.classList.add("selected-row");
+        selectedRow = row;
+    }
+</script>
 
 </body>
-
 </html>
