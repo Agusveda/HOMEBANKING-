@@ -218,7 +218,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 		}
 		return CuentasCliente;
 	}
-
+// IMPOTANTE
 	public float ObtenerSaldoPorIdCuenta(int idCue) {
 		float saldo;
 		Cuenta cuenta = null;
