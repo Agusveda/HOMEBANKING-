@@ -456,58 +456,58 @@ public class MovimientoDaoImp implements MovimientoDao {
 	
 	
 	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
-	    Connection connection = null;
-	    PreparedStatement statement = null;
-	    boolean isUpdateExitoso = false;
-	    
-	    try {
-	        connection = Conexion.getConexion().getSQLConexion();
-	        if (connection == null) {
-	            System.out.println("No se pudo obtener la conexión a la base de datos.");
-	            return false;
-	        }
+		   Connection connection = null;
+		    PreparedStatement statement = null;
+		    boolean isUpdateExitoso = false;
+		    
+		    try {
+		        connection = Conexion.getConexion().getSQLConexion(); 
+		        if (connection == null) {
+		            System.out.println("No se pudo obtener la conexión a la base de datos.");
+		            return false;
+		        }
 
-	        System.out.println("Actualizando préstamo con ID: " + idPrestamo);
-	        System.out.println("Nuevo estado de confirmación: " + confirmacion);
+		        System.out.println("Actualizando préstamo con ID: " + idPrestamo);
+		        System.out.println("Nuevo estado de confirmación: " + confirmacion);
 
-	        String updateQuery = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
-	        statement = connection.prepareStatement(updateQuery);
-	        statement.setInt(1, confirmacion);
-	        statement.setInt(2, idPrestamo);
+		        String updateQuery = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
+		        statement = connection.prepareStatement(updateQuery);
+		        statement.setInt(1, confirmacion);
+		        statement.setInt(2, idPrestamo);
 
-	        int rowsAffected = statement.executeUpdate();
+		        int rowsAffected = statement.executeUpdate();
 
-	        if (rowsAffected > 0) {
-	            System.out.println("El estado del préstamo se ha actualizado correctamente. Filas afectadas: " + rowsAffected);
-	            isUpdateExitoso = true;
-	        } else {
-	            System.out.println("No se actualizó ninguna fila. Verifica si el ID de préstamo es válido.");
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.out.println("Error durante la actualización.");
-	        if (connection != null) {
-	            try {
-	                connection.rollback();
-	            } catch (SQLException e1) {
-	                e1.printStackTrace();
-	            }
-	        }
-	    } finally {
-	        try {
-	            if (statement != null) {
-	                statement.close();
-	            }
-	            if (connection != null) {
-	                connection.setAutoCommit(true); 
-	                connection.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    return isUpdateExitoso;
-	}
+		        if (rowsAffected > 0) {
+		            System.out.println("El estado del préstamo se ha actualizado correctamente. Filas afectadas: " + rowsAffected);
+		            isUpdateExitoso = true;
+		        } else {
+		            System.out.println("No se actualizó ninguna fila. Verifica si el ID de préstamo es válido.");
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        System.out.println("Error durante la actualización.");
+		        if (connection != null) {
+		            try {
+		                connection.rollback(); 
+		            } catch (SQLException e1) {
+		                e1.printStackTrace();
+		            }
+		        }
+		    } finally {
+		        try {
+		            if (statement != null) {
+		                statement.close(); 
+		            }
+		            if (connection != null) {
+		                connection.setAutoCommit(true); 
+		               
+		            }
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+		    return isUpdateExitoso;
+		}
 	
 
 }

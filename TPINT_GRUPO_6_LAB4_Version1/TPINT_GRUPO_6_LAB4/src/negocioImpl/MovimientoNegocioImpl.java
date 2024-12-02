@@ -58,5 +58,12 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	public ArrayList<Prestamo> ListPrestamosPedidos() {
 		return MovimientoDao.ListPrestamosPedidos();
 	}
+
+	@Override
+	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
+		return MovimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
+	}
+	
+	
 	
 }
