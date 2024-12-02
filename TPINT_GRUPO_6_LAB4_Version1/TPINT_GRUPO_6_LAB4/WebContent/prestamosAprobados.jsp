@@ -2,9 +2,7 @@
 <%@ page import="Entidades.Prestamo" %>
 <%@ page import="java.util.ArrayList" %>
 
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-
 
 <!DOCTYPE html>
 <html>
@@ -44,21 +42,25 @@
 </form>
 
 <%
+    // Instanciar la clase de lógica de negocio
     MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
-    ArrayList<Prestamo> prestamos = mov.ListPrestamosPedidos();
+    ArrayList<Prestamo> prestamos = null;
 
-    if (prestamos == null || prestamos.isEmpty()) {
-        System.out.println("No se encontraron préstamos.");
-    } else {
-        System.out.println("Cantidad de préstamos encontrados: " + prestamos.size());
+    try {
+        prestamos = mov.ListPrestamosPedidosAutorizados();
+        if (prestamos == null || prestamos.isEmpty()) {
+            out.println("<p style='color: red;'>No se encontraron préstamos autorizados.</p>");
+        }
+    } catch (Exception e) {
+        out.println("<p style='color: red;'>Error al obtener la lista de préstamos: " + e.getMessage() + "</p>");
+        e.printStackTrace();
     }
-
-    request.setAttribute("prestamos", prestamos);
 %>
 
 <table id="prestamos_table" class="display">
     <thead>
         <tr>
+            <th>ID Préstamo</th>
             <th>ID Cliente</th>
             <th>Importe Pedido</th>
             <th>Fecha Alta</th>
@@ -69,21 +71,23 @@
         </tr>
     </thead>
     <tbody>
-        <% if (prestamos != null && !prestamos.isEmpty()) {
+        <% 
+        if (prestamos != null && !prestamos.isEmpty()) {
             for (Prestamo prestamo : prestamos) { %>
                 <tr onclick="selectRow(this)">
+                    <td><%= prestamo.getId() %></td>
                     <td><%= prestamo.getIdCliente() %></td>
                     <td><%= prestamo.getImporteCliente() %></td>
                     <td><%= prestamo.getFechaAlta() %></td>
                     <td><%= prestamo.getPlazoPago() %></td>
                     <td><%= prestamo.getImpxmes() %></td>
                     <td><%= prestamo.getCantCuo() %></td>
-                    <td><%= prestamo.getConfimarcion() ? "Sí" : "No" %></td>
+                    <td><%= prestamo.getConfimarcion()%></td>
                 </tr>
             <% }
         } else { %>
             <tr>
-                <td colspan="7" style="text-align: center;">No se encontraron préstamos.</td>
+                <td colspan="8" style="text-align: center;">No se encontraron préstamos.</td>
             </tr>
         <% } %>
     </tbody>
@@ -95,8 +99,7 @@
     let selectedRow = null;
 
     $(document).ready(function() {
-        $('#prestamos_table').DataTable().destroy(); 
-        $('#prestamos_table').DataTable();          
+        $('#prestamos_table').DataTable();
     });
 
     function selectRow(row) {

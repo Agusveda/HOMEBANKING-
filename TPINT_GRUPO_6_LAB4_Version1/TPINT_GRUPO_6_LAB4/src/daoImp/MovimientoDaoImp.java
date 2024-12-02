@@ -508,6 +508,56 @@ public class MovimientoDaoImp implements MovimientoDao {
 		    }
 		    return isUpdateExitoso;
 		}
+
+	@Override
+	public ArrayList<Prestamo> ListPrestamosPedidosAutorizados() {
+		try {
+	        Class.forName("com.mysql.jdbc.Driver");
+	        System.out.println("Driver cargado exitosamente.");
+	    } catch (ClassNotFoundException e) {
+	        System.out.println("Error al cargar el driver: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    
+	    ArrayList<Prestamo> PretAut = new ArrayList<Prestamo>();
+	    
+	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,PlazoPago,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 1 ";
+	    
+	    Connection con = Conexion.getConexion().getSQLConexion();
+	    
+	    if (con == null) {
+	        System.out.println("No se pudo obtener la conexión a la base de datos.");
+	        return PretAut;
+	    } else {
+	        System.out.println("Conexión a la base de datos establecida.");
+	    }
+	    
+	    try (PreparedStatement ps = con.prepareStatement(query);
+	         ResultSet rs = ps.executeQuery()) {
+	        
+	        while (rs.next()) {
+	            Prestamo pre = new Prestamo();
+	            pre.setId(rs.getInt("id"));
+	            pre.setIdCliente(rs.getInt("IdCliente"));
+	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
+	            pre.setFechaAlta(rs.getDate("FechaAlta"));
+	            pre.setPlazoPago(rs.getInt("PlazoPago"));
+	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
+	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
+	            pre.setconfimacion(rs.getBoolean("confirmacion"));
+	          
+	            PretAut.add(pre);
+	            
+	        }
+	        
+	    } catch (SQLException e) {
+	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+	    
+	    
+	    return PretAut;
+	}
 	
 
 }

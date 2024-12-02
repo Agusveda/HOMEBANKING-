@@ -1,30 +1,34 @@
 package Entidades;
 
-import negocioImpl.ClienteNegocioImpl;
+import java.util.ArrayList;
+import negocioImpl.MovimientoNegocioImpl;
 
 public class main {
 
 	public static void main(String[] args) {
-		ClienteNegocioImpl clienteNegocio = new ClienteNegocioImpl();
-        String email = "elpityloco@gmail.com"; // Cambia esto a un correo existente o no existente en tu base de datos
-        /*
-        if (clienteNegocio.existeEmail(email)) {
-            System.out.println("El correo existe en la base de datos.");
-        } else {
-            System.out.println("El correo NO existe en la base de datos.");
-        }
-        */
-       
-        String nuevaContrasena = "NuevaPassword123";
+		
+        MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
+        int cont=0;
+   
+        try {
+        	 ArrayList<Prestamo> prestamos = mov.ListPrestamosPedidosAutorizados();
 
-        boolean resultado = clienteNegocio.actualizarContrasenaPorEmail(email, nuevaContrasena);
-
-        if (resultado) {
-            System.out.println("Contraseña actualizada correctamente.");
-        } else {
-            System.out.println("No se pudo actualizar la contraseña.");
+            if (prestamos != null && !prestamos.isEmpty()) {
+                System.out.println("Préstamos autorizados encontrados:");
+                for (Prestamo prestamo : prestamos) {
+                	cont++;
+                    System.out.println(prestamo.toString()); // Asegúrate de tener un método toString en Prestamo
+                    System.out.println("Cantidad de préstamos encontrados: " + prestamos.size());
+                }
+            } else {
+                System.out.println("No se encontraron préstamos autorizados.");
+            }
+        } catch (Exception e) {
+            System.out.println("Error al ejecutar el método: " + e.getMessage());
+            e.printStackTrace();
         }
     }
-
-
 }
+        
+        
+      

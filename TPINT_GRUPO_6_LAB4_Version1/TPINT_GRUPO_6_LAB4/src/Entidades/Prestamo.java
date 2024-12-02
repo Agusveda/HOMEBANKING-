@@ -76,4 +76,15 @@ public class Prestamo {
 	public void setconfimacion(Boolean confimacion) {
 		this.confimacion = confimacion;
 	}
+
+
+
+	@Override
+	public String toString() {
+		return "Prestamo [Id=" + Id + ", IdCliente=" + IdCliente + ", ImporteCliente=" + ImporteCliente + ", fechaAlta="
+				+ fechaAlta + ", plazoPago=" + plazoPago + ", Impxmes=" + Impxmes + ", cantCuo=" + cantCuo
+				+ ", confimacion=" + confimacion + "]";
+	}
+	
+
 }
