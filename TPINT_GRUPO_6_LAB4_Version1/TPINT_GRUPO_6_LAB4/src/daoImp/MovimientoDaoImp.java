@@ -26,6 +26,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?, ?, NOW(), ?, ?, ?,?)";
+	
+	
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -103,6 +105,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 		return isInsertExitoso;
 	}
 
+	
+	
 	@Override
 	public int ObtenerIdCuentaPorCBU(int CBU) {
 		int id;
@@ -218,7 +222,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 		}
 		return CuentasCliente;
 	}
-// IMPOTANTE
+
+	
 	public float ObtenerSaldoPorIdCuenta(int idCue) {
 		float saldo;
 		Cuenta cuenta = null;
