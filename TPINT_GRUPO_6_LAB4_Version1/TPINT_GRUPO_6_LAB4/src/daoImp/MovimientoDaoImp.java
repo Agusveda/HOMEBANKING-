@@ -204,6 +204,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 				cue.setId(rs.getInt("Id"));
 				cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
 				cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+				cue.setCbu(rs.getInt("CBU"));
 				cue.setSaldo(rs.getFloat("Saldo"));
 
 				System.out.println("Cuenta encontrada: Id=" + cue.getId() + ", NumeroCuenta=" + cue.getNumeroCuenta()

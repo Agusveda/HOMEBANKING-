@@ -44,7 +44,7 @@
 <table id="table_Cuenta" class="display">
     <thead>
         <tr>
-            <th>ID Cuenta</th>
+            <th>ID </th>
             <th>Tipo cuenta</th>
             <th>CBU</th>
             <th>Saldo</th>
@@ -60,7 +60,7 @@
             <td><%= cuentaItem.getId() %></td>
             <td><%= cuentaItem.getTipoCuenta() == 1 ? "Corriente" : "Ahorro" %></td>
             <td><%= cuentaItem.getCbu() %></td>
-            <td>$<%= cuentaItem.getSaldo() %></td>
+            <td><%= cuentaItem.getSaldo() %></td>
             <td>
                  <input   type="submit" class="btn_movimientos" name="btnVerMovimientos" value="Ver Movimientos">
             </td>
