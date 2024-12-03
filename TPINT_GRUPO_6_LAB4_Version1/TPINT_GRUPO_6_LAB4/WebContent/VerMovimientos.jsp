@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/VerMovimientos.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
+ </head>
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>

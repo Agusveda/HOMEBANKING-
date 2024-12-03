@@ -1,5 +1,13 @@
+<%@page import="daoImp.MovimientoDaoImp"%>
+<%@page import="Entidades.Cuenta"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="daoImp.CuentaDaoImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+    
+    <%
+     int idCliente = (int) session.getAttribute("IdCliente");
+    %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,93 +31,52 @@
    Estado de tu cuenta
 </div>
 <div class="Cuentas">
-    <div class="Cuenta1">
-        <div class="header">
-            <h3>Cuentas</h3>
-            <p>Saldos totales</p>
-        </div>
-        <div class="valores">
-            <div class="valor">
-                <span>$</span>
-                <span >******</span>
-            </div>
-            <div class="valor2">
-                <span>U$S</span>
-                <span >*******</span>
-            </div>
-        
-        </div>
-        <div class="acciones">
-             <div >
-                
-            <a href="VerMovimientos.jsp" > 
-            <input   type="submit" class="btn_movimientos" name="btnVerMovimientos" value="Ver Movimientos">
-            </a>    
-              
-            </div>
-            <div >
-		<input type="submit" class="btn_cbu" name="btnVercbu" value="CBU / ALIAS">
-            </div>
-        </div>
-    </div>
+ 
+<%
+    // Backend para Filtrar por Tipo de Cuenta
+    MovimientoDaoImp Movimientodao = new MovimientoDaoImp();
+    ArrayList<Cuenta> listaCuenta = Movimientodao.TraeCuentasPorIdCliente(idCliente);
+  
+	
 
-
-<div class="Cuenta2">
-<div class="header2">
-            <h3>(VISA) Terminada en ****</h3>
-            <p>Cierra el *** | vence el **** </p>
-        </div>
-        <div class="consumo">
-        <div>
-        	<span> Ultimos Consumos: </span>
-        </div>
-        <br>
-            <div >
-                <span>$</span>
-                <span class="dots">******</span>
-            </div>
-            <div class="balance">
-                <span>U$S</span>
-                <span class="dots">*******</span>
-            </div>
-        </div>
-         <div >
-                
-            <a href="VerMovimientos.jsp" > 
-            <input   type="submit" class="btn_movimientos" name="btnVerMovimientos" value="Ver Movimientos">
-            </a>    
-              
-            </div>
-        
-</div>
-<div class="Cuenta3">
-<div class="header2">
-            <h3>(American) Terminada en ****</h3>
-            <p>Cierra el *** | vence el **** </p>
-        </div>
-        <div class="consumo">
-        <div>
-        	<span> Ultimos Consumos: </span>
-        </div>
-        <br>
-            <div >
-                <span>$</span>
-                <span class="dots">******</span>
-            </div>
-            <div class="balance">
-                <span>U$S</span>
-                <span class="dots">*******</span>
-            </div>
-        </div>
-         <div >
-                
-            <a href="VerMovimientos.jsp" > 
-            <input   type="submit" class="btn_movimientos" name="btnVerMovimientos" value="Ver Movimientos">
-            </a>    
-              
-            </div>
-        
-</div>
+%>
+<!-- Tabla para Mostrar las Cuentas -->
+<table id="table_Cuenta" class="display">
+    <thead>
+        <tr>
+            <th>ID Cuenta</th>
+            <th>Tipo cuenta</th>
+            <th>CBU</th>
+            <th>Saldo</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% 
+            if (listaCuenta != null && !listaCuenta.isEmpty()) {
+                for (Cuenta cuentaItem : listaCuenta) {  
+        %>
+        <tr>
+            <td><%= cuentaItem.getId() %></td>
+            <td><%= cuentaItem.getTipoCuenta() == 1 ? "Corriente" : "Ahorro" %></td>
+            <td><%= cuentaItem.getCbu() %></td>
+            <td>$<%= cuentaItem.getSaldo() %></td>
+            <td>
+                 <input   type="submit" class="btn_movimientos" name="btnVerMovimientos" value="Ver Movimientos">
+            </td>
+        </tr>
+        <% 
+                }
+            } else { 
+        %> 
+        <tr>
+            <td colspan="10">No se encontraron cuentas.</td>
+        </tr>
+        <% 
+            }
+        %>
+    </tbody>
+</table>
 </div>
 
 <br>
