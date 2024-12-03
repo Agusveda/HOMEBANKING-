@@ -526,7 +526,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    
 	    ArrayList<Prestamo> PretAut = new ArrayList<Prestamo>();
 	    
-	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,PlazoPago,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 1 ";
+	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 1 ";
 	    
 	    Connection con = Conexion.getConexion().getSQLConexion();
 	    
@@ -546,7 +546,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	            pre.setIdCliente(rs.getInt("IdCliente"));
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
-	            pre.setPlazoPago(rs.getInt("PlazoPago"));
 	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
 	            pre.setconfimacion(rs.getBoolean("confirmacion"));
