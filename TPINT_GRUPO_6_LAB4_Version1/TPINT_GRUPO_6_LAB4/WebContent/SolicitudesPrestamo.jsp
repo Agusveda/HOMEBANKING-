@@ -1,5 +1,5 @@
-<%@page import="negocioImpl.MovimientoNegocioImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@page import="negocioImpl.MovimientoNegocioImpl"%>
 <%@ page import="daoImp.MovimientoDaoImp"%>
 <%@ page import="Entidades.Prestamo"%>
 <%@ page import="java.util.ArrayList"%>

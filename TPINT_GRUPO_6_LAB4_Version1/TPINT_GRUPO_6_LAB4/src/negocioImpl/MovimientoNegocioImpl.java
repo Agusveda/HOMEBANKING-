@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import Entidades.Cuenta;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
-import dao.MovimientoDao;
 import daoImp.MovimientoDaoImp;
 import negocio.MovimientoNegocio;
 
@@ -78,6 +77,7 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado(String orden) {
 		return MovimientoDao.filtrarClienteXImporteConfirmado(orden);
 	}
+
 
 
 }

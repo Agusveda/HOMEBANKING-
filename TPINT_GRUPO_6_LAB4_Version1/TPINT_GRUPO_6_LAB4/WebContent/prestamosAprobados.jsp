@@ -1,8 +1,9 @@
-<%@ page import="negocioImpl.MovimientoNegocioImpl" %>
-<%@ page import="Entidades.Prestamo" %>
-<%@ page import="java.util.ArrayList" %>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@page import="negocioImpl.MovimientoNegocioImpl"%>
+<%@ page import="daoImp.MovimientoDaoImp"%>
+<%@ page import="Entidades.Prestamo"%>
+<%@ page import="java.util.ArrayList"%>
 
 <!DOCTYPE html>
 <html>
@@ -96,19 +97,24 @@
 <jsp:include page="Footer.jsp"/>
 
 <script>
-    let selectedRow = null;
+let selectedRow = null;
 
-    $(document).ready(function() {
-        $('#prestamos_table').DataTable();
+$(document).ready(function() {
+    let table = $('#clientes_table').DataTable({
+        stateSave: true,
+        createdRow: function(row, data, dataIndex) {
+            if ($(row).hasClass('selected-row')) {
+                $(row).addClass('selected-row');
+            }
+        }
     });
 
-    function selectRow(row) {
-        if (selectedRow) {
-            selectedRow.classList.remove("selected-row");
-        }
-        row.classList.add("selected-row");
-        selectedRow = row;
-    }
+    $('#clientes_table tbody').on('click', 'tr', function() {
+        table.$('tr.selected-row').removeClass('selected-row');
+        $(this).addClass('selected-row');
+    });
+});
+
 </script>
 
 </body>

@@ -13,13 +13,13 @@ public class main {
 
 	    try {
 	        System.out.println("Intentando filtrar préstamos de mayor a menor...");
-	        ArrayList<Prestamo> prestamosMayor = mov.filtrarClienteXImporte("Mayor");
+	        ArrayList<Prestamo> prestamosMayor = mov.filtrarClienteXImporteConfirmado("Mayor");
 	        System.out.println("Préstamos ordenados de mayor a menor:");
 	        prestamosMayor.forEach(System.out::println);
 	        cont++;
 
 	        System.out.println("Intentando filtrar préstamos de menor a mayor...");
-	        ArrayList<Prestamo> prestamosMenor = mov.filtrarClienteXImporte("Menor");
+	        ArrayList<Prestamo> prestamosMenor = mov.filtrarClienteXImporteConfirmado("Menor");
 	        System.out.println("Préstamos ordenados de menor a mayor:");
 	        prestamosMenor.forEach(System.out::println);
 	        cont++;
