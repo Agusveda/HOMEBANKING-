@@ -85,7 +85,7 @@
         prestamos = mov.filtrarClienteXImporte(filtro);
     }
 
-    request.setAttribute("prestamos", prestamos);
+    //request.setAttribute("prestamos", prestamos);
     
 %>
 
