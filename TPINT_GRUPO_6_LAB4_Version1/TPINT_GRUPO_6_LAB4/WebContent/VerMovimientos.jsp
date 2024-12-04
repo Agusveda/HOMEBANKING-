@@ -1,4 +1,10 @@
+<%@page import="Entidades.Movimiento"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="negocioImpl.MovimientoNegocioImpl"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%
+int idCuenta = (int) session.getAttribute("idCuenta");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -22,25 +28,43 @@
     
     <input class="btnAtras" type="submit" value="Atras" name="btnAtras" >
     </a>
+    
+    <%	
+    	
+    	MovimientoNegocioImpl moviN = new MovimientoNegocioImpl();
+    	ArrayList<Movimiento> listaMov = moviN.ListarMovimientosPorCuenta(idCuenta);
+    %>
        
 <table class="tabla"  border="1">
     <thead>
         <tr>
             <th>ID</th>
-            <th>Tipo de Movimiento</th>
             <th>Fecha de movimiento</th>
             <th>Importe</th>
+            <th>Detalle</th>
         </tr>
     </thead>
-    <tbody>
+        <tbody>
+        <% 
+            if (listaMov != null && !listaMov.isEmpty()) {
+                for (Movimiento movItem : listaMov) {
+        %>
         <tr>
-          
-          
+            <td><%= movItem.getId() %></td>
+            <td><%= movItem.getFechaMovimiento() %></td>
+            <td><%= movItem.getImporte() %></td>
+            <td><%= movItem.getDetalle() %></td>
         </tr>
-  
+        <% 
+                }
+            } else { 
+        %> 
         <tr>
-            <td colspan="8">No se encontraron Movimientos actualmente.</td>
+            <td colspan="10">No se encontraron Movimientos.</td>
         </tr>
+        <% 
+            }
+        %>
     </tbody>
 </table>
 

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import Entidades.Cuenta;
 import Entidades.Movimiento;
-import negocio.MovimientoNegocio;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
 import dao.MovimientoDao;

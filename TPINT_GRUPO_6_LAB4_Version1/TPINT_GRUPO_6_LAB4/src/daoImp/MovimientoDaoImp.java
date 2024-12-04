@@ -15,7 +15,7 @@ import Entidades.Prestamo;
 import dao.MovimientoDao;
 
 public class MovimientoDaoImp implements MovimientoDao {
-	private static final String ListarMovimientosPorCuenta = "Select * from movimiento where IdCuenta = ? and Activo=1";
+	private static final String ListarMovimientosPorCuenta = "Select * from movimiento where IdCuenta = ?";
 	private static final String IngresarMovimientoPositivo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , ? , ? , ?)";
 	private static final String IngresarMovimientoNegativo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , -? , ? , ?)";
 	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
@@ -280,14 +280,14 @@ public class MovimientoDaoImp implements MovimientoDao {
 			statement.setInt(1, idCue);
 			rs = statement.executeQuery();
 
-			if (rs.next()) {
+			while (rs.next()) {
 				movi = new Movimiento();
 				movi.setId(rs.getInt("Id"));
 				movi.setTipoMovimiento(rs.getInt("TipoMovimiento"));
 				movi.setFechaMovimiento(rs.getString("FechaMovimiento"));
 				movi.setImporte(rs.getFloat("Importe"));
 				movi.setIdCuenta(rs.getInt("IdCuenta"));
-				movi.setDetalle(rs.getString("Dtealle"));
+				movi.setDetalle(rs.getString("Detalle"));
 				ListaMovimiento.add(movi);
 			}
 

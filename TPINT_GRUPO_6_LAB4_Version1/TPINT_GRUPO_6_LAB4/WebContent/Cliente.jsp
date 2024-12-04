@@ -40,6 +40,8 @@
 	
 
 %>
+
+
 <!-- Tabla para Mostrar las Cuentas -->
 <table id="table_Cuenta" class="display">
     <thead>
@@ -54,7 +56,7 @@
     <tbody>
         <% 
             if (listaCuenta != null && !listaCuenta.isEmpty()) {
-                for (Cuenta cuentaItem : listaCuenta) {  
+                for (Cuenta cuentaItem : listaCuenta) {
         %>
         <tr>
             <td><%= cuentaItem.getId() %></td>
@@ -62,7 +64,10 @@
             <td><%= cuentaItem.getCbu() %></td>
             <td><%= cuentaItem.getSaldo() %></td>
             <td>
-                 <input   type="submit" class="btn_movimientos" name="btnVerMovimientos" value="Ver Movimientos">
+                <form action="ServletVerMovimiento" method="post">
+                    <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>" />
+                    <input type="submit" class="button button-blue" value="Ver Movimiento" name="btnVerMovimientos" />
+                </form>
             </td>
         </tr>
         <% 
@@ -70,7 +75,7 @@
             } else { 
         %> 
         <tr>
-            <td colspan="10">No se encontraron cuentas.</td>
+            <td colspan="5">No se encontraron cuentas.</td>
         </tr>
         <% 
             }

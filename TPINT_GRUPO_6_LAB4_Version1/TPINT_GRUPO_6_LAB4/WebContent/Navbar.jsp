@@ -10,7 +10,7 @@
     <!-- Navbar -->
     <div class="navegador">
         <div class="nav-brand-container">
-            <a class="nav-brand" href="home.jsp">CodeBank</a>
+            <a class="nav-brand" href="Cliente.jsp">CodeBank</a>
             <a class="logoNav" href="Cliente.jsp" title="Ir a la página de inicio">
                 <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
             </a>
