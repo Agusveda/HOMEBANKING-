@@ -45,33 +45,6 @@
 </form>
 
 <%
-/*
-	ClienteDaoImp banco = new ClienteDaoImp();
-	ArrayList<Cliente> lista;
-	String sexo = request.getParameter("sexo");
-	System.out.println("Sexo seleccionado: " + sexo);
-	
-	if (sexo == null || sexo.trim().isEmpty() ||sexo.equals("todos")) {
-		System.out.println("Obteniendo todos los clientes.");
-	    lista = banco.ListarCliente();
-	} else {
-		System.out.println("Filtrando por género: " + sexo);
-	    lista = banco.filtrarClienteXsexo(sexo);
-	}
-	
-	if (lista == null || lista.isEmpty()) {
-        System.out.println("No se encontraron clientes para el filtro: " + (sexo == null ? "null" : sexo));
-    } else {
-        System.out.println("Cantidad de clientes encontrados: " + lista.size());
-    }
-*/
-
-%>
-
-
-
-<%
-
     MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
     ArrayList<Prestamo> prestamos;
     String filtro = request.getParameter("txtfiltrar");
@@ -84,9 +57,6 @@
     	System.out.println("Filtrado por Importe:" + filtro);
         prestamos = mov.filtrarClienteXImporte(filtro);
     }
-
-    //request.setAttribute("prestamos", prestamos);
-    
 %>
 
 <table id="prestamos_table" class="display">
@@ -154,13 +124,7 @@
         row.classList.add("selected-row");
         selectedRow = row;
     }
-    /*
-    function actualizarFiltro() {
-        // Evitar recargar la página completa. En su lugar, reenvía solo el filtro.
-        var form = document.getElementById('filtroForm');
-        form.submit(); // Esto hará que se re-renderice el JSP con el filtro aplicado.
-    }
-    */
+ 
 </script>
 
 </body>

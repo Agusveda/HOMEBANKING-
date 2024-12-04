@@ -74,5 +74,10 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		return MovimientoDao.filtrarClienteXImporte(orden);
 	}
 
+	@Override
+	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado(String orden) {
+		return MovimientoDao.filtrarClienteXImporteConfirmado(orden);
+	}
+
 
 }

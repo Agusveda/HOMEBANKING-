@@ -617,4 +617,63 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return lista;
 	}
 
+
+
+	@Override
+	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado(String orden) {
+		ArrayList<Prestamo> lista = new ArrayList<>();
+	    String query = "SELECT * FROM prestamo where confirmacion = 1 ORDER BY ImportePedidoCliente " 
+	        + (orden.equalsIgnoreCase("Mayor") ? "DESC" : "ASC");
+
+	    Connection conexion = null;
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+
+	    try {
+	        System.out.println("Consulta generada: " + query);
+	        conexion = Conexion.getConexion().getSQLConexion();
+	        if (conexion == null) {
+	            System.err.println("No se pudo establecer la conexión con la base de datos.");
+	            return lista;
+	        }
+
+	        statement = conexion.prepareStatement(query);
+	        rs = statement.executeQuery();
+
+	        while (rs.next()) {
+	            Prestamo pre = new Prestamo();
+	            pre.setId(rs.getInt("id"));
+	            pre.setIdCliente(rs.getInt("IdCliente"));
+	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
+	            pre.setFechaAlta(rs.getDate("FechaAlta"));
+	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
+	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
+	            pre.setconfimacion(rs.getBoolean("confirmacion"));
+	            lista.add(pre);
+	        }
+
+	        if (lista.isEmpty()) {
+	            System.out.println("No se encontraron resultados para la consulta.");
+	        }
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al ejecutar la consulta: " + e.getMessage());
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return lista;
+		
+	}
+	
+	
+	
+	
+
 }
