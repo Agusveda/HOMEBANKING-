@@ -568,7 +568,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
 		ArrayList<Prestamo> lista = new ArrayList<Prestamo>();
-		String query = "SELECT * FROM prestamos WHERE confirmacion = 1 ORDER BY ImportePedidoCliente \" + (orden.equalsIgnoreCase(\"Mayor\") ? \"DESC\" : \"ASC";
+		String query = "SELECT * FROM prestamo WHERE confirmacion = 1 ORDER BY ImportePedidoCliente " 
+                		+ (orden.equalsIgnoreCase("Mayor") ? "DESC" : "ASC");
 		
 		Connection conexion = null;
 	    PreparedStatement statement = null;

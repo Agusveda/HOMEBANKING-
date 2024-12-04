@@ -36,13 +36,14 @@
         <p>
             <label for="Importe">Buscar Préstamo:</label>
             <select id="buscar" name="txtfiltrar" onchange="this.form.submit()">
-                <option value="todos" <%="todos".equals(request.getParameter("txtfiltrar")) ? "selected" : ""%>>Todos</option>
-                <option value="Menor Importe" <%="Menor".equals(request.getParameter("txtfiltrar")) ? "selected" : ""%>>Menor Importe</option>
-                <option value="Mayor Importe" <%="Mayor".equals(request.getParameter("txtfiltrar")) ? "selected" : ""%>>Mayor Importe</option>
+                <option value="todos" <%= "todos".equals(request.getParameter("txtfiltrar")) ? "selected" : "" %>>Todos</option>
+                <option value="Menor" <%= "Menor".equals(request.getParameter("txtfiltrar")) ? "selected" : "" %>>Menor Importe</option>
+                <option value="Mayor" <%= "Mayor".equals(request.getParameter("txtfiltrar")) ? "selected" : "" %>>Mayor Importe</option>
             </select>
         </p>
     </fieldset>
 </form>
+
 
 <%
     String filtro = request.getParameter("txtfiltrar");
