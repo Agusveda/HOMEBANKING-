@@ -422,7 +422,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    
 	    ArrayList<Prestamo> ListaPrestamos = new ArrayList<Prestamo>();
 	    
-	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,PlazoPago,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo";
+	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo";
 	    
 	    Connection con = Conexion.getConexion().getSQLConexion();
 	    
@@ -442,7 +442,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	            pre.setIdCliente(rs.getInt("IdCliente"));
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
-	            pre.setPlazoPago(rs.getInt("PlazoPago"));
 	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
 	            pre.setconfimacion(rs.getBoolean("confirmacion"));
@@ -562,6 +561,50 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    
 	    
 	    return PretAut;
+	}
+
+
+
+	@Override
+	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
+		ArrayList<Prestamo> lista = new ArrayList<Prestamo>();
+		String query = "SELECT * FROM prestamo WHERE confirmacion = 1 ORDER BY ImportePedidoCliente " 
+                		+ (orden.equalsIgnoreCase("Mayor") ? "DESC" : "ASC");
+		
+		Connection conexion = null;
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+
+	    try {
+	        conexion = Conexion.getConexion().getSQLConexion();
+	        statement = conexion.prepareStatement(query);
+	        rs = statement.executeQuery();
+
+	        while (rs.next()) {
+	        	Prestamo pre = new Prestamo();
+	            pre.setId(rs.getInt("id"));
+	            pre.setIdCliente(rs.getInt("IdCliente"));
+	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
+	            pre.setFechaAlta(rs.getDate("FechaAlta"));
+	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
+	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
+	            pre.setconfimacion(rs.getBoolean("confirmacion"));
+	            lista.add(pre);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+		
+		
+		return lista;
 	}
 	
 

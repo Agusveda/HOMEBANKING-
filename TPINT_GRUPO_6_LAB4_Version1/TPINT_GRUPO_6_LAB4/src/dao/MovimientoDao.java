@@ -19,4 +19,5 @@ public interface MovimientoDao
     public ArrayList<Prestamo> ListPrestamosPedidos();
     public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
     public ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
+    public ArrayList<Prestamo> filtrarClienteXImporte (String orden ); 
 }

@@ -2,6 +2,7 @@ package Entidades;
 
 import java.util.ArrayList;
 import negocioImpl.MovimientoNegocioImpl;
+import Entidades.Prestamo;
 
 public class main {
 
@@ -9,22 +10,16 @@ public class main {
 		
         MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
         int cont=0;
-   
         try {
-        	 ArrayList<Prestamo> prestamos = mov.ListPrestamosPedidosAutorizados();
+            ArrayList<Prestamo> prestamosMayor = mov.filtrarClienteXImporte("Mayor");
+            System.out.println("Préstamos ordenados de mayor a menor:");
+            prestamosMayor.forEach(System.out::println);
 
-            if (prestamos != null && !prestamos.isEmpty()) {
-                System.out.println("Préstamos autorizados encontrados:");
-                for (Prestamo prestamo : prestamos) {
-                	cont++;
-                    System.out.println(prestamo.toString()); // Asegúrate de tener un método toString en Prestamo
-                    System.out.println("Cantidad de préstamos encontrados: " + prestamos.size());
-                }
-            } else {
-                System.out.println("No se encontraron préstamos autorizados.");
-            }
+            ArrayList<Prestamo> prestamosMenor = mov.filtrarClienteXImporte("Menor");
+            System.out.println("Préstamos ordenados de menor a mayor:");
+            prestamosMenor.forEach(System.out::println);
         } catch (Exception e) {
-            System.out.println("Error al ejecutar el método: " + e.getMessage());
+            System.err.println("Ocurrió un error al filtrar los préstamos: " + e.getMessage());
             e.printStackTrace();
         }
     }

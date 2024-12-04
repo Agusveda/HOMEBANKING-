@@ -29,21 +29,27 @@
     <h1>Solicitudes de Préstamo</h1>
 </div>
 
-<form method="get" action="#">
+
+<form method="get" action="" id="filtroForm">
     <fieldset>
-        <legend>Buscar Préstamo</legend>
+    <legend>Filtrar Clientes por Importe de pedido</legend>
         <p>
-            <label for="buscar">Número de Solicitud:</label>
-            <input id="buscar" type="text" name="txtBuscar" placeholder="Ingrese número de solicitud" required>
-            <input type="submit" value="Buscar">
+            <label for="Importe">Buscar Préstamo:</label>
+            <select id="buscar" name="txtfiltrar" onchange="this.form.submit()">
+                <option value="todos" <%= "todos".equals(request.getParameter("txtfiltrar")) ? "selected" : "" %>>Todos</option>
+                <option value="Menor" <%= "Menor".equals(request.getParameter("txtfiltrar")) ? "selected" : "" %>>Menor Importe</option>
+                <option value="Mayor" <%= "Mayor".equals(request.getParameter("txtfiltrar")) ? "selected" : "" %>>Mayor Importe</option>
+            </select>
         </p>
     </fieldset>
 </form>
 
+
 <%
-    
+    String filtro = request.getParameter("txtfiltrar");
     MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
     ArrayList<Prestamo> prestamos = mov.ListPrestamosPedidos();
+    
 
     if (prestamos == null || prestamos.isEmpty()) {
         System.out.println("No se encontraron préstamos.");
@@ -52,6 +58,23 @@
     }
 
     request.setAttribute("prestamos", prestamos);
+    
+%>
+
+<%
+/*
+    String filtro = request.getParameter("txtfiltrar");
+    MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
+    ArrayList<Prestamo> prestamos;
+
+    if (filtro != null && !filtro.isEmpty()) {
+        prestamos = mov.obtenerPrestamosOrdenados(filtro);
+    } else {
+        prestamos = mov.ListPrestamosPedidosAutorizados();
+    }
+
+    request.setAttribute("prestamos", prestamos);
+    */
 %>
 
 <table id="prestamos_table" class="display">
@@ -61,7 +84,6 @@
             <th>ID Cliente</th>
             <th>Importe Pedido</th>
             <th>Fecha Alta</th>
-            <th>Plazo Pago</th>
             <th>Importe Mensual</th>
             <th>Cantidad Cuotas</th>
             <th>Confirmado</th>
@@ -76,7 +98,6 @@
                     <td><%= prestamo.getIdCliente() %></td>
                     <td><%= prestamo.getImporteCliente() %></td>
                     <td><%= prestamo.getFechaAlta() %></td>
-                    <td><%= prestamo.getPlazoPago() %></td>
                     <td><%= prestamo.getImpxmes() %></td>
                     <td><%= prestamo.getCantCuo() %></td>
                     <td><%= prestamo.getConfimarcion() ? "Sí" : "No" %></td>
