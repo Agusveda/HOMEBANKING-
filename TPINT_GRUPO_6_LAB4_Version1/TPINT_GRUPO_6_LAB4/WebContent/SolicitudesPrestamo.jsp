@@ -61,7 +61,6 @@
             <th>ID Cliente</th>
             <th>Importe Pedido</th>
             <th>Fecha Alta</th>
-            <th>Plazo Pago</th>
             <th>Importe Mensual</th>
             <th>Cantidad Cuotas</th>
             <th>Confirmado</th>
@@ -76,7 +75,6 @@
                     <td><%= prestamo.getIdCliente() %></td>
                     <td><%= prestamo.getImporteCliente() %></td>
                     <td><%= prestamo.getFechaAlta() %></td>
-                    <td><%= prestamo.getPlazoPago() %></td>
                     <td><%= prestamo.getImpxmes() %></td>
                     <td><%= prestamo.getCantCuo() %></td>
                     <td><%= prestamo.getConfimarcion() ? "Sí" : "No" %></td>
