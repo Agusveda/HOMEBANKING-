@@ -26,7 +26,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?, ?, NOW(), ?, ?, ?,?)";
-	
+	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where IdCliente = ? ";
+
 	
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
@@ -674,6 +675,71 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 
 
+	@Override
+	public boolean CargarPrestamoEnCuenta(int idPrestamo, float monto) {
+			 
+			   Connection connection = null;
+			   PreparedStatement statement = null;
+			   boolean isInsertExitoso = false;
+			   
+			   
+			   
+			   
+			   
+			   try {
+			       connection = Conexion.getConexion().getSQLConexion();
+			       if (connection == null) {
+			           System.out.println("No se pudo obtener la conexión a la base de datos.");
+			           return false;
+			       }
+			       connection.setAutoCommit(false); 
+			
+			       statement = connection.prepareStatement(CargarPrestamoEnCuenta);
+			       statement.setFloat(1, monto);
+			       statement.setFloat(2, idPrestamo);
+			    
+			
+			       int rowsAffected = statement.executeUpdate();
+			       
+			       if (rowsAffected > 0) {
+			           connection.commit(); 
+			           System.out.println("El MONTO del prestamo se ha insertado correctamente. Filas afectadas: " + rowsAffected); 
+			           isInsertExitoso = true;
+			       }
+			
+			   } catch (SQLException e) {
+			       e.printStackTrace();
+			       System.out.println("Error durante la inserción.");
+			       if (connection != null) {
+			           try {
+			               connection.rollback(); 
+			           } catch (SQLException e1) {
+			               e1.printStackTrace();
+			           }
+			       }
+			   } finally {
+			     
+			       try {
+			           if (statement != null) {
+			               statement.close();
+			           }
+			           if (connection != null) {
+			               connection.setAutoCommit(true); 
+			               connection.close();
+			           }
+			       } catch (SQLException e) {
+			           e.printStackTrace();
+			       }
+			   }
+			   return isInsertExitoso;
+		}
+	
+
+
+}
+
+
+
 	
 	
 	
@@ -681,4 +747,4 @@ public class MovimientoDaoImp implements MovimientoDao {
 	
 	
 
-}
+

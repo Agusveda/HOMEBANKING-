@@ -11,31 +11,22 @@ import javax.servlet.http.HttpServletResponse;
 import Entidades.Prestamo;
 import daoImp.MovimientoDaoImp;
 
-/**
- * Servlet implementation class ServletPrestamo
- */
+
 @WebServlet("/ServletPrestamo")
 public class ServletPrestamo extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
+   
     public ServletPrestamo() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		  
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		  
@@ -44,6 +35,7 @@ public class ServletPrestamo extends HttpServlet {
 	        } 
 	        else if (request.getParameter("idPrestamo") != null && request.getParameter("confirmacion") != null) {
 	            procesarAprobacionPrestamo(request, response);
+	    
 	        }
 	     
 	    }
@@ -96,9 +88,17 @@ public class ServletPrestamo extends HttpServlet {
 	        try {
 	            int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
 	            int confirmacion = Integer.parseInt(request.getParameter("confirmacion"));
+	            float monto = Float.parseFloat( request.getParameter("monto"));
 
+	            // actualizo en prestamo
 	            MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
 	            boolean exito = movimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
+	            
+	            // cargo el monto en la cuenta
+	            if (exito != false) {
+	            	
+	            boolean exito2 = movimientoDao.CargarPrestamoEnCuenta(idPrestamo, monto);
+	            }
 
 	            if (exito) {
 	                response.sendRedirect("SolicitudesPrestamo.jsp"); 
