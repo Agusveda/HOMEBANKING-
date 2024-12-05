@@ -5,13 +5,6 @@ body {
 	padding:0;
 }
 
-h1 {
-	text-align: center;
-	color: #333;
-	margin-top: 20px;
-	font-size:2em;
-}
-
 form {
 	width: 60%;
 	margin: 0 auto;
@@ -19,6 +12,7 @@ form {
 	padding: 20px;
 	border-radius: 10px;
 	box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+	margin-bottom:90px;
 }
 fieldset {
 	border: none;
@@ -91,17 +85,4 @@ input[type="submit"]:hover {
 
 .btn-volver:hover {
     background-color: #aaa;
-}
-
-/* Footer styling */
-.footer {
-    background-color: #408080;
-    color: #fff;
-    text-align: center;
-    padding: 10px;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    font-size: 0.9em;
-    border-radius: 0px 0px 10px 10px;
 }

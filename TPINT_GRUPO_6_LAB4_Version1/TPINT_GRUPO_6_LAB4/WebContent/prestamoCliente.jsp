@@ -9,20 +9,22 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Solicitud de Préstamo</title>
 <link rel="stylesheet" type="text/css" href="">
+    <link rel="stylesheet" type="text/css" href="css/Navbar.css">
+    <link rel="stylesheet" type="text/css" href="css/Footer.css">
+
 </head>
 <body>
-<div class="navegador">
+
 <jsp:include page="Navbar.jsp"/>
+<div class="encabezado">
+    <h1>Solicitud de Préstamo</h1>
 </div>
 
+
 <div class="container">
-    <h2>Solicitud de Préstamos</h2>
     
     <% 
-        
-        Integer idCliente = (Integer) session.getAttribute("IdCliente");
-        
-  
+        Integer idCliente = (Integer) session.getAttribute("IdCliente");   
         if (idCliente != null) {
             MovimientoDao movimientoDao = new MovimientoDaoImp();
             ArrayList<Cuenta> cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);

@@ -1,10 +1,8 @@
 package Servlet;
 
 import java.io.IOException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import negocio.ClienteNegocio;
 import negocioImpl.ClienteNegocioImpl;
 
 import javax.servlet.RequestDispatcher;
@@ -13,8 +11,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import Entidades.Cliente;
 import Entidades.Localidad;
 import Entidades.Provincia;
@@ -253,9 +249,13 @@ public class ServletCliente extends HttpServlet {
             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             Usuario usuario = bandolero.verificarCredenciales(username, password);
             
+            Cliente cliente = bandolero.ObtenerDatosXid(usuario.getIdCliente()); //1. Cliente que inicia sesion
+            
             if (usuario != null) {
             	request.removeAttribute("mensajeError");
                 int tipoUsuario = usuario.getTipoUsuario();
+                
+                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); //2. Nombre cliente sesion
 
                 request.getSession().setAttribute("IdCliente", usuario.getIdCliente());
                 

@@ -11,10 +11,42 @@
     <div class="navegador">
         <div class="nav-brand-container">
             <a class="nav-brand" href="Cliente.jsp">CodeBank</a>
-            <a class="logoNav" href="Cliente.jsp" title="Ir a la página de inicio">
-                <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
-            </a>
+            
+            <% 
+                String nombreCliente = (String) session.getAttribute("nombreCliente");
+                if (nombreCliente != null) { // Si el usuario está logueado
+            %>
+            
+			<a class="logoNav" href="Cliente.jsp" title="Ir a la página de inicio">
+			    <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
+			</a>
+			
+			<a href="InformacionPersonal.jsp" title="Ir a mi perfil">
+			    <img src="img/icoInfo.png" alt="Ícono de información" />
+			</a>
+			
+			<div class="nav-welcome">
+			    <span class="welcome-message">¡Bienvenido, <%= nombreCliente %>!</span>
+			</div>
+			
+			<!-- Modificación para que el logout esté a la derecha -->
+			<a href="Logout.jsp" class="logout">
+			    <img src="img/icoLogout.png" alt="Ícono de logout" />
+			</a>
+
+            <% 
+                } else { 
+            %>
+                <!-- Navbar si el usuario no esta logueado -->
+                             
+                <div class="nav-welcome">
+                    <span class="welcome-message">¡Bienvenido!</span>
+                </div>
+            <% 
+                }
+            %>
         </div>
+
         <span class="time" id="time"></span>
     </div>
 

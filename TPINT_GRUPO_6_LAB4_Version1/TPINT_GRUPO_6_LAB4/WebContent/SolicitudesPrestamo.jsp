@@ -10,7 +10,6 @@
     <title>Solicitudes de Préstamo</title>
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
-    <link rel="stylesheet" type="text/css" href="css/AMPrestamos.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
     <style>
@@ -24,11 +23,9 @@
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>
-
 <div class="encabezado">
     <h1>Solicitudes de Préstamo</h1>
 </div>
-
 
 <form method="get" action="" id="filtroForm">
     <fieldset>
@@ -126,6 +123,6 @@
     }
  
 </script>
-
+<jsp:include page="Footer.jsp"/>
 </body>
 </html>

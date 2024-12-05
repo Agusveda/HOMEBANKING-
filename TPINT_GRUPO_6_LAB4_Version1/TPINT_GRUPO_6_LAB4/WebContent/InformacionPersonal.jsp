@@ -7,27 +7,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<style>
 
-<jsp:include page="css/Informacionpersonal.css"></jsp:include>
-<jsp:include page="css/Cliente.css"></jsp:include>
-	
-	        .footer {
-		    background-color: #408080;
-		    color: #fff;
-		    text-align: center;
-		    padding: 10px;
-		    position: fixed;
-		    bottom: 0;
-		    width: 100%;
-		    font-size: 0.9em;
-		    border-radius: 0px 0px 10px 10px; 
-		}
-</style>
+
+    <link rel="stylesheet" type="text/css" href="css/Navbar.css">
+    <link rel="stylesheet" type="text/css" href="css/Informacionpersonal.css">
+    <link rel="stylesheet" type="text/css" href="css/Footer.css">
 
 </head>
 <body>
 <jsp:include page="Navbar.jsp"/>
+
+<div class="encabezado">
+    <h1>Información del usuario</h1>
+</div>
 
 <%
 	String clie = session.getAttribute("IdCliente").toString();
@@ -40,12 +32,12 @@
 	
 %>
 
-<h1>INFORMACION DEL USUARIO</h1>
-<input type = "submit" class="btn-volver" name="btnVolver" value="volver" onclick="window.location.href='Cliente.jsp'; return false;">
+
+<input type = "submit" class="btn-volver" name="btnVolver" value="Volver" onclick="window.location.href='Cliente.jsp'; return false;">
 <form method="post" action="ServletUsuario">
 
     <fieldset>
-      <legend>Informacion Personal</legend>
+      <legend>INFORMACIÓN PERSONAL</legend>
       <p>
         <label class="form-label" for="nombre">Nombre:</label>
         <input class="" id="nombre" readOnly="true" type="text" value="<%= cli.getNombre()%>" required name="txtNombre">
@@ -106,7 +98,7 @@
     %>
 
  
-
+<jsp:include page="Footer.jsp"/>
 </body>
 
 </html>
