@@ -10,7 +10,11 @@ public class Usuario {
 	
 	public Usuario ()
 	{
-		
+		id=0;
+		usuario="";
+		contraseña="";
+		tipoUsuario =0 ;
+		IdCliente = 0;
 	}
 	
     public Usuario(int id, String usuario, String contraseña, int tipoUsuario, int idCliente, boolean activo) {

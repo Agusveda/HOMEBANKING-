@@ -12,7 +12,15 @@ public class Prestamo {
 	private int cantCuo;
 	private boolean confimacion;
 	
-	public Prestamo () {}
+	public Prestamo () 
+	{
+		Id=0;
+		IdCliente=0;
+		ImporteCliente=0;
+		plazoPago=0;
+		Impxmes=0;
+		cantCuo=0;	
+	}
 	
 	
 	

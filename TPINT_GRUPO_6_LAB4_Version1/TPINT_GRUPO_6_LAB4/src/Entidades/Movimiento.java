@@ -10,6 +10,8 @@ public class Movimiento
 	private float importe;
 	private int idCuenta;
 	private String detalle;
+	
+	/// NO ESTAN EN LA BASE DE DATOS 
 	private boolean esPrestamo;  
     private int cantidadCuotas;   
     private float saldoPrestamo; 

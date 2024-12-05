@@ -24,6 +24,9 @@ public class Cliente {
 
 	public Cliente() 
 	{
+		id=0;
+		dni=0;
+		cuil=0;
 		nombre="";
 		apellido="";
 		sexo="";
@@ -33,6 +36,7 @@ public class Cliente {
 		localidad="";
 		provincia="";
 		correoElectronico="";
+		telefono=0;
 		usuario="";
 		contrasenia="";
 	}

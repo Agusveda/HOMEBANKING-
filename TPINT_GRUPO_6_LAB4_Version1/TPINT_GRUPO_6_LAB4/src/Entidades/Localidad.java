@@ -13,8 +13,11 @@ public class Localidad {
     }
 
    
-    public Localidad() {
-     
+    public Localidad() 
+    {
+    	idLocalidad=0;
+    	localidad= "";
+    	idProvincia=0;
     }
 
 
