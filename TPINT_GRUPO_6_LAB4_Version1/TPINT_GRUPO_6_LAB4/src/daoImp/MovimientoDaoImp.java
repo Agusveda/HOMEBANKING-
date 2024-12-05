@@ -26,7 +26,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?, ?, NOW(), ?, ?, ?,?)";
-	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where IdCliente = ? ";
+	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where IdCuenta = ? ";
 
 	
 	@Override
@@ -676,7 +676,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 
 	@Override
-	public boolean CargarPrestamoEnCuenta(int idPrestamo, float monto) {
+	public boolean CargarPrestamoEnCuenta(int IdCuenta, float monto) {
 			 
 			   Connection connection = null;
 			   PreparedStatement statement = null;
@@ -696,7 +696,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 			
 			       statement = connection.prepareStatement(CargarPrestamoEnCuenta);
 			       statement.setFloat(1, monto);
-			       statement.setFloat(2, idPrestamo);
+			       statement.setFloat(2, IdCuenta);
 			    
 			
 			       int rowsAffected = statement.executeUpdate();
