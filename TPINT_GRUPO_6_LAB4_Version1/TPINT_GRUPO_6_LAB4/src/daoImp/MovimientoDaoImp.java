@@ -25,7 +25,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
-	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?, ?, NOW(), ?, ?, ?,?)";
+	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?,?, ?, NOW(), ?, ?, ?,?)";
 	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where IdCuenta = ? ";
 
 	
@@ -370,11 +370,13 @@ public class MovimientoDaoImp implements MovimientoDao {
 		
 		       statement = connection.prepareStatement(InsertarPrestamo);
 		       statement.setInt(1, prestamo.getIdCliente());
-		       statement.setFloat(2, prestamo.getImporteCliente());
-		       statement.setInt(3, prestamo.getPlazoPago());
-		       statement.setFloat(4, prestamo.getImpxmes());
-		       statement.setInt(5, prestamo.getCantCuo());
-		       statement.setInt(6,0);
+		       statement.setInt(2,prestamo.getIdCuenta());
+		       statement.setFloat(3, prestamo.getImporteCliente());
+		       statement.setInt(4, prestamo.getPlazoPago());
+		       statement.setFloat(5, prestamo.getImpxmes());
+		       statement.setInt(6, prestamo.getCantCuo());
+		       statement.setInt(7,0);
+		   
 		
 		       int rowsAffected = statement.executeUpdate();
 		       

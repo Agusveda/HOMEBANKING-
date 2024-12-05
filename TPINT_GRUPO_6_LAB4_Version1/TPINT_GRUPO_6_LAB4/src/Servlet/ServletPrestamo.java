@@ -47,7 +47,7 @@ public class ServletPrestamo extends HttpServlet {
 	        if (idCliente != null) {
 	            String monto = request.getParameter("monto");
 	            String cuotas = request.getParameter("cuotas");
-	            String cuenta = request.getParameter("cuenta");
+	            String idcuenta = request.getParameter("cuenta");
 	            boolean confirmacion = false; 
 
 	            try {
@@ -60,6 +60,7 @@ public class ServletPrestamo extends HttpServlet {
 
 	                Prestamo prestamo = new Prestamo();
 	                prestamo.setIdCliente(idCliente);
+	                prestamo.setIdCuenta(Integer.parseInt(idcuenta));
 	                prestamo.setImporteCliente(importeCliente);
 	                prestamo.setFechaAlta(fechaAlta);
 	                prestamo.setPlazoPago(plazoPago);

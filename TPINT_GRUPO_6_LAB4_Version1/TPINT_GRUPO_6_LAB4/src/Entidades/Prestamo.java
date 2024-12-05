@@ -5,6 +5,7 @@ import java.sql.Date;
 public class Prestamo {
 	private int Id;
 	private int IdCliente;
+	private int IdCuenta;
 	private float ImporteCliente;
 	private Date fechaAlta;
 	private int plazoPago;
@@ -48,6 +49,15 @@ public class Prestamo {
 	public void setIdCliente(int idCliente) {
 		IdCliente = idCliente;
 	}
+	
+	 public int getIdCuenta() {
+	        return IdCuenta;
+	    }
+	 
+	    public void setIdCuenta(int idCuenta) {
+	        IdCuenta = idCuenta;
+	    }
+	
 	public float getImporteCliente() {
 		return ImporteCliente;
 	}
