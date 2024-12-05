@@ -70,7 +70,7 @@ function EventoSeleccionarCuenta()
 		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
 		<% } %>
 	
-    <form method="post" action="ServletTransferencia">
+    <form method="post" action="ServletTransferencia" onsubmit="return confirmarTransferencia(this)">
         <fieldset>
             <legend>Transferencias</legend>
             
@@ -129,5 +129,18 @@ function EventoSeleccionarCuenta()
         <input class="btnAtras" type="button" value="Atrás" name="btnAtras">
     </a>
     <jsp:include page="Footer.jsp" />
+    
+    <script>
+    function confirmarTransferencia(form) {
+        const confirmacion = confirm("¿Estás seguro de transferir a esta cuenta?");
+        if (confirmacion) {
+            return true;
+        } else {
+            console.log("Transferencia cancelada.");
+            return false;
+        }
+    }
+</script>
+    
 </body>
 </html>

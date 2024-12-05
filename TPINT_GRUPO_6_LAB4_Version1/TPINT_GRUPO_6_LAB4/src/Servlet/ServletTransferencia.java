@@ -74,10 +74,34 @@ public class ServletTransferencia extends HttpServlet {
 			//declaracion de objetos
 			Movimiento movimiento = new Movimiento();
 			MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+			Cuenta cuen = new Cuenta();
+			CuentaNegocioImpl cuentaN = new CuentaNegocioImpl();
+			
 			
 			
 			
 			///VALIDACIONES
+			
+			/// PARA VERIFICAR QUE NO SE TRANSFIERA A LA MISMA CUENTA (POR EL CBU)
+			String idCuentaStrCBU = request.getSession().getAttribute("idCuenta").toString();
+			int idCueCBU = Integer.parseInt(idCuentaStrCBU);
+			cuen = cuentaN.obtenerCuentaPorId(idCueCBU);
+			if (cuen.getCbu() == Integer.parseInt(request.getParameter("txtCbuDestino")))
+			{
+                request.setAttribute("mensajeError", "No puede transferirse a esta misma cuenta.");
+                request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                return;
+			}
+			
+			///PARA VERIFICAR QUE SE INGRESE UN MONTO MAYOR A 0 PARA TRANSFERIR
+			if (Float.parseFloat(request.getParameter("txtImporte")) <= 0)
+			{
+                request.setAttribute("mensajeError", "El importe debe ser mayor a 0.");
+                request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                return;
+			}
+			
+			/// PARA VERIFICAR QUE EL SALDO SEA MAYOR AL IMPORTE A TRANSFERIR
             if (Float.parseFloat(request.getParameter("txtImporte")) > Float.parseFloat(request.getParameter("txtSaldo")) ) 
             {
                 request.setAttribute("mensajeError", "El importe es mayor a su sueldo.");
@@ -85,6 +109,7 @@ public class ServletTransferencia extends HttpServlet {
                 return;
             }
             
+            /// PARA VERIFICAR SI EXISTE EL CBU A TRANSFERIR
             if (movimientoNegocio.ExisteCBU(Integer.parseInt(request.getParameter("txtCbuDestino"))) == false)
             {
                 request.setAttribute("mensajeError", "El CBU no existe.");
@@ -114,7 +139,9 @@ public class ServletTransferencia extends HttpServlet {
 			movimiento.setIdCuenta(CuentaDestino);
 				
 			
-			int idCue = movimientoNegocio.ObtenerIdCuentaPorIdCliente(Integer.parseInt(idCli));
+			int idCue = 0;
+			String idCuentaStr = request.getSession().getAttribute("idCuenta").toString();
+			idCue = Integer.parseInt(idCuentaStr);
 	    	    
 	   	    boolean insertado = movimientoNegocio.insertar(movimiento, idCue);
 	   	    
