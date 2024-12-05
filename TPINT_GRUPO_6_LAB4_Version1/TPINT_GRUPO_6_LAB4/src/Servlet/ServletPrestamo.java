@@ -86,28 +86,37 @@ public class ServletPrestamo extends HttpServlet {
 
 	    //Solicitudes para el administrador para Aceptar o denegar
 	    private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	    	   
 	        try {
 	            int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
 	            int confirmacion = Integer.parseInt(request.getParameter("confirmacion"));
 	            float monto = Float.parseFloat( request.getParameter("monto"));
-
+	            int idcuenta = Integer.parseInt(request.getParameter("cuenta"));
+	          
+	            System.out.println("idPrestamo: " + request.getParameter("idPrestamo"));
+	            System.out.println("confirmacion: " + request.getParameter("confirmacion"));
+	            System.out.println("monto: " + request.getParameter("monto"));
+	            System.out.println("cuenta: " + request.getParameter("cuenta"));
+	            
 	            // actualizo en prestamo
 	            MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
 	            boolean exito = movimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
 	            
-	            // cargo el monto en la cuenta
-	            if (exito != false) {
-	            	
-	            boolean exito2 = movimientoDao.CargarPrestamoEnCuenta(idPrestamo, monto);
+	            if (exito && confirmacion == 1) {
+	                boolean exito2 = movimientoDao.CargarPrestamoEnCuenta(idcuenta, monto);
+	               
+	                // Verifico si se cargó el monto correctamente
+	                if (exito2) {
+	                    response.sendRedirect("SolicitudesPrestamo.jsp");
+	                    return; // Finaliza el método después de redirigir
+	                }
 	            }
 
-	            if (exito) {
-	                response.sendRedirect("SolicitudesPrestamo.jsp"); 
-	            } else {
-	                response.sendRedirect("error.jsp"); 
-	            }
+	            // Si no se aprueba o hay algún error, redirijo a error.jsp
+	            response.sendRedirect("error.jsp");
+
 	        } catch (NumberFormatException e) {
-	            response.sendRedirect("error.jsp"); 
+	            response.sendRedirect("error.jsp");
 	        }
 	    }
 	    

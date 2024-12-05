@@ -61,6 +61,7 @@
         <tr>
         	<th>ID Prestamo</th>
             <th>ID Cliente</th>
+             <th>ID Cuenta</th>
             <th>Importe Pedido</th>
             <th>Fecha Alta</th>
             <th>Importe Mensual</th>
@@ -75,6 +76,7 @@
                 <tr onclick="selectRow(this)">
                 	<td><%= prestamo.getId() %></td>
                     <td><%= prestamo.getIdCliente() %></td>
+                    <td><%= prestamo.getIdCuenta() %></td>
                     <td><%= prestamo.getImporteCliente() %></td>
                     <td><%= prestamo.getFechaAlta() %></td>
                     <td><%= prestamo.getImpxmes() %></td>
@@ -85,6 +87,9 @@
                         <form action="ServletPrestamo" method="post" style="display:inline;">
                             <input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>">
                             <input type="hidden" name="confirmacion" value="1">
+                                <input type="hidden" name="cuenta" value="<%= prestamo.getIdCuenta() %>"> 
+                            
+                             <input type="hidden" name="monto" value="<%= prestamo.getImporteCliente() %>">
                             <button type="submit" class="acciones-btn">Aprobar</button>
                         </form>
                         <!-- Formulario para denegar el préstamo -->

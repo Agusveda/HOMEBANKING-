@@ -26,7 +26,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?,?, ?, NOW(), ?, ?, ?,?)";
-	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where IdCuenta = ? ";
+	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where Id = ? ";
 
 	
 	@Override
@@ -425,7 +425,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    
 	    ArrayList<Prestamo> ListaPrestamos = new ArrayList<Prestamo>();
 	    
-	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo";
+	    String query = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo";
 	    
 	    Connection con = Conexion.getConexion().getSQLConexion();
 	    
@@ -443,6 +443,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	            Prestamo pre = new Prestamo();
 	            pre.setId(rs.getInt("id"));
 	            pre.setIdCliente(rs.getInt("IdCliente"));
+	            pre.setIdCuenta(rs.getInt("IdCuenta"));
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
 	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));

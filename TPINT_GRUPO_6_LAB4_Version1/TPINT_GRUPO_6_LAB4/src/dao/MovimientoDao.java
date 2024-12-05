@@ -22,5 +22,6 @@ public interface MovimientoDao
     public ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
     public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden); 
     
-    public boolean CargarPrestamoEnCuenta(int idPrestamo, float monto);
+    public boolean CargarPrestamoEnCuenta(int idcuenta, float monto);
+    
 }
