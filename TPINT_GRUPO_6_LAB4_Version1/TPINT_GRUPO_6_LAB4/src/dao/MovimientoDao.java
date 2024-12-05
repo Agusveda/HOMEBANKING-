@@ -21,5 +21,4 @@ public interface MovimientoDao
     public ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
     public ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
     public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden); 
-    public boolean procesarPrestamosAceptados(int idCliente);
 }
