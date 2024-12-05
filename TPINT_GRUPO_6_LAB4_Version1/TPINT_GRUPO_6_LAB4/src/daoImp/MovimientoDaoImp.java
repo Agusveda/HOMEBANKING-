@@ -27,6 +27,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?,?, ?, NOW(), ?, ?, ?,?)";
 	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where Id = ? ";
+	
+	///REPORTES
+	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE FechaMovimiento BETWEEN ? AND ? AND Importe > 0 GROUP BY TipoMovimiento = ?";
 
 	
 	@Override
@@ -736,6 +739,54 @@ public class MovimientoDaoImp implements MovimientoDao {
 			   }
 			   return isInsertExitoso;
 		}
+	
+	public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal) 
+	{
+		float total = 0;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+
+		try 
+		{
+			if (conexion == null || conexion.isClosed()) 
+			{
+				throw new SQLException("La conexión está cerrada.");
+			}
+
+			statement = conexion.prepareStatement(ReporteMovimientos);
+			statement.setString(1, FechaInicio);
+			statement.setString(2, FechaFinal);
+			statement.setInt(3, TipoMovimiento);
+			rs = statement.executeQuery();
+
+			if (rs.next()) 
+			{
+				total = rs.getFloat("Total");
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+					rs.close();
+				if (statement != null)
+					statement.close();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return total;
+	}
 	
 
 

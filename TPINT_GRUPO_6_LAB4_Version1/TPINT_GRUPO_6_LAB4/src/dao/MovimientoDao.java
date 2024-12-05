@@ -15,13 +15,16 @@ public interface MovimientoDao
 	public float ObtenerSaldoPorIdCuenta(int idCue); 
 	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue);
 	public boolean ExisteCBU(int Cbu);
+	
+	///PRESTAMOS
     public boolean insertarPrestamo(Prestamo prestamo);
     public ArrayList<Prestamo> ListPrestamosPedidos();
     public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
     public ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
     public ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
-    public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden); 
-    
+    public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);     
     public boolean CargarPrestamoEnCuenta(int idcuenta, float monto);
     
+    ///REPORTE DE MOVIMIENTO
+    public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
 }

@@ -78,6 +78,11 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		return MovimientoDao.filtrarClienteXImporteConfirmado(orden);
 	}
 
+	@Override
+	public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal) {
+		return MovimientoDao.ReporteMovimiento(TipoMovimiento, FechaInicio, FechaFinal);
+	}
+
 
 
 }

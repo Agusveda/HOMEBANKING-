@@ -45,7 +45,7 @@
                     <a href="#"> <span class="fa fa-chart-line"></span> Reportes</a>
                     <ul>
                         <li><a href="generarReporte.jsp" target="contenido">Generar Reporte</a></li>
-                        <li><a href="verReportes.jsp" target="contenido">Ver Reportes</a></li>
+                        <li><a href="Reportes.jsp" target="contenido">Ver Reportes</a></li>
                     </ul>
                 </li>
             </ul>

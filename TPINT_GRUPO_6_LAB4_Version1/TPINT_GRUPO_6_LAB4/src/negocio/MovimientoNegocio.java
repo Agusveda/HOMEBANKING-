@@ -21,4 +21,7 @@ public interface MovimientoNegocio
 	public ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
 	public ArrayList<Prestamo> filtrarClienteXImporte (String orden ); 
 	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden );
+	
+	///REPORTES
+	public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
 }

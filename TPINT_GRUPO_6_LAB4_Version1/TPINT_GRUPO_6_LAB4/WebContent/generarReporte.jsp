@@ -15,7 +15,27 @@
     <h1>Generar Reporte de Ingresos y Egresos</h1>
 </div>
 
-    <form action="ServletReporte" method="post">
+    <form action="ServletReportes" method="post">
+    	
+    	<select id="TipoMovimiento" name="TipoMovimiento">
+        <option value="0" >
+                    Selecciona una cuenta
+        </option>
+        <option value="1" >
+                    Alta cuenta
+        </option>
+        <option value="2" >
+                    Alta prestamo
+        </option>
+        <option value="3" >
+                    Pago prestamo
+        </option>
+        <option value="4" >
+                    Transferencia
+        </option>
+        
+        </select>
+    
         <label for="fechaInicio">Fecha Inicio:</label>
         <input type="date" id="fechaInicio" name="fechaInicio" required>
         
