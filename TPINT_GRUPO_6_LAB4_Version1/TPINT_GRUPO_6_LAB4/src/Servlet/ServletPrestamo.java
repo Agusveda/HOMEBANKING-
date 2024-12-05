@@ -45,6 +45,9 @@ public class ServletPrestamo extends HttpServlet {
 	        else if (request.getParameter("idPrestamo") != null && request.getParameter("confirmacion") != null) {
 	            procesarAprobacionPrestamo(request, response);
 	        }
+	        else if (request.getParameter("procesarPrestamosAceptados") != null) {
+	            procesarPrestamosAceptados(request, response);
+	        }
 	    }
 
 	    private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -108,5 +111,26 @@ public class ServletPrestamo extends HttpServlet {
 	            response.sendRedirect("error.jsp"); 
 	        }
 	    }
+	    
+	    
+	    private void procesarPrestamosAceptados(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	        Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
+
+	        if (idCliente != null) {
+	            MovimientoDaoImp prestamoDao = new MovimientoDaoImp();
+
+	            boolean exito = prestamoDao.procesarPrestamosAceptados(idCliente);
+
+	            if (exito) {
+	                response.sendRedirect("Cliente.jsp");
+	            } else {
+	                response.sendRedirect("Cliente.jsp");
+	            }
+
+	        } else {
+	            response.sendRedirect("Cliente.jsp");
+	        }
+	    }
 	}
+
 

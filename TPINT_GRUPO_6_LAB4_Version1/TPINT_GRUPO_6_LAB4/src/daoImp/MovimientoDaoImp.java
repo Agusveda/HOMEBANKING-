@@ -671,6 +671,66 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return lista;
 		
 	}
+
+
+
+	@Override
+	public boolean procesarPrestamosAceptados(int idCliente) {
+	    String queryBuscarPrestamos = "SELECT Id, ImportePedidoCliente FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
+	    String queryActualizarSaldo = "UPDATE cuenta SET Saldo = Saldo + ? WHERE IdCliente = ? AND Activo = 1";
+
+	    Connection conexion = null;
+	    PreparedStatement psBuscarPrestamos = null;
+	    PreparedStatement psActualizarSaldo = null;
+	    ResultSet rs = null;
+
+	    try {
+	       
+	        conexion = Conexion.getConexion().getSQLConexion();
+	        if (conexion == null) {
+	            System.err.println("No se pudo establecer la conexión con la base de datos.");
+	            return false;
+	        }
+
+	        // preststamos aprobados para el cliente
+	        psBuscarPrestamos = conexion.prepareStatement(queryBuscarPrestamos);
+	        psBuscarPrestamos.setInt(1, idCliente);
+	        rs = psBuscarPrestamos.executeQuery();
+
+	        //préstamos encontrados
+	        while (rs.next()) {
+	            float importe = rs.getFloat("ImportePedidoCliente");
+
+	            // Actualizar el saldo de la cuenta 
+	            psActualizarSaldo = conexion.prepareStatement(queryActualizarSaldo);
+	            psActualizarSaldo.setFloat(1, importe);
+	            psActualizarSaldo.setInt(2, idCliente);
+	            int filasActualizadas = psActualizarSaldo.executeUpdate();
+
+	            if (filasActualizadas <= 0) {
+	                System.out.println("No se pudo actualizar el saldo.");
+	                continue;
+	            } else {
+	                System.out.println("Saldo actualizado exitosamente.");
+	            }
+	        }
+
+	        return true;
+
+	    } catch (SQLException e) {
+	        System.err.println("Error al ejecutar la consulta: " + e.getMessage());
+	        return false;
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (psBuscarPrestamos != null) psBuscarPrestamos.close();
+	            if (psActualizarSaldo != null) psActualizarSaldo.close();
+	            if (conexion != null) conexion.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	}
 	
 	
 	
