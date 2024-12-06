@@ -124,7 +124,10 @@
     	</div>
     </form>
 
-
+   	 <a href="Reportes.jsp">
+        <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
+     </a>
+     
  <jsp:include page="Footer.jsp"/>
 
 </body>
