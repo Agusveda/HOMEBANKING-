@@ -152,10 +152,6 @@ public class ServletTransferencia extends HttpServlet {
             }
             request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
             
-            /**
-	   	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Transferencias.jsp");
-	   	    dispatcher.forward(request, response);
-	   	    **/
 	   	    return; 
 			
 		}
