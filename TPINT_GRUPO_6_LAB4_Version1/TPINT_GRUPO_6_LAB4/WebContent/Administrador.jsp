@@ -1,5 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%
+    // Validar si el usuario está logueado y es admin
+    String nombreCliente = (String) session.getAttribute("nombreCliente");
+    Integer tipoUsuario = (Integer) session.getAttribute("tipoUsuario");
+
+    if (nombreCliente == null || tipoUsuario == null || tipoUsuario != 1) {
+        response.sendRedirect("Login.jsp");
+        return; 
+    }
+%>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -52,12 +63,12 @@
         </div>
     </div>
 
-   <div class="parteDer">
-    <iframe id="contenido" name="contenido" src="Administrador.jsp" width="100%" height="600px" frameborder="0"></iframe>
-</div>
+    <div class="parteDer">
+        <iframe id="contenido" name="contenido" src="Administrador.jsp" width="100%" height="600px" frameborder="0"></iframe>
+    </div>
 </div>
 
- <jsp:include page="Footer.jsp"/>
+<jsp:include page="Footer.jsp"/>
 
 </body>
 </html>

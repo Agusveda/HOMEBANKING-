@@ -254,10 +254,9 @@ public class ServletCliente extends HttpServlet {
             if (usuario != null) {
             	request.removeAttribute("mensajeError");
                 int tipoUsuario = usuario.getTipoUsuario();
-                
-                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); //2. Nombre cliente sesion
-
                 request.getSession().setAttribute("IdCliente", usuario.getIdCliente());
+                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); //2. Nombre cliente sesion
+                request.getSession().setAttribute("tipoUsuario", tipoUsuario); //3. Tipo de usuario
                 
                 if (tipoUsuario == 1) 
                 {
