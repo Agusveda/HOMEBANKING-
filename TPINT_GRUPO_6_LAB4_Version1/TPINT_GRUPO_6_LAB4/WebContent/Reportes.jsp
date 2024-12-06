@@ -8,58 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     
     <style>
-        /* Contenedor de los botones */
-        .botones-contenedor {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        /* Estilo general para todos los botones */
-        .botones-contenedor input[type="submit"] {
-            font-size: 24px; 
-            padding: 15px 40px; 
-            border-radius: 12px; 
-            border: none;
-            cursor: pointer;
-            transition: transform 0.3s, background-color 0.3s;
-            width: 300px;
-            text-align: center; 
-        }
-
-        /* Botón Movimientos */
-        .BtnMovimientos {
-            background-color: #007bff; 
-            color: white;
-        }
-
-        .BtnMovimientos:hover {
-            background-color: #0056b3;
-            transform: scale(1.05); 
-        }
-
-        /* Botón Transferencia */
-        .BtnTransferencia {
-            background-color: #28a745; 
-            color: white;
-        }
-
-        .BtnTransferencia:hover {
-            background-color: #1e7e34;
-            transform: scale(1.05);
-        }
-
-        /* Botón Cuentas */
-        .BtnCuentas {
-            background-color: #ffc107;
-            color: black;
-        }
-
-        .BtnCuentas:hover {
-            background-color: #e0a800;
-            transform: scale(1.05);
-        }
+		<jsp:include page="css/Reportes.css"></jsp:include>
     </style>
 <title>Reportes</title>
 </head>

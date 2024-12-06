@@ -68,7 +68,8 @@ public class ServletReportes extends HttpServlet {
         String idStr = request.getSession().getAttribute("id").toString();
         int id = Integer.parseInt(idStr);
         float total = 0;
-		
+		String TipoMovimientoStr = "";
+        
 		///VALIDACIONES - FALTA CARTEL!!
         if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) 
         {
@@ -92,6 +93,27 @@ public class ServletReportes extends HttpServlet {
         		
         		int TipoMovimiento = Integer.parseInt(request.getParameter("TipoMovimiento"));
         		total = MoviN.ReporteMovimiento(TipoMovimiento, fechaInicio, fechaFin);
+        	    
+        	    //OBTENEMOS EL NOMBRE DEL MOVIMIENTO PARA MOSTRARLO EN EL REPORTE
+        	    switch (TipoMovimiento) {
+				case 1:
+					TipoMovimientoStr = "Alta de Cuenta";
+					break;
+				case 2:
+					TipoMovimientoStr = "Alta de Prestamo";
+					break;
+				case 3:
+					TipoMovimientoStr = "Pago de Prestamo";
+					break;
+
+				default:
+					break;
+				}
+        	    
+        	    //Lo ponemos en una Session para pasarlo al JSP
+        	    request.getSession().setAttribute("TipoMovimiento", TipoMovimientoStr);
+        	    
+        	    
         	    request.getSession().setAttribute("total", total);
     			RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
     			rd.forward(request, response);
