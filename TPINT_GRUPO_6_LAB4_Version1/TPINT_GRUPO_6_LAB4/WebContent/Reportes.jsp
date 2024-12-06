@@ -8,45 +8,58 @@
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     
     <style>
-    
-.botones-contenedor {
-    display: flex; 
-    justify-content: center; 
-    gap: 20px;
-    margin-top: 20px; 
-}
+        /* Contenedor de los botones */
+        .botones-contenedor {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
 
+        /* Estilo general para todos los botones */
+        .botones-contenedor input[type="submit"] {
+            font-size: 24px; 
+            padding: 15px 40px; 
+            border-radius: 12px; 
+            border: none;
+            cursor: pointer;
+            transition: transform 0.3s, background-color 0.3s;
+            width: 300px;
+            text-align: center; 
+        }
 
-.botones-contenedor input[type="submit"] {
-    font-size: 18px; 
-    padding: 10px 20px; 
-    border-radius: 8px; 
-    border: none; 
-    cursor: pointer; 
-    transition: transform 0.3s, background-color 0.3s; 
-}
+        /* Botón Movimientos */
+        .BtnMovimientos {
+            background-color: #007bff; 
+            color: white;
+        }
 
-/* Botón Movimientos */
-.BtnMovimientos {
-    background-color: #007bff; 
-    color: white; 
-}
+        .BtnMovimientos:hover {
+            background-color: #0056b3;
+            transform: scale(1.05); 
+        }
 
-.BtnMovimientos:hover {
-    background-color: #0056b3; 
-    transform: scale(1.1); 
-}
+        /* Botón Transferencia */
+        .BtnTransferencia {
+            background-color: #28a745; 
+            color: white;
+        }
 
-/* Botón Clientes */
-.BtnClientes {
-    background-color: #28a745; 
-    color: white; 
-}
+        .BtnTransferencia:hover {
+            background-color: #1e7e34;
+            transform: scale(1.05);
+        }
 
-.BtnClientes:hover {
-    background-color: #1e7e34; 
-    transform: scale(1.1);
-}
+        /* Botón Cuentas */
+        .BtnCuentas {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .BtnCuentas:hover {
+            background-color: #e0a800;
+            transform: scale(1.05);
+        }
     </style>
 <title>Reportes</title>
 </head>
@@ -65,7 +78,10 @@
 	</div>
 	<br>
 	<div class="botones-contenedor">
-    	<input type="submit" class="BtnClientes" name="btnClientes" value="Clientes" />
+    	<input type="submit" class="BtnTransferencia" name="btnTransferencia" value="Transferencia" />
+	</div>
+	<div class="botones-contenedor">
+    	<input type="submit" class="BtnCuentas" name="btnCuentas" value="Cuentas" />
 	</div>
 		
 	

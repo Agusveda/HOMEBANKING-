@@ -146,13 +146,25 @@ button[type="submit"]:hover {
 %>
 
 <div class="encabezado">
-    <h1>Generar Reporte de <% if(id == 1)
+    <h1>Generar Reporte de <% 
+    	if(id == 1)
     	{%>
     		Movimientos
-    	<% }else
-    	{%>
-    		Clientes
+    	<% 
+    	}else
+    	{ 
+    	  if (id == 2)
+    	
+    	  {
+    	%>
+    		Transferencia
+    	<%}else
+    	  {%>
+    		Cuentas
+    		
     	<%}
+    	
+    	}
     	%>
     
     </h1>

@@ -27,6 +27,7 @@ public class ServletReportes extends HttpServlet {
 		
 		///REDIRECCION DEPENDIENDO DEL REPORTE QUE ELIJA
 		int id=0;
+		
 		if (request.getParameter("btnMovimientos") != null)
 		{
 			id=1;
@@ -35,9 +36,17 @@ public class ServletReportes extends HttpServlet {
 			rd.forward(request, response);
 		}
 		
-		if (request.getParameter("btnClientes") != null)
+		if (request.getParameter("btnTransferencia") != null)
 		{
 			id=2;
+    	    request.getSession().setAttribute("id", id);
+			RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
+			rd.forward(request, response);
+		}
+		
+		if (request.getParameter("btnCuentas") != null)
+		{
+			id=3;
     	    request.getSession().setAttribute("id", id);
 			RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
 			rd.forward(request, response);
@@ -88,8 +97,14 @@ public class ServletReportes extends HttpServlet {
     			rd.forward(request, response);
         	}
         	
-        	///REPORTE DE CLIENTES
+        	///REPORTE DE TRANSFERENCIAS
         	if (id == 2)
+        	{
+        		
+        	}
+        	
+        	///REPORTE DE CUENTAS
+        	if (id == 3)
         	{
         		
         	}
