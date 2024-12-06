@@ -70,6 +70,12 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	}
 
 
+	@Override
+	public float ReporteCuentas() {
+		return cuentaDao.ReporteCuentas();
+	}
+
+
 	
 
 	

@@ -21,6 +21,9 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ? WHERE Id = ?";
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
+    
+    //REPORTE
+    private static final String ReporteCuentas = "SELECT SUM(Saldo) AS saldo FROM cuenta";
 
     @Override
     public boolean insertCuenta(Cuenta cuenta) {
@@ -445,6 +448,51 @@ public class CuentaDaoImpl implements CuentaDao {
 
         return listaCuentas;
     }
+
+	@Override
+	public float ReporteCuentas() {
+		float saldo = 0;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+
+		try 
+		{
+			if (conexion == null || conexion.isClosed()) 
+			{
+				throw new SQLException("La conexión está cerrada.");
+			}
+
+			statement = conexion.prepareStatement(ReporteCuentas);
+			rs = statement.executeQuery();
+
+			if (rs.next()) 
+			{
+				saldo = rs.getFloat("saldo");
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+					rs.close();
+				if (statement != null)
+					statement.close();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return saldo;
+	}
 
     
     

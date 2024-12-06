@@ -18,6 +18,7 @@
 
 <jsp:include page="Navbar.jsp"/>
 <%
+	///REPORTE DE MOVIMIENTOS
 	String TipoMovimiento = "";
 	float total=0;
 	int id = 0;
@@ -34,6 +35,17 @@
 	if (session.getAttribute("TipoMovimiento") != null)
 	{
     	TipoMovimiento = (String) session.getAttribute("TipoMovimiento");	
+	}
+	
+	/// REPORTE DE TRANSFERENCIA
+	
+	
+	///REPORTE DE CUENTAS
+	float saldo = 0;
+	
+	if (session.getAttribute("saldo") != null)
+	{
+    	saldo = (float) session.getAttribute("saldo");	
 	}
 %>
 
@@ -91,7 +103,11 @@
     		}
         %>
         <br>
-    
+    	
+    	<%
+    		if(id == 1 || id == 2)
+    		{	
+    	%>
         <label for="fechaInicio">Fecha Inicio:</label>
         <input type="date" id="fechaInicio" name="fechaInicio" required>
         <br>
@@ -100,11 +116,14 @@
         <input type="date" id="fechaFin" name="fechaFin" required>
         <br>
         <br>
+        <%
+    		}        
+        %>
         
         <button type="submit" name="btnReportes">Generar Reporte</button>
         
-        
         <% 
+        /// REPORTE DE MOVIMIENTOS
         if (total != 0)
         	{
         %>
@@ -122,6 +141,26 @@
         	}
         	%>
     	</div>
+    	
+    	<% 
+    	/// REPORTE DE CUENTAS
+        if (saldo != 0)
+        	{
+        %>
+        	
+        	<div class="reporte-lista">
+        	
+    			<div class="reporte-item">
+        			<span class="tipo-movimiento">La cantidad de plata en el banco es de:  </span>
+        			<span class="total"> <%= saldo %></span>
+    			</div>
+    			
+    	   </div>
+        	
+        	<%
+        	}
+        	%>
+    	
     </form>
 
    	 <a href="Reportes.jsp">

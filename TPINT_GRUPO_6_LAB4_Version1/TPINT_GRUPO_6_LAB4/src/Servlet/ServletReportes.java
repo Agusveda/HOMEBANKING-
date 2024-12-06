@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
 
 
@@ -62,12 +63,14 @@ public class ServletReportes extends HttpServlet {
 		
 		
 		/// DECLARAMOS OBJETOS
+		CuentaNegocioImpl CuentaN = new CuentaNegocioImpl();
 		MovimientoNegocioImpl MoviN = new MovimientoNegocioImpl();
         String fechaInicio = request.getParameter("fechaInicio");
         String fechaFin = request.getParameter("fechaFin");
         String idStr = request.getSession().getAttribute("id").toString();
         int id = Integer.parseInt(idStr);
         float total = 0;
+        float saldo = 0;
 		String TipoMovimientoStr = "";
         
 		///VALIDACIONES - FALTA CARTEL!!
@@ -128,7 +131,12 @@ public class ServletReportes extends HttpServlet {
         	///REPORTE DE CUENTAS
         	if (id == 3)
         	{
+        		//Traemos el reporte
+        		saldo = CuentaN.ReporteCuentas();
         		
+        	    request.getSession().setAttribute("saldo", saldo);
+    			RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
+    			rd.forward(request, response);
         	}
         }
         
