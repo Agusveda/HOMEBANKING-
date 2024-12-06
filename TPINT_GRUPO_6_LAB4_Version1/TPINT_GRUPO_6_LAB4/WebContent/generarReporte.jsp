@@ -136,8 +136,13 @@
     			</div>
     			
     	   </div>
+    	   
+	 <a href="Reportes.jsp">
+        <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
+     </a>
         	
         	<%
+        	session.removeAttribute("total");
         	}
         	%>
     	</div>
@@ -158,6 +163,7 @@
     	   </div>
         	
         	<%
+        	session.removeAttribute("saldo");
         	}
         	%>
     	

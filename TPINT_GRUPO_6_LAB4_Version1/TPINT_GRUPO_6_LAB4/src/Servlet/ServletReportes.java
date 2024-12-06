@@ -73,20 +73,23 @@ public class ServletReportes extends HttpServlet {
         float saldo = 0;
 		String TipoMovimientoStr = "";
         
-		///VALIDACIONES - FALTA CARTEL!!
-        if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) 
-        {
-        	
-            return;
-        }
         
         
         
         if (request.getParameter("btnReportes") != null)
         {
+
         	/// REPORTE DE MOVIMIENTOS
         	if (id == 1)
         	{
+        		
+        		///VALIDACIONES - FALTA CARTEL!!
+        		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) 
+        		{
+        			
+        			return;
+        		}
+        		
         		///Valido que TipoMovimiento no sea null dentro del ID = 1 porque si es distinto a 1, no deberia cargarse.
         		if (request.getParameter("TipoMovimiento") == null || request.getParameter("TipoMovimiento").isEmpty())
         		{
