@@ -73,26 +73,35 @@ public class ServletReportes extends HttpServlet {
         float saldo = 0;
 		String TipoMovimientoStr = "";
         
-		///VALIDACIONES - FALTA CARTEL!!
-        if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) 
-        {
-        	
-            return;
-        }
         
         
         
         if (request.getParameter("btnReportes") != null)
         {
+
         	/// REPORTE DE MOVIMIENTOS
         	if (id == 1)
         	{
-        		///Valido que TipoMovimiento no sea null dentro del ID = 1 porque si es distinto a 1, no deberia cargarse.
-        		if (request.getParameter("TipoMovimiento") == null || request.getParameter("TipoMovimiento").isEmpty())
+        		
+        		///VALIDACIONES
+        		if (fechaInicio == null || fechaFin == null || fechaInicio.isEmpty() || fechaFin.isEmpty()) 
         		{
-        			
+                    request.setAttribute("mensajeError", "Complete todos los campos porfavor.");
+                    request.getRequestDispatcher("/generarReporte.jsp").forward(request, response);
         			return;
         		}
+        		
+        		
+        		
+        		
+        		///Valido que TipoMovimiento no sea null dentro del ID = 1 porque si es distinto a 1, no deberia cargarse.
+        		if (request.getParameter("TipoMovimiento") == null || request.getParameter("TipoMovimiento").isEmpty() || Integer.parseInt(request.getParameter("TipoMovimiento")) == 0)
+        		{
+                    request.setAttribute("mensajeError", "Complete todos los campos porfavor.");
+                    request.getRequestDispatcher("/generarReporte.jsp").forward(request, response);
+        			return;
+        		}
+        		
         		
         		int TipoMovimiento = Integer.parseInt(request.getParameter("TipoMovimiento"));
         		total = MoviN.ReporteMovimiento(TipoMovimiento, fechaInicio, fechaFin);
@@ -116,6 +125,11 @@ public class ServletReportes extends HttpServlet {
         	    //Lo ponemos en una Session para pasarlo al JSP
         	    request.getSession().setAttribute("TipoMovimiento", TipoMovimientoStr);
         	    
+        	    if (total != 0)
+        	    {
+        	    	 request.setAttribute("mensaje", "Reporte realizado exitosamente.");
+        	    }
+        	    
         	    
         	    request.getSession().setAttribute("total", total);
     			RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
@@ -133,6 +147,11 @@ public class ServletReportes extends HttpServlet {
         	{
         		//Traemos el reporte
         		saldo = CuentaN.ReporteCuentas();
+        		
+        		if (saldo != 0)
+        		{
+        			 request.setAttribute("mensaje", "Reporte realizado exitosamente.");
+        		}
         		
         	    request.getSession().setAttribute("saldo", saldo);
     			RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
