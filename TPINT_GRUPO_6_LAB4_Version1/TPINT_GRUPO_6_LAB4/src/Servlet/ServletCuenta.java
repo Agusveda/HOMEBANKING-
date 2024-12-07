@@ -123,7 +123,7 @@ public class ServletCuenta extends HttpServlet {
     	        dispatcher.forward(request, response);
 
     	    } catch (NumberFormatException e) {
-    	        request.setAttribute("mensajeError", "Datos inv�lidos.");
+    	        request.setAttribute("mensajeError", "Datos invalidos.");
     	        RequestDispatcher dispatcher = request.getRequestDispatcher("/ModificarCuenta.jsp");
     	        dispatcher.forward(request, response);
     	    }

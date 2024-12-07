@@ -131,7 +131,8 @@ function EventoSeleccionarCuenta()
     <jsp:include page="Footer.jsp" />
     
     <script>
-    function confirmarTransferencia(form) {
+    function confirmarTransferencia(form) 
+    {
         const confirmacion = confirm("¿Estás seguro de transferir a esta cuenta?");
         if (confirmacion) {
             return true;
@@ -140,7 +141,7 @@ function EventoSeleccionarCuenta()
             return false;
         }
     }
-</script>
+	</script>
     
 </body>
 </html>
