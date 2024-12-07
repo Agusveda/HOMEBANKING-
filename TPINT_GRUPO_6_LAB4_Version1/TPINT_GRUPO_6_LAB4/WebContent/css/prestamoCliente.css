@@ -1,0 +1,71 @@
+		    /* Contenedor principal */
+		    
+		    
+    .container {
+        max-width: 500px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        font-family: Arial, sans-serif;
+    }
+
+
+    /* Títulos y etiquetas */
+    label {
+        font-size: 14px;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+
+    /* Campos de entrada */
+    input[type="number"],
+    select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+
+    input[type="number"]:focus,
+    select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+
+
+    /* Botón de acción */
+    .btn-pedir {
+        width: 100%;
+        padding: 12px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+
+    .btn-pedir:hover {
+        background-color: #0056b3;
+    }
+
+
+    /* Mensaje de error */
+    .mensaje-error {
+        font-size: 14px;
+        color: red;
+        text-align: center;
+        margin-top: 20px;
+    }

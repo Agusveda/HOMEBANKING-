@@ -1,0 +1,80 @@
+    /* Estilo general */
+    
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f9;
+        margin: 0;
+        padding: 20px;
+    }
+
+
+    .encabezado {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+
+    .encabezado h1 {
+        font-size: 24px;
+        color: #333;
+    }
+
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+
+
+    th {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        text-align: center;
+    }
+
+
+    td {
+        text-align: center;
+        padding: 8px;
+        border: 1px solid #ddd;
+    }
+
+
+    tbody tr:nth-child(odd) {
+        background-color: #f9f9f9;
+    }
+
+
+    tbody tr:nth-child(even) {
+        background-color: #eef4fc;
+    }
+
+
+    tbody tr:hover {
+        background-color: #d7ebfa;
+        cursor: pointer;
+    }
+
+
+    .acciones-btn {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+
+
+    .acciones-btn:hover {
+        background-color: #218838;
+    }
+
+
+    .empty-message {
+        font-size: 16px;
+        color: #555;
+        text-align: center;
+    }

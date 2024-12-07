@@ -16,6 +16,36 @@
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/Cliente.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
+    
+    <style>
+    .ver-movimientos-btn 
+    {
+    display: inline-block;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+	}
+
+	.ver-movimientos-btn:hover 
+	{
+    background-color: #0056b3;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+	}
+
+	.ver-movimientos-btn:active 
+	{
+    background-color: #004494;
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+	}
+    </style>
+    
 <title>Bienvenida</title>
 </head>
 
@@ -62,7 +92,7 @@
             <td>
                 <form action="ServletVerMovimiento" method="post">
                     <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>" />
-                    <input type="submit" class="button button-blue" value="Ver Movimiento" name="btnVerMovimientos" />
+                    <input type="submit" class="ver-movimientos-btn" value="Ver Movimiento" name="btnVerMovimientos" />
                 </form>
             </td>
         </tr>
