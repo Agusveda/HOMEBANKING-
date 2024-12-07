@@ -275,11 +275,7 @@ public class ServletCliente extends HttpServlet {
                 
                     response.sendRedirect("Cliente.jsp");
                 }
-            } else {
-                request.setAttribute("mensajeError", "Usuario o contraseña incorrectos");
-                request.getRequestDispatcher("/Login.jsp").forward(request, response);
-                
-            }
+            } 
         } else {
         	
             request.setAttribute("mensajeError", "Usuario o contraseña incorrectos");
