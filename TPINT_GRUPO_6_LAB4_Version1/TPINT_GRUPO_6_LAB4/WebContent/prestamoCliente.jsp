@@ -26,6 +26,22 @@
 
 
 <div class="container">
+
+<%-- Mostrar el mensaje de error o éxito --%>
+<% 
+    String mensaje = (String) request.getAttribute("mensaje");
+    String mensajeError = (String) request.getAttribute("mensajeError");
+    if (mensaje != null) {
+%>
+    <div class="mensaje-exito"><%= mensaje %></div>
+<% 
+    }
+    if (mensajeError != null) {
+%>
+    <div class="mensaje-error"><%= mensajeError %></div>
+<% 
+    }
+%>
     
     <% 
         Integer idCliente = (Integer) session.getAttribute("IdCliente");   

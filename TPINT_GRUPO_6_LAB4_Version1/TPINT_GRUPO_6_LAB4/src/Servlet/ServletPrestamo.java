@@ -3,6 +3,7 @@ package Servlet;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -40,7 +41,7 @@ public class ServletPrestamo extends HttpServlet {
 	     
 	    }
 
-	    private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	    private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	        Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
 
 	        //El cliente pide el prestamo
@@ -53,7 +54,7 @@ public class ServletPrestamo extends HttpServlet {
 	            try {
 	                float importeCliente = Float.parseFloat(monto);
 	                int cantCuo = Integer.parseInt(cuotas);
-	                int plazoPago = 12; 
+	               
 	                float impxmes = importeCliente / cantCuo;
 
 	                java.sql.Date fechaAlta = new java.sql.Date(System.currentTimeMillis());
@@ -63,7 +64,7 @@ public class ServletPrestamo extends HttpServlet {
 	                prestamo.setIdCuenta(Integer.parseInt(idcuenta));
 	                prestamo.setImporteCliente(importeCliente);
 	                prestamo.setFechaAlta(fechaAlta);
-	                prestamo.setPlazoPago(plazoPago);
+	                prestamo.setPlazoPago(cantCuo);
 	                prestamo.setImpxmes(impxmes);
 	                prestamo.setCantCuo(cantCuo);
 	                prestamo.setconfimacion(confirmacion);
@@ -72,12 +73,21 @@ public class ServletPrestamo extends HttpServlet {
 	                boolean exito = prestamoDao.insertarPrestamo(prestamo);
 
 	                if (exito) {
-	                    response.sendRedirect("prestamoCliente.jsp"); 
-	                } else {
-	                    response.sendRedirect("error.jsp"); 
+	                	request.setAttribute("mensaje", "Pedido de préstamo confirmado.");
+	                    RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
+	                    dispatcher.forward(request, response);
+
+	                    dispatcher.forward(request, response);
+	                    } else {
+	                	request.setAttribute("mensajeError", "No se pudo procesar la solicitud de préstamo. Intente nuevamente.");
+	                    RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
+
+	                    dispatcher.forward(request, response);
 	                }
 	            } catch (NumberFormatException e) {
-	                response.sendRedirect("error.jsp"); 
+	            	request.setAttribute("mensajeError", "Error en los datos ingresados. Asegúrese de que todos los campos sean correctos.");
+	                RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
+	                dispatcher.forward(request, response);
 	            }
 	        } else {
 	            response.sendRedirect("login.jsp");
@@ -112,11 +122,10 @@ public class ServletPrestamo extends HttpServlet {
 	                }
 	            }
 
-	            // Si no se aprueba o hay algún error, redirijo a error.jsp
-	            response.sendRedirect("error.jsp");
+	            
 
 	        } catch (NumberFormatException e) {
-	            response.sendRedirect("error.jsp");
+	            
 	        }
 	    }
 	    
