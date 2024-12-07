@@ -18,32 +18,9 @@
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     
     <style>
-    .ver-movimientos-btn 
-    {
-    display: inline-block;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-	}
-
-	.ver-movimientos-btn:hover 
-	{
-    background-color: #0056b3;
-    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-	}
-
-	.ver-movimientos-btn:active 
-	{
-    background-color: #004494;
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-	}
+    
+		        <jsp:include page="css/ClienteVentana.css"></jsp:include>
+    
     </style>
     
 <title>Bienvenida</title>
