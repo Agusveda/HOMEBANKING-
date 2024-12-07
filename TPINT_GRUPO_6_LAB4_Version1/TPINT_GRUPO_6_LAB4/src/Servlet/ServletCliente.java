@@ -65,7 +65,7 @@ public class ServletCliente extends HttpServlet {
     	String action = request.getParameter("action");
 
     	if ("loadProvinces".equals(action)) {	 
- 	   // Obtener el id de la nacionalidad seleccionada
+ 	 // Obtener el id de la nacionalidad seleccionada
      String nacionalidadId = request.getParameter("txtNacionalidad");
      String provinciaId = request.getParameter("txtProvincia");
      String localidadId = request.getParameter("txtLocalidad");
@@ -176,6 +176,7 @@ public class ServletCliente extends HttpServlet {
 
             if (contrasena1 == null || contrasena2 == null || !contrasena1.equals(contrasena2)) {
                 request.setAttribute("mensajeError", "Las contraseñas no coinciden. Por favor, intente nuevamente.");
+                System.out.println("Mensaje de error: Las contraseñas no coinciden.");
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
@@ -215,17 +216,20 @@ public class ServletCliente extends HttpServlet {
             
             if (bandolero.ValidacionDni(dni)) {
                 request.setAttribute("mensajeError", "El DNI ya existe en la base de datos. Por favor, intente con otro DNI.");
+                System.out.println("Mensaje de error: El DNI ya existe en la base de datos.");
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
             if (bandolero.ValidacionCuil(cuil)) {
                 request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
+                System.out.println("Mensaje de error: El CUIL ya existe en la base de datos.");
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
             if (bandolero.ValidacionUsuario(user)) {
                 request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
-                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+                System.out.println("Mensaje de error: El USUARIO ya existe en la base de datos.");
+                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);	
                 return;
             }
             
@@ -235,8 +239,13 @@ public class ServletCliente extends HttpServlet {
 
             if (insertado) {
                 request.setAttribute("mensaje", "Cliente registrado exitosamente.");
+             // Restablecer valores de los desplegables
+                request.setAttribute("nacionalidad",null);
+                request.setAttribute("provincias", null);
+                request.setAttribute("localidades", null);
             } else {
                 request.setAttribute("mensajeError", "Hubo un error al registrar el cliente.");
+                System.out.println("Mensaje: Cliente registrado exitosamente.");
             }
             request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
         }

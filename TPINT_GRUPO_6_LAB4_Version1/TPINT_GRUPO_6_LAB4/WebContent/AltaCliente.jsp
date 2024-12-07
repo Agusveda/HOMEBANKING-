@@ -25,14 +25,19 @@
 	    String mensaje = (String) request.getAttribute("mensaje");
 	    String mensajeError = (String) request.getAttribute("mensajeError");
 	    %>
-        
-        <!-- Mensajes de éxito o error -->
+	    <!-- Mostrar alert en caso de mensajes -->
 	    <% if (mensaje != null) { %>
-	    <div class="mensaje mensaje-exito"><%= mensaje %></div>
+		 <div style="color: green;">
+        <%= mensaje %>
+    </div>
 		<% } %>
+		
 		<% if (mensajeError != null) { %>
-		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
+		    <div style="color: red;">
+        <%= mensajeError %>
+    </div>
 		<% } %>
+		       
 
         <!-- Formulario para registrar cliente -->
         <form method="POST" action="ServletBanco">
@@ -96,20 +101,20 @@
                 <legend>Datos del Cliente</legend>
                 <p>
                     <label class="form-label" for="nombre">Nombre</label>
-                    <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" required name="txtNombre">
+                    <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" required name="txtNombre" onkeypress="validarSoloLetras(event)">
                     
                 </p>
                 <p>
                     <label class="form-label" for="apellido">Apellido</label>
-                    <input class="controls" id="apellido" type="text" placeholder="Ingrese el apellido" required name="txtApellido">
+                    <input class="controls" id="apellido" type="text" placeholder="Ingrese el apellido" required name="txtApellido" onkeypress="validarSoloLetras(event)">
                 </p>
                 <p>
                     <label class="form-label" for="dni">DNI</label>
-                    <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" required name="txtDNI">
+                    <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" required name="txtDNI" onkeypress="validarSoloNumeros(event)">
                 </p>
                 <p>
                     <label class="form-label" for="cuil">CUIL</label>
-                    <input class="controls" id="cuil" type="number" placeholder="Ingrese el CUIL" required name="txtCUIL">
+                    <input class="controls" id="cuil" type="number" placeholder="Ingrese el CUIL" required name="txtCUIL" onkeypress="validarSoloNumeros(event)">
                 </p>
                 <p>
                     <label class="form-label" for="sexo">Sexo</label>
@@ -136,7 +141,7 @@
                 </p>
                 <p>
                     <label class="form-label" for="telefono">Teléfono</label>
-                    <input class="controls" id="telefono" type="text" placeholder="Ingrese el teléfono" required name="txtTelefono">
+                    <input class="controls" id="telefono" type="text" placeholder="Ingrese el teléfono" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
                 </p>
                 <p>
                     <label class="form-label" for="usuario">Usuario</label>
@@ -169,8 +174,70 @@
                 <input class="botons" id="btnAceptar" type="submit" value="Aceptar" required name="btnAltaCliente">
                 <input class="botons" type="submit" value="Volver" id="btnVolver" onclick="window.location.href='Administrador.jsp'; return false;">
             </div>
+            
         </form>
     </div>
+   <!-- Modal para mensajes con Bootstrap -->
+<div class="modal fade" id="mensajeModal" tabindex="-1" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="mensajeModalLabel">Mensaje</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body">
+                <p id="modalMensaje"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para mostrar el modal -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        <% if (mensaje != null) { %>
+            document.getElementById("modalMensaje").innerText = "<%= mensaje %>";
+            new bootstrap.Modal(document.getElementById("mensajeModal")).show();
+        <% } else if (mensajeError != null) { %>
+            document.getElementById("modalMensaje").innerText = "<%= mensajeError %>";
+            new bootstrap.Modal(document.getElementById("mensajeModal")).show();
+        <% } %>
+    });
+   
+    
+function validarSoloLetras(event) {
+    const key = event.key;
+    const regex = /^[a-zA-Z]+$/;
+
+    if (!regex.test(key) && key !== "Backspace") {
+        event.preventDefault(); // Evita que se ingrese el carácter no permitido
+        alert("Solo se permiten letras.");
+    }
+}
+
+function validarSoloNumeros(event) {
+    const key = event.key;
+    const regex = /^[0-9]$/;
+
+    if (!regex.test(key) && key !== "Backspace" && key !== "Tab" && key !== "Delete" && key !== "ArrowLeft" && key !== "ArrowRight") {
+        event.preventDefault(); // Evita que se ingrese un carácter no permitido
+        alert("Solo se permiten números.");
+    }
+}
+
+</script>
+
+
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script> 
+    
+    
+    
+    
     
     <jsp:include page="Footer.jsp"/>
 </body>

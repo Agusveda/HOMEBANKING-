@@ -27,4 +27,5 @@ public interface ClienteDao  {
 	public boolean ValidacionDniModificar (int dni, int id);
 	public boolean ValidacionCuilModificar (int cuil, int id);
 	public boolean ValidacionUsuarioModificar (String usu, int id);
+	
 }
