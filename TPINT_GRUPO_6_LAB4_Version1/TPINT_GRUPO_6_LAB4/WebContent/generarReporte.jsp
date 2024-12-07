@@ -66,6 +66,17 @@
 	}
 	
 	/// REPORTE DE TRANSFERENCIA
+//	float ImporteEgreso =0;
+//	float Importeingreso = 0 ;
+	
+//	if (session.getAttribute("ImporteEgreso") != null && session.getAttribute("Importeingreso") != null )
+//	{
+//	 ImporteEgreso = (float) session.getAttribute("ImporteEgreso");
+//	 Importeingreso = (float)session.getAttribute("Importeingreso");
+	
+	
+//	}
+	
 	
 	
 	///REPORTE DE CUENTAS
@@ -147,7 +158,7 @@
         <br>
     	
     	<%
-    		if(id == 1 || id == 2)
+    		if(id == 1 )
     		{	
     	%>
     	<p style="font-size: 0.9em; color: gray;">Ejemplo: 2024-12-06 (Año-Mes-Día)</p>
@@ -190,6 +201,48 @@
         	}
         	%>
     	</div>
+    	<%
+    	if(id == 2 )
+		{	
+    	%>
+    	
+    	<p style="font-size: 0.9em; color: gray;">Ejemplo: 44552521</p>
+    	
+       <label for="DNICliente">DNI del cliente:</label>
+<input type="text" id="DNICliente" name="DNICliente" pattern="\d*" title="Solo se permiten números" required>
+
+        <br>
+        
+        <br>
+        <br>
+    	<%} %>
+    	
+<%
+    Float ImporteEgreso = (Float) session.getAttribute("ImporteEgreso");
+    Float ImporteIngreso = (Float) session.getAttribute("ImporteIngreso");
+
+    if (ImporteEgreso == null) {
+        ImporteEgreso = 0f;
+    }
+    if (ImporteIngreso == null) {
+        ImporteIngreso = 0f;
+    }
+%>
+<div class="reporte-item">
+    <span class="egreso">La cantidad de plata que se debitó de la cuenta es </span>
+    <span class="total"> <%= ImporteEgreso %> </span>
+</div>
+<div class="reporte-item">
+    <span class="ingreso">La cantidad de plata que se ingresó en la cuenta es </span>
+    <span class="total"> <%= ImporteIngreso %> </span>
+</div>
+
+
+    	
+    	
+    	
+    	
+    	
     	
     	<% 
     	/// REPORTE DE CUENTAS

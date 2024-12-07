@@ -83,6 +83,17 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		return MovimientoDao.ReporteMovimiento(TipoMovimiento, FechaInicio, FechaFinal);
 	}
 
+	@Override
+	public float EgresoDeCliente(int DNICLIENTE) {
+		return MovimientoDao.EgresoDeCliente(DNICLIENTE);
+	}
+
+	@Override
+	public float IngresoDeCliente(int DNICLIENTE) {
+		return MovimientoDao.IngresoDeCliente(DNICLIENTE);
+
+	}
+
 
 
 }

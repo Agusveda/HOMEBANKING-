@@ -24,4 +24,8 @@ public interface MovimientoNegocio
 	
 	///REPORTES
 	public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
+	
+    // REPORTE DE TRANSFERENCIAS
+    public float EgresoDeCliente(int IdCliente);
+    public float IngresoDeCliente(int IdCliente);
 }

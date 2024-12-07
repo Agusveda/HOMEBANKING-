@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import dao.MovimientoDao;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
 
@@ -72,6 +73,7 @@ public class ServletReportes extends HttpServlet {
         float total = 0;
         float saldo = 0;
 		String TipoMovimientoStr = "";
+		int DNICliente = Integer.parseInt(request.getParameter("DNICliente"));
         
         
         
@@ -137,10 +139,41 @@ public class ServletReportes extends HttpServlet {
         	}
         	
         	///REPORTE DE TRANSFERENCIAS
-        	if (id == 2)
-        	{
-        		
+        	if (id == 2) {
+        	    String dniStr = request.getParameter("DNICliente");
+        	    
+        	    if (dniStr == null || dniStr.isEmpty()) {
+        	        request.setAttribute("mensajeError", "El campo DNICliente es obligatorio.");
+        	        request.getRequestDispatcher("/generarReporte.jsp").forward(request, response);
+        	        return;
+        	    }
+        	    
+        	    try {
+        	        DNICliente = Integer.parseInt(dniStr);
+        	    } catch (NumberFormatException e) {
+        	        request.setAttribute("mensajeError", "El DNI debe ser un número válido.");
+        	        request.getRequestDispatcher("/generarReporte.jsp").forward(request, response);
+        	        return;
+        	    }
+
+        	    float ImporteEgreso = MoviN.EgresoDeCliente(DNICliente);
+        	    float ImporteIngreso = MoviN.IngresoDeCliente(DNICliente);
+        
+        	
+
+        	    if (ImporteIngreso != 0 || ImporteEgreso != 0) {
+        	        request.setAttribute("mensaje", "Reporte realizado exitosamente.");
+        	    } else {
+        	        request.setAttribute("mensajeError", "No se encontraron registros para el DNI ingresado.");
+        	    }
+
+        	    request.getSession().setAttribute("ImporteEgreso", ImporteEgreso);
+        	    request.getSession().setAttribute("ImporteIngreso", ImporteIngreso);
+        	    RequestDispatcher rd = request.getRequestDispatcher("/generarReporte.jsp");
+        	    rd.forward(request, response);
         	}
+
+
         	
         	///REPORTE DE CUENTAS
         	if (id == 3)

@@ -31,8 +31,12 @@ public class MovimientoDaoImp implements MovimientoDao {
 	///REPORTES
 	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE FechaMovimiento BETWEEN ? AND ? AND Importe > 0 GROUP BY TipoMovimiento = ?";
 
-	
+	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
+	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";
+		
+
 	@Override
+	
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
 
@@ -788,6 +792,87 @@ public class MovimientoDaoImp implements MovimientoDao {
 		return total;
 	}
 	
+	public float IngresoDeCliente(int DNICLIENTE) 
+	{
+		float total = 0;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+
+		try 
+		{
+			if (conexion == null || conexion.isClosed()) 
+			{
+				throw new SQLException("La conexión está cerrada.");
+			}
+
+			statement = conexion.prepareStatement(ReporteIngresoMovimiento);
+			statement.setInt(1, DNICLIENTE);
+			
+			rs = statement.executeQuery();
+
+			if (rs.next()) 
+			{
+				total = rs.getFloat("total");
+			}
+
+		} 
+		catch (SQLException e) 
+		{
+			e.printStackTrace();
+		} 
+		finally 
+		{
+			try 
+			{
+				if (rs != null)
+					rs.close();
+				if (statement != null)
+					statement.close();
+			} 
+			catch (SQLException e) 
+			{
+				e.printStackTrace();
+			}
+		}
+
+		return total;
+	}
+	
+	public float EgresoDeCliente(int DNICLIENTE) {
+	    float total = 0;
+	    PreparedStatement statement = null;
+	    ResultSet rs = null;
+	    Connection conexion = Conexion.getConexion().getSQLConexion();
+
+	    try {
+	        if (conexion == null || conexion.isClosed()) {
+	            throw new SQLException("La conexión está cerrada.");
+	        }
+
+	    
+	        statement = conexion.prepareStatement(ReporteEgresoMovimiento);
+	        statement.setInt(1, DNICLIENTE);
+
+	        rs = statement.executeQuery();
+
+	        if (rs.next()) {
+	            total = rs.getFloat("total");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (rs != null) rs.close();
+	            if (statement != null) statement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return total;
+	}
+
 
 
 }
