@@ -55,7 +55,16 @@ public class ServletPrestamo extends HttpServlet {
 	                float importeCliente = Float.parseFloat(monto);
 	                int cantCuo = Integer.parseInt(cuotas);
 	               
-	                float impxmes = importeCliente / cantCuo;
+	                float interes = 0;
+	                if (cantCuo <= 6) {
+	                    interes = 0; 
+	                } else if (cantCuo <= 12) {
+	                    interes = 0.05f; 
+	                } else {
+	                    interes = 0.10f; 
+	                }
+	                float importeConInteres = importeCliente * (1 + interes);
+	                float impxmes = importeConInteres  / cantCuo;
 
 	                java.sql.Date fechaAlta = new java.sql.Date(System.currentTimeMillis());
 
