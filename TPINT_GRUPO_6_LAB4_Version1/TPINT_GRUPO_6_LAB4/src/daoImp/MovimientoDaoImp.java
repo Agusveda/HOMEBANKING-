@@ -403,20 +403,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 		               e1.printStackTrace();
 		           }
 		       }
-		   } finally {
-		     
-		       try {
-		           if (statement != null) {
-		               statement.close();
-		           }
-		           if (connection != null) {
-		               connection.setAutoCommit(true); 
-		               connection.close();
-		           }
-		       } catch (SQLException e) {
-		           e.printStackTrace();
-		       }
-		   }
+		   } 
 		   return isInsertExitoso;
 	}
 
