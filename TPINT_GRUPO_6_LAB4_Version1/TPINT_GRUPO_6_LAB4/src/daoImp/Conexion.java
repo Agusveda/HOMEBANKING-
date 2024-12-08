@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.sql.Connection;
 
 public class Conexion {
-    public static Conexion instancia;
+    private static Conexion instancia;
     private Connection connection;
 
     private Conexion() {
@@ -24,6 +24,16 @@ public class Conexion {
         if (instancia == null) {
             instancia = new Conexion();
         }
+        
+        // Verifica si la conexión está cerrada, en ese caso la reestablece
+        try {
+            if (instancia.connection == null || instancia.connection.isClosed()) {
+                instancia = new Conexion();  // Reestablece la conexión
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
         return instancia;
     }
 
@@ -42,4 +52,3 @@ public class Conexion {
         instancia = null;
     }
 }
-

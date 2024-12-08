@@ -36,7 +36,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		
 
 	@Override
-	
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
 
@@ -193,7 +192,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 		return id;
 	}
-
+/*
 	@Override
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
 		ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
@@ -230,6 +229,55 @@ public class MovimientoDaoImp implements MovimientoDao {
 			System.out.println("Error durante la consulta de cuentas.");
 		}
 		return CuentasCliente;
+	}
+*/
+	
+	@Override
+	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
+	    ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
+	    System.out.println("Buscando cuentas para IdCliente: " + idCliente);
+
+	    String query = TraerCuentasPorIdCliente;
+	    Connection con = Conexion.getConexion().getSQLConexion();
+
+	    try {
+	        // Verifica si la conexión está cerrada y reconecta si es necesario
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();  // Vuelve a obtener la conexión si está cerrada
+	        }
+
+	        // Prepara la consulta
+	        PreparedStatement ps = con.prepareStatement(query);
+	        ps.setInt(1, idCliente);
+	        ResultSet rs = ps.executeQuery();
+
+	        // Procesa los resultados
+	        while (rs.next()) {
+	            Cuenta cue = new Cuenta();
+	            cue.setId(rs.getInt("Id"));
+	            cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+	            cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+	            cue.setCbu(rs.getInt("CBU"));
+	            cue.setSaldo(rs.getFloat("Saldo"));
+
+	            System.out.println("Cuenta encontrada: Id=" + cue.getId() + ", NumeroCuenta=" + cue.getNumeroCuenta()
+	                    + ", Saldo=" + cue.getSaldo());
+
+	            CuentasCliente.add(cue);
+	        }
+
+	        // Verifica si no se encontraron cuentas
+	        if (CuentasCliente.isEmpty()) {
+	            System.out.println("No se encontraron cuentas para IdCliente: " + idCliente);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la consulta de cuentas.");
+	    }
+
+	    return CuentasCliente;
 	}
 
 	
@@ -854,31 +902,42 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return total;
 	}
 	
-
 	@Override
 	public double obtenerTotalPrestamosConfirmados(int idCliente) {
 	    double totalPrestamos = 0;
+	    Connection con = null;
+	    
+	    try {
+	        // Obtener conexión a la base de datos
+	        con = Conexion.getConexion().getSQLConexion();
 
-	    // Obtener conexión a la base de datos
-	    try (Connection con = Conexion.getConexion().getSQLConexion();
-	         PreparedStatement ps = con.prepareStatement("SELECT SUM(ImportePedidoCliente) AS TotalPrestamos FROM prestamo WHERE IdCliente = ? AND confirmacion = 1")) {
+	        // Verifica si la conexión está cerrada y reconectar si es necesario
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();  // Reconectar si está cerrada
+	        }
 
-	        // Configurar parámetro de la consulta
-	        ps.setInt(1, idCliente);
+	        // Prepara la consulta SQL
+	        String sql = "SELECT SUM(ImportePedidoCliente) AS TotalPrestamos FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
+	        try (PreparedStatement ps = con.prepareStatement(sql)) {
+	            // Configura el parámetro de la consulta
+	            ps.setInt(1, idCliente);
 
-	        // Ejecutar consulta y obtener resultados
-	        try (ResultSet rs = ps.executeQuery()) {
-	            if (rs.next()) {
-	                totalPrestamos = rs.getDouble("TotalPrestamos");
+	            // Ejecuta la consulta y obtiene los resultados
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    totalPrestamos = rs.getDouble("TotalPrestamos");
+	                }
 	            }
 	        }
 	    } catch (SQLException e) {
 	        System.err.println("Error al obtener el total de préstamos confirmados: " + e.getMessage());
 	        e.printStackTrace();
+	    } finally {
+	        // La conexión no se cierra en este método porque es manejada por la clase Conexion
 	    }
 
 	    return totalPrestamos;
 	}	
 	
 }
-	
