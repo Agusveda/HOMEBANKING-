@@ -561,8 +561,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return PretAut;
 	}
 
-
-
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
 		ArrayList<Prestamo> lista = new ArrayList<>();
@@ -678,10 +676,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 			   Connection connection = null;
 			   PreparedStatement statement = null;
 			   boolean isInsertExitoso = false;
-			   
-			   
-			   
-			   
 			   
 			   try {
 			       connection = Conexion.getConexion().getSQLConexion();
@@ -859,18 +853,32 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return total;
 	}
+	
 
+	@Override
+	public double obtenerTotalPrestamosConfirmados(int idCliente) {
+	    double totalPrestamos = 0;
 
+	    // Obtener conexión a la base de datos
+	    try (Connection con = Conexion.getConexion().getSQLConexion();
+	         PreparedStatement ps = con.prepareStatement("SELECT SUM(ImportePedidoCliente) AS TotalPrestamos FROM prestamo WHERE IdCliente = ? AND confirmacion = 1")) {
 
+	        // Configurar parámetro de la consulta
+	        ps.setInt(1, idCliente);
+
+	        // Ejecutar consulta y obtener resultados
+	        try (ResultSet rs = ps.executeQuery()) {
+	            if (rs.next()) {
+	                totalPrestamos = rs.getDouble("TotalPrestamos");
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al obtener el total de préstamos confirmados: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+
+	    return totalPrestamos;
+	}	
+	
 }
-
-
-
 	
-	
-	
-	
-	
-	
-
-

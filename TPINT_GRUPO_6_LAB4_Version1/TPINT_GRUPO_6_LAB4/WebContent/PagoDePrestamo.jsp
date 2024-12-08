@@ -26,7 +26,7 @@
         <h2>Pagar Préstamo</h2>
         <form method="post" action="ServletBanco">
             <div class="form-group">
-                <label for="monto">Monto total de prestamos:</label>
+                <label for="monto">Monto del Préstamo total:</label>
                 <span>$2.500.000</span>
             </div>
 
@@ -43,7 +43,7 @@
 
             <!-- Selección de cuenta de depósito -->
             <div class="form-group">
-                <label for="cuenta">Cuenta a debitar:</label>
+                <label for="cuenta">Cuenta de Depósito:</label>
                 <select id="cuenta" name="cuenta" required>
                     <option value="">Seleccione...</option>
                     <%
@@ -68,7 +68,6 @@
                     %>
                 </select>
             </div>
-
 
             <!-- Botón para enviar el formulario -->
             <div class="form-group">

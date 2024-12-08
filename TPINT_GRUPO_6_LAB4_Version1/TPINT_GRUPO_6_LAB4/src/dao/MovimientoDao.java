@@ -24,6 +24,7 @@ public interface MovimientoDao
     public ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
     public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);     
     public boolean CargarPrestamoEnCuenta(int idcuenta, float monto);
+    public double obtenerTotalPrestamosConfirmados(int idCliente);
     
     ///REPORTE DE MOVIMIENTO
     public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
