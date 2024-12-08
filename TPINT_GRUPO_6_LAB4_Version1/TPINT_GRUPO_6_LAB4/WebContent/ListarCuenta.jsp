@@ -46,7 +46,6 @@
 </form>
 
 <%
-    // Backend para Filtrar por Tipo de Cuenta
     CuentaDaoImpl cuentaDao = new CuentaDaoImpl();
     ArrayList<Cuenta> listaCuenta;
     int tipoCuenta = -1; // Valor predeterminado para "Todos"

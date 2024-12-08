@@ -15,7 +15,8 @@ import dao.CuentaDao;
 public class CuentaDaoImpl implements CuentaDao {
 
     private static final String insertCuenta = "INSERT INTO cuenta ( IdCliente, TipoCuenta, FechaCreacion , NumeroCuenta, CBU, Saldo, Activo) VALUES ( ?, ?, CURDATE(), ?, ?, 10000, ?)";
-    private static final String ListarCuenta = "SELECT cuenta.id AS ID,cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cliente.DNI = ?";
+ // private static final String ListarCuenta = "SELECT cuenta.id AS ID,cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cliente.DNI = ?";
+    private static final String ListarCuenta = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cuenta.Activo = 1";
     private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id AND cuenta.Activo = 1";
     private static final String EliminarCuenta = "UPDATE cuenta SET Activo = 0 WHERE id = ?";
     private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ? WHERE Id = ?";
@@ -391,15 +392,15 @@ public class CuentaDaoImpl implements CuentaDao {
     }
     
     
-    
-  
     public ArrayList<Cuenta> filtrarCuentaXTipoCuenta(int tipoCuenta) {
         ArrayList<Cuenta> listaCuentas = new ArrayList<>();
+        
         String query = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, " +
                        "cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, " +
                        "cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo " +
-                       "FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id " +
-                       "WHERE cuenta.TipoCuenta = ?";
+                       "FROM cuenta " +
+                       "INNER JOIN cliente ON cuenta.IdCliente = cliente.id " +
+                       "WHERE cuenta.TipoCuenta = ? AND cuenta.Activo = 1"; 
         
         Connection conexion = null;
         PreparedStatement statement = null;
@@ -408,7 +409,7 @@ public class CuentaDaoImpl implements CuentaDao {
         try {
             conexion = Conexion.getConexion().getSQLConexion(); 
             statement = conexion.prepareStatement(query);
-            statement.setInt(1, tipoCuenta);
+            statement.setInt(1, tipoCuenta); 
             rs = statement.executeQuery();
 
             while (rs.next()) {
@@ -437,7 +438,6 @@ public class CuentaDaoImpl implements CuentaDao {
             System.out.println("Error al ejecutar la consulta: " + e.getMessage());
             e.printStackTrace();
         } finally {
-            // Cerrar ResultSet y PreparedStatement
             try {
                 if (rs != null) rs.close();
                 if (statement != null) statement.close();
@@ -448,6 +448,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
         return listaCuentas;
     }
+
 
 	@Override
 	public float ReporteCuentas() {
