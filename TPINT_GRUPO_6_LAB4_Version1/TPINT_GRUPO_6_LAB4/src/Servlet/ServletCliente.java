@@ -240,7 +240,7 @@ public class ServletCliente extends HttpServlet {
             if (insertado) {
                 request.setAttribute("mensaje", "Cliente registrado exitosamente.");
              // Restablecer valores de los desplegables
-                request.setAttribute("nacionalidad",null);
+             // request.setAttribute("nacionalidad",null);
                 request.setAttribute("provincias", null);
                 request.setAttribute("localidades", null);
             } else {
