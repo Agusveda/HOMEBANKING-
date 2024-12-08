@@ -254,8 +254,14 @@ public class ServletCliente extends HttpServlet {
         String username = request.getParameter("txtuser");
         String password = request.getParameter("txtpass");
 
-        if (username != null && password != null) {
+        if (username != null && password != null) 
+        {
             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
+            if (bandolero.verificarCredenciales(username, password) == null)
+            {
+            	request.getSession().setAttribute("Error", "Usuario o contraseña incorrectos");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            }
             Usuario usuario = bandolero.verificarCredenciales(username, password);
             
             Cliente cliente = bandolero.ObtenerDatosXid(usuario.getIdCliente()); //1. Cliente que inicia sesion
@@ -276,12 +282,7 @@ public class ServletCliente extends HttpServlet {
                     response.sendRedirect("Cliente.jsp");
                 }
             } 
-        } else {
-        	
-            request.setAttribute("mensajeError", "Usuario o contraseña incorrectos");
-            request.getRequestDispatcher("/Login.jsp").forward(request, response);
         }
-        
         
         String mail = request.getParameter("txtEmail");
 		String nuevaContraseña  = request.getParameter("txtPassNue");
