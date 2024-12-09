@@ -171,7 +171,7 @@ public class ServletCliente extends HttpServlet {
 
         // Manejo de alta de cliente
         if (request.getParameter("btnAltaCliente") != null) {
-        	/*
+        	
             String contrasena1 = request.getParameter("txtContrasena1");
             String contrasena2 = request.getParameter("txtContrasena2");
 
@@ -181,7 +181,7 @@ public class ServletCliente extends HttpServlet {
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
-			*/
+			
             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             
             Usuario usu = new Usuario();

@@ -64,7 +64,7 @@
 		       
 
         <!-- Formulario para registrar cliente -->
-        <form method="POST" action="ServletBanco" onsubmit="return validaYConfirma(this)">
+        <form onsubmit="return validaYConfirma(this)" method="post" action="ServletBanco">
         <input type="hidden" name="action" value="loadProvinces">
         
            <p>
@@ -243,6 +243,7 @@ function validarLongitudDni(input) {
         input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
         return;
     }
+    
 
 }
 
@@ -254,12 +255,13 @@ function validarLongitudCuil(input) {
         input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
         return;
     }
+    
 }
 
 
 function validarContraseñas() {
-    const contrasena1 = document.getElementById("contrasena").value;
-    const contrasena2 = document.getElementById("contrasena2").value;
+    const contrasena1 = document.getElementById("contrasena").value.trim();
+    const contrasena2 = document.getElementById("contrasena2").value.trim();
 
     if (contrasena1 !== contrasena2) {
         alert("Las contraseñas no coinciden. Por favor, intente nuevamente.");
@@ -270,27 +272,16 @@ function validarContraseñas() {
 }
 
 function validaYConfirma(form){
-	const dni = form.txtDNI.value.trim();
-    const cuil = form.txtCUIL.value.trim();
-
-    if (dni.length !== 8) {
-        alert("El DNI debe tener exactamente 8 dígitos.");
-        return false;
-    }
-
-    if (cuil.length !== 11) {
-        alert("El CUIL debe tener exactamente 11 dígitos.");
-        return false;
-    }
-	
-	
+	/*
 	if(!validarContraseñas()){
 		return false;
 	}
+	*/
 	if(!confirmarAlta(form)){
 		return false;
 	}
 	return true;
+	
 }
 
 
