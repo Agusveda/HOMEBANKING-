@@ -50,22 +50,21 @@
 	    String mensaje = (String) request.getAttribute("mensaje");
 	    String mensajeError = (String) request.getAttribute("mensajeError");
 	    %>
-	    <!-- Mostrar alert en caso de mensajes -->
-	    <% if (mensaje != null) { %>
-		 <div style="color: green;">
-        <%= mensaje %>
-    </div>
-		<% } %>
-		
-		<% if (mensajeError != null) { %>
-		    <div style="color: red;">
-        <%= mensajeError %>
-    </div>
-		<% } %>
+		    <% if (mensaje != null) { %>
+			    <div class="mensaje mensaje-exito">
+			        <%= mensaje %>
+			    </div>
+			<% } %>
+			<% if (mensajeError != null) { %>
+			    <div class="mensaje mensaje-error">
+			        <%= mensajeError %>
+			    </div>
+			<% } %>
+
 		       
 
         <!-- Formulario para registrar cliente -->
-        <form method="POST" action="ServletBanco" onsubmit="return confirmarAlta(this)">
+        <form method="POST" action="ServletBanco" onsubmit="return validaYConfirma(this)">
         <input type="hidden" name="action" value="loadProvinces">
         
            <p>
@@ -237,21 +236,61 @@ function validarSoloNumeros(event) {
     }
 }
 function validarLongitudDni(input) {
-	const maxLongitud  = 8;
-
-    if (input.value.length > maxLongitud) {
+	const longitudExacta   = 8;
+	 
+    if (input.value.length > longitudExacta) {
         alert("El DNI no puede tener más de 8 dígitos.");
-        input.value = input.value.slice(0, maxLongitud);
+        input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
+        return;
     }
+
 }
 
 function validarLongitudCuil(input) {
-    const maxLongitud  = 11;
-
-    if (input.value.length > maxLongitud) {
+    const longitudExacta   = 11;
+ 
+    if (input.value.length > longitudExacta) {
         alert("El CUIL no puede tener más de 11 dígitos.");
-        input.value = input.value.slice(0, maxLongitud);
+        input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
+        return;
     }
+}
+
+
+function validarContraseñas() {
+    const contrasena1 = document.getElementById("contrasena").value;
+    const contrasena2 = document.getElementById("contrasena2").value;
+
+    if (contrasena1 !== contrasena2) {
+        alert("Las contraseñas no coinciden. Por favor, intente nuevamente.");
+        return false; 
+    }
+
+    return true; 
+}
+
+function validaYConfirma(form){
+	const dni = form.txtDNI.value.trim();
+    const cuil = form.txtCUIL.value.trim();
+
+    if (dni.length !== 8) {
+        alert("El DNI debe tener exactamente 8 dígitos.");
+        return false;
+    }
+
+    if (cuil.length !== 11) {
+        alert("El CUIL debe tener exactamente 11 dígitos.");
+        return false;
+    }
+	
+	
+	if(!validarContraseñas()){
+		return false;
+	}
+	if(!confirmarAlta(form)){
+		return false;
+	}
+	return true;
 }
 
 
