@@ -15,6 +15,22 @@
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/PagoPrestamo.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
+    <script type="text/javascript">
+        function confirmarPago() {
+
+            var montoPago = document.getElementById("pagosAcumulados").options[document.getElementById("pagosAcumulados").selectedIndex].text;
+            var cuentaSeleccionada = document.getElementById("cuenta").options[document.getElementById("cuenta").selectedIndex].text;
+
+
+            var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: " + montoPago + "\nCuenta seleccionada: " + cuentaSeleccionada);
+            if (confirmacion) {
+                document.getElementById("cuentaConfirmada").value = document.getElementById("cuenta").value;
+                return true; 
+            } else {
+                return false; 
+            }
+        }
+    </script>
 </head>
 <body>
     <jsp:include page="Navbar.jsp"/>
@@ -72,12 +88,10 @@
             <select id="pagosAcumulados" name="mesPago" required>
                 <option value="">Seleccione...</option>
                 <%
-                    // Crear un array con los nombres de los meses en español
-                    String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+                    String[] meses = {"Diciembre", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre"};
 
-                    // Mostrar los pagos acumulados con los nombres de los meses
                     for (int i = 0; i < 12; i++) {
-                        String nombreMes = meses[i]; // Obtener el nombre del mes correspondiente
+                        String nombreMes = meses[i];
                         float pagoMes = pagosAcumulados.get(i);
                 %>
                     <option value="<%= i %>">
@@ -89,9 +103,8 @@
             </select>
         </div>
 
-        <form action="PrestamoVer.jsp" method="POST">
+        <form action="PagoPrestamo.jsp" method="POST" onsubmit="return confirmarPago()">
             <input type="hidden" name="totalPrestamos" value="<%= totalPrestamos %>"/>
-
 
             <div class="form-group">
                 <label for="cuenta">Cuenta a debitar:</label>

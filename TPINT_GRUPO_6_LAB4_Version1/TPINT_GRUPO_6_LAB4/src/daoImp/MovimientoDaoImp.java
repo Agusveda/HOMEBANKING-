@@ -32,7 +32,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	
 	///REPORTES
 	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE FechaMovimiento BETWEEN ? AND ? AND Importe > 0 GROUP BY TipoMovimiento = ?";
-
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";
 		
@@ -718,8 +717,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		
 	}
 
-
-
 	@Override
 	public boolean CargarPrestamoEnCuenta(int IdCuenta, float monto) {
 			 
@@ -910,22 +907,18 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    Connection con = null;
 	    
 	    try {
-	        // Obtener conexión a la base de datos
+	    	
 	        con = Conexion.getConexion().getSQLConexion();
 
-	        // Verifica si la conexión está cerrada y reconectar si es necesario
 	        if (con == null || con.isClosed()) {
 	            System.out.println("Conexión cerrada, intentando reconectar...");
 	            con = Conexion.getConexion().getSQLConexion();  // Reconectar si está cerrada
 	        }
 
-	        // Prepara la consulta SQL
 	        String sql = "SELECT SUM(ImportePedidoCliente) AS TotalPrestamos FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
 	        try (PreparedStatement ps = con.prepareStatement(sql)) {
-	            // Configura el parámetro de la consulta
 	            ps.setInt(1, idCliente);
 
-	            // Ejecuta la consulta y obtiene los resultados
 	            try (ResultSet rs = ps.executeQuery()) {
 	                if (rs.next()) {
 	                    totalPrestamos = rs.getDouble("TotalPrestamos");
@@ -935,9 +928,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    } catch (SQLException e) {
 	        System.err.println("Error al obtener el total de préstamos confirmados: " + e.getMessage());
 	        e.printStackTrace();
-	    } finally {
-	        // La conexión no se cierra en este método porque es manejada por la clase Conexion
-	    }
+	    } 
 
 	    return totalPrestamos;
 	}	
@@ -948,21 +939,19 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    Connection con = null;
 
 	    try {
-	        // Obtener conexión a la base de datos
+
 	        con = Conexion.getConexion().getSQLConexion();
 
-	        // Verifica si la conexión está cerrada y reconecta si es necesario
+
 	        if (con == null || con.isClosed()) {
 	            System.out.println("Conexión cerrada, intentando reconectar...");
-	            con = Conexion.getConexion().getSQLConexion();  // Reconectar si está cerrada
+	            con = Conexion.getConexion().getSQLConexion(); 
 	        }
 
-	        // Prepara la consulta SQL
 	        String sql = "SELECT Id, IdCliente, IdCuenta, ImportePedidoCliente AS ImporteCliente, FechaAlta, PlazoPago, ImportePagarXmes AS Impxmes, CantidadCuotas AS cantCuo, confirmacion AS confimacion "
 	                   + "FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
 
 	        try (PreparedStatement ps = con.prepareStatement(sql)) {
-	            // Configura el parámetro de la consulta
 	            ps.setInt(1, idCliente);
 
 	            // Ejecuta la consulta y obtiene los resultados
@@ -986,9 +975,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    } catch (SQLException e) {
 	        System.err.println("Error al obtener los préstamos confirmados: " + e.getMessage());
 	        e.printStackTrace();
-	    } finally {
-	        // La conexión no se cierra aquí porque la maneja la clase Conexion
-	    }
+	    } 
 
 	    return prestamos;
 	}

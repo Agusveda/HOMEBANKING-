@@ -25,10 +25,9 @@ public class Conexion {
             instancia = new Conexion();
         }
         
-        // Verifica si la conexión está cerrada, en ese caso la reestablece
         try {
             if (instancia.connection == null || instancia.connection.isClosed()) {
-                instancia = new Conexion();  // Reestablece la conexión
+                instancia = new Conexion(); 
             }
         } catch (SQLException e) {
             e.printStackTrace();
