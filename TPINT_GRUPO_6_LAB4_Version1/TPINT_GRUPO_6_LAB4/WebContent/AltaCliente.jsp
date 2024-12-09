@@ -64,7 +64,7 @@
 		       
 
         <!-- Formulario para registrar cliente -->
-        <form onsubmit="return validaYConfirma(this)" method="post" action="ServletBanco">
+        <form method="POST" action="ServletBanco" onsubmit="validaYConfirma(this)" >
         <input type="hidden" name="action" value="loadProvinces">
         
            <p>
@@ -260,8 +260,8 @@ function validarLongitudCuil(input) {
 
 
 function validarContraseñas() {
-    const contrasena1 = document.getElementById("contrasena").value.trim();
-    const contrasena2 = document.getElementById("contrasena2").value.trim();
+    const contrasena1 = document.getElementById("contrasena").value;
+    const contrasena2 = document.getElementById("contrasena2").value;
 
     if (contrasena1 !== contrasena2) {
         alert("Las contraseñas no coinciden. Por favor, intente nuevamente.");
