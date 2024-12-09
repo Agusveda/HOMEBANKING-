@@ -135,11 +135,11 @@
                 </p>
                 <p>
                     <label class="form-label" for="dni">DNI</label>
-                    <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" required name="txtDNI" onkeypress="validarSoloNumeros(event)">
+                    <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" required name="txtDNI" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudDni(this)">
                 </p>
                 <p>
                     <label class="form-label" for="cuil">CUIL</label>
-                    <input class="controls" id="cuil" type="number" placeholder="Ingrese el CUIL" required name="txtCUIL" onkeypress="validarSoloNumeros(event)">
+                    <input class="controls" id="cuil" type="number" placeholder="Ingrese el CUIL" required name="txtCUIL" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudCuil(this)">
                 </p>
                 <p>
                     <label class="form-label" for="sexo">Sexo</label>
@@ -236,6 +236,24 @@ function validarSoloNumeros(event) {
         alert("Solo se permiten números.");
     }
 }
+function validarLongitudDni(input) {
+	const maxLongitud  = 8;
+
+    if (input.value.length > maxLongitud) {
+        alert("El DNI no puede tener más de 8 dígitos.");
+        input.value = input.value.slice(0, maxLongitud);
+    }
+}
+
+function validarLongitudCuil(input) {
+    const maxLongitud  = 11;
+
+    if (input.value.length > maxLongitud) {
+        alert("El CUIL no puede tener más de 11 dígitos.");
+        input.value = input.value.slice(0, maxLongitud);
+    }
+}
+
 
 </script>
     
