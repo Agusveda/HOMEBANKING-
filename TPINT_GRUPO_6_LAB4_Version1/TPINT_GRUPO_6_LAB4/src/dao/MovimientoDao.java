@@ -1,10 +1,12 @@
 package dao;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Entidades.Cuenta;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
+
 
 public interface MovimientoDao 
 {
@@ -24,6 +26,7 @@ public interface MovimientoDao
     public ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
     public ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);     
     public boolean CargarPrestamoEnCuenta(int idcuenta, float monto);
+    public double obtenerTotalPrestamosConfirmados(int idCliente);
     
     ///REPORTE DE MOVIMIENTO
     public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
@@ -31,4 +34,7 @@ public interface MovimientoDao
     // REPORTE DE TRANSFERENCIAS
     public float EgresoDeCliente(int DNICLIENTE);
     public float IngresoDeCliente(int DNICLIENTE);
+	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
+
+
 }

@@ -1,11 +1,13 @@
 package daoImp;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import Entidades.Cliente;
 import Entidades.Cuenta;
@@ -30,13 +32,11 @@ public class MovimientoDaoImp implements MovimientoDao {
 	
 	///REPORTES
 	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE FechaMovimiento BETWEEN ? AND ? AND Importe > 0 GROUP BY TipoMovimiento = ?";
-
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";
 		
 
 	@Override
-	
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
 
@@ -193,7 +193,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 		return id;
 	}
-
+/*
 	@Override
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
 		ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
@@ -230,6 +230,55 @@ public class MovimientoDaoImp implements MovimientoDao {
 			System.out.println("Error durante la consulta de cuentas.");
 		}
 		return CuentasCliente;
+	}
+*/
+	
+	@Override
+	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
+	    ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
+	    System.out.println("Buscando cuentas para IdCliente: " + idCliente);
+
+	    String query = TraerCuentasPorIdCliente;
+	    Connection con = Conexion.getConexion().getSQLConexion();
+
+	    try {
+	        // Verifica si la conexión está cerrada y reconecta si es necesario
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();  // Vuelve a obtener la conexión si está cerrada
+	        }
+
+	        // Prepara la consulta
+	        PreparedStatement ps = con.prepareStatement(query);
+	        ps.setInt(1, idCliente);
+	        ResultSet rs = ps.executeQuery();
+
+	        // Procesa los resultados
+	        while (rs.next()) {
+	            Cuenta cue = new Cuenta();
+	            cue.setId(rs.getInt("Id"));
+	            cue.setNumeroCuenta(rs.getInt("NumeroCuenta"));
+	            cue.setTipoCuenta(rs.getInt("TipoCuenta"));
+	            cue.setCbu(rs.getInt("CBU"));
+	            cue.setSaldo(rs.getFloat("Saldo"));
+
+	            System.out.println("Cuenta encontrada: Id=" + cue.getId() + ", NumeroCuenta=" + cue.getNumeroCuenta()
+	                    + ", Saldo=" + cue.getSaldo());
+
+	            CuentasCliente.add(cue);
+	        }
+
+	        // Verifica si no se encontraron cuentas
+	        if (CuentasCliente.isEmpty()) {
+	            System.out.println("No se encontraron cuentas para IdCliente: " + idCliente);
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la consulta de cuentas.");
+	    }
+
+	    return CuentasCliente;
 	}
 
 	
@@ -561,8 +610,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return PretAut;
 	}
 
-
-
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
 		ArrayList<Prestamo> lista = new ArrayList<>();
@@ -670,18 +717,12 @@ public class MovimientoDaoImp implements MovimientoDao {
 		
 	}
 
-
-
 	@Override
 	public boolean CargarPrestamoEnCuenta(int IdCuenta, float monto) {
 			 
 			   Connection connection = null;
 			   PreparedStatement statement = null;
 			   boolean isInsertExitoso = false;
-			   
-			   
-			   
-			   
 			   
 			   try {
 			       connection = Conexion.getConexion().getSQLConexion();
@@ -859,18 +900,85 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return total;
 	}
+	
+	@Override
+	public double obtenerTotalPrestamosConfirmados(int idCliente) {
+	    double totalPrestamos = 0;
+	    Connection con = null;
+	    
+	    try {
+	    	
+	        con = Conexion.getConexion().getSQLConexion();
+
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();  // Reconectar si está cerrada
+	        }
+
+	        String sql = "SELECT SUM(ImportePedidoCliente) AS TotalPrestamos FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
+	        try (PreparedStatement ps = con.prepareStatement(sql)) {
+	            ps.setInt(1, idCliente);
+
+	            try (ResultSet rs = ps.executeQuery()) {
+	                if (rs.next()) {
+	                    totalPrestamos = rs.getDouble("TotalPrestamos");
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al obtener el total de préstamos confirmados: " + e.getMessage());
+	        e.printStackTrace();
+	    } 
+
+	    return totalPrestamos;
+	}	
+	
+	@Override
+	public List<Prestamo> obtenerPrestamosConfirmados(int idCliente) {
+	    List<Prestamo> prestamos = new ArrayList<>();
+	    Connection con = null;
+
+	    try {
+
+	        con = Conexion.getConexion().getSQLConexion();
 
 
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion(); 
+	        }
+
+	        String sql = "SELECT Id, IdCliente, IdCuenta, ImportePedidoCliente AS ImporteCliente, FechaAlta, PlazoPago, ImportePagarXmes AS Impxmes, CantidadCuotas AS cantCuo, confirmacion AS confimacion "
+	                   + "FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
+
+	        try (PreparedStatement ps = con.prepareStatement(sql)) {
+	            ps.setInt(1, idCliente);
+
+	            // Ejecuta la consulta y obtiene los resultados
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    Prestamo prestamo = new Prestamo();
+	                    prestamo.setId(rs.getInt("Id"));
+	                    prestamo.setIdCliente(rs.getInt("IdCliente"));
+	                    prestamo.setIdCuenta(rs.getInt("IdCuenta"));
+	                    prestamo.setImporteCliente(rs.getFloat("ImporteCliente"));
+	                    prestamo.setFechaAlta(rs.getDate("FechaAlta"));
+	                    prestamo.setPlazoPago(rs.getInt("PlazoPago"));
+	                    prestamo.setImpxmes(rs.getFloat("Impxmes"));
+	                    prestamo.setCantCuo(rs.getInt("cantCuo"));
+	                    prestamo.setconfimacion(rs.getBoolean("confimacion"));
+
+	                    prestamos.add(prestamo);
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al obtener los préstamos confirmados: " + e.getMessage());
+	        e.printStackTrace();
+	    } 
+
+	    return prestamos;
+	}
 
 }
-
-
-
-	
-	
-	
-	
-	
-	
-
 
