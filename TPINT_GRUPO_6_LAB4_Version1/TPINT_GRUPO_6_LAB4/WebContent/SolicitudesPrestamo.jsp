@@ -64,7 +64,7 @@
             <th>Fecha Alta</th>
             <th>Importe Mensual</th>
             <th>Cantidad Cuotas</th>
-            <th>Confirmado</th>
+           
             <th>Acciones</th>
         </tr>
     </thead>
@@ -79,7 +79,7 @@
                     <td><%= prestamo.getFechaAlta() %></td>
                     <td><%= prestamo.getImpxmes() %></td>
                     <td><%= prestamo.getCantCuo() %></td>
-                    <td><%= prestamo.getConfimarcion() ? "Sí" : "No" %></td>
+                   
                     <td>
                         <!-- Formulario para aprobar el préstamo -->
                         <form action="ServletPrestamo" method="post" style="display:inline;">
