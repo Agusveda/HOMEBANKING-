@@ -104,7 +104,7 @@ Accesos Rapidos
 	<input type="submit" class="BtnOpciones"  name="btnPrestamos" value="Prestamos" />
 	</a>
 	
-	<a href="PrestamoVer.jsp">
+	<a href="PagoDePrestamo.jsp">
 	<input type="submit" class="BtnOpciones"   name="btnPagoServicios" value="Pago de Prestamos"/>
 	</a>
 	

@@ -1,11 +1,13 @@
 package daoImp;
 
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import Entidades.Cliente;
 import Entidades.Cuenta;
@@ -940,4 +942,56 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return totalPrestamos;
 	}	
 	
+	@Override
+	public List<Prestamo> obtenerPrestamosConfirmados(int idCliente) {
+	    List<Prestamo> prestamos = new ArrayList<>();
+	    Connection con = null;
+
+	    try {
+	        // Obtener conexión a la base de datos
+	        con = Conexion.getConexion().getSQLConexion();
+
+	        // Verifica si la conexión está cerrada y reconecta si es necesario
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();  // Reconectar si está cerrada
+	        }
+
+	        // Prepara la consulta SQL
+	        String sql = "SELECT Id, IdCliente, IdCuenta, ImportePedidoCliente AS ImporteCliente, FechaAlta, PlazoPago, ImportePagarXmes AS Impxmes, CantidadCuotas AS cantCuo, confirmacion AS confimacion "
+	                   + "FROM prestamo WHERE IdCliente = ? AND confirmacion = 1";
+
+	        try (PreparedStatement ps = con.prepareStatement(sql)) {
+	            // Configura el parámetro de la consulta
+	            ps.setInt(1, idCliente);
+
+	            // Ejecuta la consulta y obtiene los resultados
+	            try (ResultSet rs = ps.executeQuery()) {
+	                while (rs.next()) {
+	                    Prestamo prestamo = new Prestamo();
+	                    prestamo.setId(rs.getInt("Id"));
+	                    prestamo.setIdCliente(rs.getInt("IdCliente"));
+	                    prestamo.setIdCuenta(rs.getInt("IdCuenta"));
+	                    prestamo.setImporteCliente(rs.getFloat("ImporteCliente"));
+	                    prestamo.setFechaAlta(rs.getDate("FechaAlta"));
+	                    prestamo.setPlazoPago(rs.getInt("PlazoPago"));
+	                    prestamo.setImpxmes(rs.getFloat("Impxmes"));
+	                    prestamo.setCantCuo(rs.getInt("cantCuo"));
+	                    prestamo.setconfimacion(rs.getBoolean("confimacion"));
+
+	                    prestamos.add(prestamo);
+	                }
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.err.println("Error al obtener los préstamos confirmados: " + e.getMessage());
+	        e.printStackTrace();
+	    } finally {
+	        // La conexión no se cierra aquí porque la maneja la clase Conexion
+	    }
+
+	    return prestamos;
+	}
+
 }
+
