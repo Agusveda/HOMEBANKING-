@@ -38,5 +38,6 @@ public interface MovimientoDao
 	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
 	
 	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
+	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
 
 }

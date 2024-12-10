@@ -93,7 +93,4 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		return MovimientoDao.IngresoDeCliente(DNICLIENTE);
 
 	}
-
-
-
 }

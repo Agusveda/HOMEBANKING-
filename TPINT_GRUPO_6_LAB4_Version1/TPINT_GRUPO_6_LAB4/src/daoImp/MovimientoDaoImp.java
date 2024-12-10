@@ -1205,5 +1205,90 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return cuotas;
 	}	
 	
+	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
+	    Connection conn = null;
+	    PreparedStatement psSaldo = null;
+	    PreparedStatement psUpdateCuenta = null;
+	    PreparedStatement psInsertMovimiento = null;
+	    PreparedStatement psUpdateCuota = null;
+
+	    try {
+	        // Obtener conexión
+	        conn = Conexion.getConexion().getSQLConexion();
+
+	        // Verificar si la conexión está cerrada y reconectar si es necesario
+	        if (conn == null || conn.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            conn = Conexion.getConexion().getSQLConexion();
+	        }
+
+	        conn.setAutoCommit(false); // Iniciar la transacción
+
+	        // Verificar saldo suficiente
+	        String sqlSaldo = "SELECT Saldo FROM cuenta WHERE Id = ?";
+	        psSaldo = conn.prepareStatement(sqlSaldo);
+	        psSaldo.setInt(1, cuentaId);
+	        ResultSet rsSaldo = psSaldo.executeQuery();
+
+	        if (rsSaldo.next()) {
+	            float saldoActual = rsSaldo.getFloat("Saldo");
+	            if (saldoActual < monto) {
+	                throw new Exception("Saldo insuficiente para realizar el pago.");
+	            }
+	        } else {
+	            throw new Exception("La cuenta no existe.");
+	        }
+
+	        // Actualizar el saldo de la cuenta
+	        String sqlUpdateCuenta = "UPDATE cuenta SET Saldo = Saldo - ? WHERE Id = ?";
+	        psUpdateCuenta = conn.prepareStatement(sqlUpdateCuenta);
+	        psUpdateCuenta.setFloat(1, monto);
+	        psUpdateCuenta.setInt(2, cuentaId);
+	        psUpdateCuenta.executeUpdate();
+
+	        // Insertar el movimiento de pago de préstamo
+	        String sqlInsertMovimiento = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) " +
+	                                      "VALUES (?, NOW(), ?, ?, ?)";
+	        psInsertMovimiento = conn.prepareStatement(sqlInsertMovimiento);
+	        psInsertMovimiento.setInt(1, 3); // 3 representa el pago de préstamo
+	        psInsertMovimiento.setFloat(2, -monto); // Movimiento negativo
+	        psInsertMovimiento.setInt(3, cuentaId);
+	        psInsertMovimiento.setString(4, "Pago de préstamo (Cuota ID: " + cuotaId + ")");
+	        psInsertMovimiento.executeUpdate();
+
+	        // Actualizar la cuota como pagada
+	        String sqlUpdateCuota = "UPDATE cuota SET FechaPago = NOW(), estaPagada = 1 WHERE Id = ?";
+	        psUpdateCuota = conn.prepareStatement(sqlUpdateCuota);
+	        psUpdateCuota.setInt(1, cuotaId);
+	        psUpdateCuota.executeUpdate();
+
+	        conn.commit(); // Confirmar la transacción
+	        return true;
+
+	    } catch (Exception e) {
+	        if (conn != null) {
+	            try {
+	                conn.rollback(); // Revertir la transacción en caso de error
+	            } catch (SQLException rollbackEx) {
+	                rollbackEx.printStackTrace();
+	            }
+	        }
+	        e.printStackTrace();
+	        return false;
+
+	    } finally {
+	        // Cerrar recursos
+	        try {
+	            if (psSaldo != null) psSaldo.close();
+	            if (psUpdateCuenta != null) psUpdateCuenta.close();
+	            if (psInsertMovimiento != null) psInsertMovimiento.close();
+	            if (psUpdateCuota != null) psUpdateCuota.close();
+	            if (conn != null) conn.close();
+	        } catch (SQLException closeEx) {
+	            closeEx.printStackTrace();
+	        }
+	    }
+	}
+
 }
 

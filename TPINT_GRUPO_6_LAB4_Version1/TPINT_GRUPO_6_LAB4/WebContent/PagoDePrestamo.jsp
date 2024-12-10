@@ -7,7 +7,7 @@
 <%@ page import="Entidades.Prestamo"%>
 <%@ page import="Entidades.Cuota"%>
 <%@ page import="java.util.Collections"%>
-
+<%@ page import="java.io.IOException"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -40,6 +40,28 @@
 
         <%
             Integer idClienteObj = (Integer) session.getAttribute("IdCliente");
+            String mensaje = "";
+
+            if (request.getMethod().equalsIgnoreCase("POST")) {
+                // Capturar datos del formulario
+                int cuotaId = Integer.parseInt(request.getParameter("cuotaId"));
+                int cuentaId = Integer.parseInt(request.getParameter("cuentaId"));
+                float montoPago = Float.parseFloat(request.getParameter("montoPago"));
+
+                MovimientoDao movimientoDao = new MovimientoDaoImp();
+                try {
+                    // Realizar el pago
+                    boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
+                    if (exito) {
+                        mensaje = "El pago se realizó con éxito.";
+                    } else {
+                        mensaje = "Ocurrió un error al realizar el pago.";
+                    }
+                } catch (Exception e) {
+                    mensaje = "Error: " + e.getMessage();
+                }
+            }
+
             if (idClienteObj == null) {
         %>
                 <p>Error: No se encontró el ID del cliente en la sesión.</p>
@@ -55,36 +77,14 @@
                 List<Cuota> cuotas = new ArrayList<>();
 
                 try {
-                    // Obtener total de préstamos confirmados
+                    // Obtener datos
                     totalPrestamos = movimientoDao.obtenerTotalPrestamosConfirmados(idCliente);
-                    // Obtener cuentas asociadas al cliente
                     cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
-                    // Obtener préstamos confirmados
                     prestamos = movimientoDao.obtenerPrestamosConfirmados(idCliente);
-                    
-                    // Obtener cuotas para cada préstamo
+
+                    // Obtener cuotas pendientes
                     for (Prestamo prestamo : prestamos) {
                         cuotas.addAll(movimientoDao.obtenerCuotas(idCliente, prestamo.getId()));
-                    }
-
-                    // Llenar pagos acumulados
-                    for (Prestamo prestamo : prestamos) {
-                        float importePagarXmes = prestamo.getImpxmes();
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.setTime(prestamo.getFechaAlta());
-                        int mesAlta = calendar.get(Calendar.MONTH);
-
-                        for (int i = 0; i < prestamo.getCantCuo(); i++) {
-                            int mes = (mesAlta + i) % 12;
-                            pagosAcumulados.set(mes, pagosAcumulados.get(mes) + importePagarXmes);
-                        }
-                    }
-
-                    // Depuración: Mostrar detalles obtenidos
-                    System.out.println("Total de préstamos: " + totalPrestamos);
-                    System.out.println("Cuotas obtenidas: ");
-                    for (Cuota cuota : cuotas) {
-                        System.out.println("Cuota ID: " + cuota.getId() + ", Préstamo: " + cuota.getIdPrestamo() + ", Monto: " + cuota.getMonto() + ", Fecha Pago: " + cuota.getFechaPago());
                     }
 
                 } catch (Exception e) {
@@ -93,34 +93,18 @@
                 }
         %>
 
+        <!-- Mensaje de resultado -->
+        <%
+            if (!mensaje.isEmpty()) {
+        %>
+            <p><strong><%= mensaje %></strong></p>
+        <%
+            }
+        %>
+
         <div class="form-group">
             <label for="monto">Monto total de préstamos:</label>
             <span>$<%= (totalPrestamos == 0) ? "0" : String.format("%.2f", totalPrestamos) %></span>
-        </div>
-
-        <!-- Selección de cuenta -->
-        <div class="form-group">
-            <label for="cuenta">Cuenta a debitar:</label>
-            <select id="cuenta" name="cuenta" required>
-                <option value="">Seleccione...</option>
-                <%
-                    if (cuentas != null && !cuentas.isEmpty()) {
-                        for (Cuenta cuenta : cuentas) {
-                            String tipoCuenta = (cuenta.getTipoCuenta() == 1) ? " (CAJA AHORRO)" : " (CUENTA CORRIENTE)";
-                            double saldo = cuenta.getSaldo();
-                %>
-                    <option value="<%= cuenta.getId() %>">
-                        <%= cuenta.getNumeroCuenta() %> - <%= tipoCuenta %> - Saldo: $<%= String.format("%.2f", saldo) %>
-                    </option>
-                <%
-                        }
-                    } else {
-                %>
-                    <option value="">No tiene cuentas asociadas</option>
-                <%
-                    }
-                %>
-            </select>
         </div>
 
         <!-- Tabla de cuotas -->
@@ -156,9 +140,10 @@
                         <td><%= estado %></td>
                         <td>
                             <% if (!cuota.isPagada()) { %>
-                                <form action="PagoDePrestamo.jsp" method="POST" onsubmit="return confirmarPago(<%= cuota.getId() %>, <%= cuota.getMonto() %>)">
-                                    <input type="hidden" name="cuotaId" id="cuotaId" />
-                                    <input type="hidden" name="cuentaId" value="<%= request.getParameter("cuenta") %>" />
+                                <form action="" method="POST" onsubmit="return confirmarPago(<%= cuota.getId() %>, <%= cuota.getMonto() %>)">
+                                    <input type="hidden" name="cuotaId" value="<%= cuota.getId() %>" />
+                                    <input type="hidden" name="cuentaId" value="<%= cuentas.get(0).getId() %>" />
+                                    <input type="hidden" name="montoPago" value="<%= cuota.getMonto() %>" />
                                     <button type="submit" class="btn-pagar">Pagar</button>
                                 </form>
                             <% } %>
@@ -170,8 +155,6 @@
                 %>
             </tbody>
         </table>
-
-   
 
         <a href="Cliente.jsp">Volver</a>
 
