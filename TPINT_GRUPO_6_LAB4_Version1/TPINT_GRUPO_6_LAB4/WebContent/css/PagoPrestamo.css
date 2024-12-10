@@ -5,9 +5,8 @@
     color: white;
     padding: 20px;
     margin: 0;
-    width: 100%; /* Asegura que ocupe toda la pantalla */
-    box-sizing: border-box; /* Incluye el padding en el ancho total */
-    
+    width: 100%;
+    box-sizing: border-box;
 }
 
 /* ===================== FORM CONTAINER ===================== */
@@ -16,17 +15,38 @@
     background-color: #fff;
     padding: 30px;
     margin: 30px auto;
-    border-radius: 15px; /* Bordes más redondeados */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Más profundidad */
-    max-width: 400px;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
     text-align: left;
     margin-bottom: 50px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Animación */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .container:hover {
-    transform: translateY(-5px); /* Efecto de levantamiento */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Más intensidad al hover */
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* ===================== TABLE ===================== */
+.tabla-cuotas {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.tabla-cuotas th, .tabla-cuotas td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.tabla-cuotas th {
+    background-color: #f4f4f4;
+}
+
+.tabla-cuotas td {
+    background-color: #fafafa;
 }
 
 /* ===================== FORM ELEMENTS ===================== */
@@ -73,47 +93,8 @@ a {
     margin-top: 10px;
     text-decoration: none;
     color: #3f51b5;
-    font-weight: bold;
 }
 
 a:hover {
     text-decoration: underline;
-}
-
-/* ===================== ALIGNMENT FIX ===================== */
-body {
-    background-color: #f0f2f5;
-    margin: 0;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Navbar */
-.navegador {
-    width: 100%;
-    background-color: #408080;
-    color: white;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-}
-
-.time {
-    font-size: 14px;
-}
-
-/* ===================== MEDIA QUERIES ===================== */
-@media (max-width: 768px) {
-    .container {
-        margin: 20px;
-        padding: 20px;
-    }
-
-    .navegador {
-        flex-direction: column;
-        align-items: center;
-    }
 }

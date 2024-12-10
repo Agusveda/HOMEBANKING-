@@ -6,11 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import Entidades.Cliente;
 import Entidades.Cuenta;
+import Entidades.Cuota;
 import Entidades.Movimiento;
 import Entidades.Nacionalidades;
 import Entidades.Prestamo;
@@ -27,7 +29,10 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
-	private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?,?, ?, NOW(), ?, ?, ?,?)";
+	// BASE - private static final String InsertarPrestamo= "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas,confirmacion) " + "VALUES (?,?, ?, NOW(), ?, ?, ?,?)";
+	private static final String InsertarPrestamo = "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas, confirmacion) " + 
+            "VALUES (?,?, ?, NOW(), ?, ?, ?, ?)";
+	
 	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where Id = ? ";
 	
 	///REPORTES
@@ -408,7 +413,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return exists;
 	}
-
+/* sin cuotas
 	@Override
 	public boolean insertarPrestamo(Prestamo prestamo) {
 		 
@@ -454,6 +459,77 @@ public class MovimientoDaoImp implements MovimientoDao {
 		       }
 		   } 
 		   return isInsertExitoso;
+	}
+	
+	*/
+	@Override
+	public boolean insertarPrestamo(Prestamo prestamo) {
+	    boolean isInsertExitoso = false;
+
+	    try (Connection connection = Conexion.getConexion().getSQLConexion()) {
+
+	        if (connection == null) {
+	            System.out.println("No se pudo obtener la conexión a la base de datos.");
+	            return false;
+	        }
+
+	        connection.setAutoCommit(false); // Deshabilitar el auto commit para control manual de la transacción
+
+	        // Utilizamos la consulta definida para insertar el préstamo
+	        try (PreparedStatement statement = connection.prepareStatement(InsertarPrestamo, Statement.RETURN_GENERATED_KEYS)) {
+	            // Asignamos los valores del objeto prestamo a los parámetros del PreparedStatement
+	            statement.setInt(1, prestamo.getIdCliente());
+	            statement.setInt(2, prestamo.getIdCuenta());
+	            statement.setFloat(3, prestamo.getImporteCliente());
+	            statement.setInt(4, prestamo.getPlazoPago());
+	            statement.setFloat(5, prestamo.getImpxmes());
+	            statement.setInt(6, prestamo.getCantCuo());
+	            statement.setInt(7, 0); // Asignamos el valor de confirmacion (0 = pendiente, o el valor que corresponda)
+
+	            int rowsAffected = statement.executeUpdate(); // Ejecutar la inserción del préstamo
+
+	            if (rowsAffected > 0) {
+	                ResultSet generatedKeys = statement.getGeneratedKeys();
+	                if (generatedKeys.next()) {
+	                    int idPrestamo = generatedKeys.getInt(1); // ID del préstamo recién insertado
+
+	                    // Insertar las cuotas asociadas
+	                    String insertarCuotaSQL = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
+	                    try (PreparedStatement statementCuota = connection.prepareStatement(insertarCuotaSQL)) {
+	                        for (int i = 1; i <= prestamo.getCantCuo(); i++) {
+	                            statementCuota.setInt(1, idPrestamo); // idPrestamo
+	                            statementCuota.setInt(2, i); // NumeroCuota
+	                            statementCuota.setFloat(3, prestamo.getImporteCliente() / prestamo.getCantCuo()); // Monto
+	                            statementCuota.setInt(4, 0); // estaPagada (0: pendiente)
+	                            statementCuota.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusMonths(i))); // FechaPago (fecha de vencimiento)
+
+	                            statementCuota.addBatch(); // Añadir la cuota al batch
+	                        }
+
+	                        int[] cuotasAfectadas = statementCuota.executeBatch();
+	                        if (cuotasAfectadas.length == prestamo.getCantCuo()) {
+	                            connection.commit(); // Si todo se insertó correctamente, realizar commit
+	                            System.out.println("El préstamo y sus cuotas se han insertado correctamente.");
+	                            isInsertExitoso = true;
+	                        } else {
+	                            connection.rollback(); // Si hubo un error en las cuotas, hacer rollback
+	                            System.out.println("Error al insertar las cuotas. Se realizó un rollback.");
+	                        }
+	                    }
+	                }
+	            }
+	        } catch (SQLException e) {
+	            connection.rollback();
+	            System.out.println("Error durante la inserción del préstamo o las cuotas. Se realizó un rollback.");
+	            e.printStackTrace();
+	        }
+
+	    } catch (SQLException e) {
+	        System.out.println("Error al obtener la conexión a la base de datos o al cerrar los recursos.");
+	        e.printStackTrace();
+	    }
+
+	    return isInsertExitoso;
 	}
 
 	@Override
@@ -933,6 +1009,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return totalPrestamos;
 	}	
 	
+	/*
 	@Override
 	public List<Prestamo> obtenerPrestamosConfirmados(int idCliente) {
 	    List<Prestamo> prestamos = new ArrayList<>();
@@ -980,5 +1057,153 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return prestamos;
 	}
 
+	*/
+	@Override
+	public List<Prestamo> obtenerPrestamosConfirmados(int idCliente) {
+	    List<Prestamo> prestamos = new ArrayList<>();
+	    StringBuilder sql = new StringBuilder();
+
+	
+	    sql.append("SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.PlazoPago, ")
+	       .append("p.ImportePagarXmes, p.CantidadCuotas, p.confirmacion ")
+	       .append("FROM prestamo p ")
+	       .append("WHERE p.IdCliente = ? AND p.confirmacion = 1");
+
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    try {
+	        // Obtener la conexión a la base de datos
+	        con = Conexion.getConexion().getSQLConexion();
+
+	        // Verificar si la conexión está cerrada y reconectar si es necesario
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();
+	        }
+
+	        // Preparar la consulta con los parámetros
+	        ps = con.prepareStatement(sql.toString());
+	        ps.setInt(1, idCliente);  // Configurar el idCliente
+
+	        // Ejecutar la consulta
+	        rs = ps.executeQuery();
+
+	        while (rs.next()) {
+	            // Crear objeto Prestamo y agregarlo a la lista
+	            Prestamo prestamo = new Prestamo();
+	            prestamo.setId(rs.getInt("Id"));
+	            prestamo.setIdCliente(rs.getInt("IdCliente"));
+	            prestamo.setIdCuenta(rs.getInt("IdCuenta"));
+	            prestamo.setImporteCliente(rs.getFloat("ImporteCliente")); 
+	            prestamo.setFechaAlta(rs.getDate("FechaAlta"));
+	            prestamo.setPlazoPago(rs.getInt("PlazoPago"));
+	            prestamo.setImpxmes(rs.getFloat("ImportePagarXmes"));
+	            prestamo.setCantCuo(rs.getInt("CantidadCuotas"));
+	            prestamo.setconfimacion(rs.getBoolean("confirmacion"));
+
+	            prestamos.add(prestamo);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error al obtener los préstamos.");
+	    } finally {
+	        // Asegurarse de cerrar los recursos
+	        try {
+	            if (rs != null) rs.close();
+	            if (ps != null) ps.close();
+	            if (con != null) con.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return prestamos;
+	}
+
+
+	
+	@Override
+	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo) {
+	    List<Cuota> cuotas = new ArrayList<>();
+	    StringBuilder sql = new StringBuilder();
+	    
+	    // Base de la consulta SQL
+	    sql.append("SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada ")
+	       .append("FROM cuota cu ")
+	       .append("JOIN prestamo p ON cu.IdPrestamo = p.Id ")
+	       .append("WHERE p.IdCliente = ? AND p.confirmacion = 1 ");
+
+	    // Si se especifica un idPrestamo, filtrar por ese préstamo
+	    if (idPrestamo != 0) { 
+	        sql.append("AND p.Id = ? ");
+	    }
+
+	    sql.append("ORDER BY cu.FechaPago, cu.NumeroCuota");  
+
+	    Connection con = null;
+	    PreparedStatement ps = null;
+	    ResultSet rs = null;
+
+	    try {
+	        // Obtener la conexión a la base de datos
+	        con = Conexion.getConexion().getSQLConexion();
+
+	        // Verificar si la conexión está cerrada y reconectar si es necesario
+	        if (con == null || con.isClosed()) {
+	            System.out.println("Conexión cerrada, intentando reconectar...");
+	            con = Conexion.getConexion().getSQLConexion();
+	        }
+
+	        // Preparar la consulta con los parámetros
+	        ps = con.prepareStatement(sql.toString());
+	        ps.setInt(1, idCliente);  // Configurar el idCliente
+
+	        if (idPrestamo != 0) {
+	            ps.setInt(2, idPrestamo);  // Configurar el idPrestamo solo si se pasa
+	        }
+
+	        // Ejecutar la consulta
+	        System.out.println("Ejecutando SQL: " + sql.toString()); // Log de la consulta
+	        rs = ps.executeQuery();
+	        
+	        while (rs.next()) {
+	            // Crear objeto Cuota y agregarlo a la lista
+	            Cuota cuota = new Cuota();
+	            cuota.setId(rs.getInt("Id"));
+	            cuota.setIdPrestamo(rs.getInt("IdPrestamo"));
+	            cuota.setNumeroCuota(rs.getInt("NumeroCuota"));
+	            cuota.setMonto(rs.getDouble("Monto"));
+	            cuota.setFechaPago(rs.getDate("FechaPago"));
+	            cuota.setPagada(rs.getBoolean("estaPagada"));
+
+	            cuotas.add(cuota);
+
+	            // Depuración: Mostrar cuota obtenida
+	            System.out.println("Cuota obtenida: " + cuota.getId() + ", " + cuota.getNumeroCuota() + ", Monto: " + cuota.getMonto());
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error al obtener las cuotas.");
+	    } finally {
+	        // Asegurarse de cerrar los recursos
+	        try {
+	            if (rs != null) rs.close();
+	            if (ps != null) ps.close();
+	            if (con != null) con.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    // Si no se encontraron cuotas, log de la situación
+	    if (cuotas.isEmpty()) {
+	        System.out.println("No se encontraron cuotas para el cliente con ID: " + idCliente);
+	    }
+
+	    return cuotas;
+	}	
+	
 }
 

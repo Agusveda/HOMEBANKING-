@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Entidades.Cuenta;
+import Entidades.Cuota;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
 
@@ -35,6 +36,7 @@ public interface MovimientoDao
     public float EgresoDeCliente(int DNICLIENTE);
     public float IngresoDeCliente(int DNICLIENTE);
 	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
-
+	
+	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
 
 }

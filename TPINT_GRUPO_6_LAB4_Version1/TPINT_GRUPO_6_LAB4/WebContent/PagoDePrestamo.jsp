@@ -5,6 +5,7 @@
 <%@ page import="java.util.Calendar"%>
 <%@ page import="Entidades.Cuenta"%>
 <%@ page import="Entidades.Prestamo"%>
+<%@ page import="Entidades.Cuota"%>
 <%@ page import="java.util.Collections"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
@@ -16,15 +17,10 @@
     <link rel="stylesheet" type="text/css" href="css/PagoPrestamo.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <script type="text/javascript">
-        function confirmarPago() {
-
-            var montoPago = document.getElementById("pagosAcumulados").options[document.getElementById("pagosAcumulados").selectedIndex].text;
-            var cuentaSeleccionada = document.getElementById("cuenta").options[document.getElementById("cuenta").selectedIndex].text;
-
-
-            var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: " + montoPago + "\nCuenta seleccionada: " + cuentaSeleccionada);
+        function confirmarPago(cuotaId, montoPago) {
+            var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: $" + montoPago);
             if (confirmacion) {
-                document.getElementById("cuentaConfirmada").value = document.getElementById("cuenta").value;
+                document.getElementById("cuotaId").value = cuotaId;
                 return true; 
             } else {
                 return false; 
@@ -55,23 +51,42 @@
                 double totalPrestamos = 0;
                 ArrayList<Cuenta> cuentas = new ArrayList<>();
                 List<Float> pagosAcumulados = new ArrayList<>(Collections.nCopies(12, 0f));
+                List<Prestamo> prestamos = new ArrayList<>();
+                List<Cuota> cuotas = new ArrayList<>();
 
                 try {
+                    // Obtener total de préstamos confirmados
                     totalPrestamos = movimientoDao.obtenerTotalPrestamosConfirmados(idCliente);
+                    // Obtener cuentas asociadas al cliente
                     cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
-                    List<Prestamo> prestamos = movimientoDao.obtenerPrestamosConfirmados(idCliente);
+                    // Obtener préstamos confirmados
+                    prestamos = movimientoDao.obtenerPrestamosConfirmados(idCliente);
+                    
+                    // Obtener cuotas para cada préstamo
+                    for (Prestamo prestamo : prestamos) {
+                        cuotas.addAll(movimientoDao.obtenerCuotas(idCliente, prestamo.getId()));
+                    }
 
+                    // Llenar pagos acumulados
                     for (Prestamo prestamo : prestamos) {
                         float importePagarXmes = prestamo.getImpxmes();
                         Calendar calendar = Calendar.getInstance();
                         calendar.setTime(prestamo.getFechaAlta());
-                        int mesAlta = calendar.get(Calendar.MONTH); 
+                        int mesAlta = calendar.get(Calendar.MONTH);
 
                         for (int i = 0; i < prestamo.getCantCuo(); i++) {
                             int mes = (mesAlta + i) % 12;
                             pagosAcumulados.set(mes, pagosAcumulados.get(mes) + importePagarXmes);
                         }
                     }
+
+                    // Depuración: Mostrar detalles obtenidos
+                    System.out.println("Total de préstamos: " + totalPrestamos);
+                    System.out.println("Cuotas obtenidas: ");
+                    for (Cuota cuota : cuotas) {
+                        System.out.println("Cuota ID: " + cuota.getId() + ", Préstamo: " + cuota.getIdPrestamo() + ", Monto: " + cuota.getMonto() + ", Fecha Pago: " + cuota.getFechaPago());
+                    }
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     totalPrestamos = 0;
@@ -83,57 +98,80 @@
             <span>$<%= (totalPrestamos == 0) ? "0" : String.format("%.2f", totalPrestamos) %></span>
         </div>
 
+        <!-- Selección de cuenta -->
         <div class="form-group">
-            <label for="pagosAcumulados">Pagos acumulados por mes:</label>
-            <select id="pagosAcumulados" name="mesPago" required>
+            <label for="cuenta">Cuenta a debitar:</label>
+            <select id="cuenta" name="cuenta" required>
                 <option value="">Seleccione...</option>
                 <%
-                    String[] meses = {"Diciembre", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre"};
-
-                    for (int i = 0; i < 12; i++) {
-                        String nombreMes = meses[i];
-                        float pagoMes = pagosAcumulados.get(i);
+                    if (cuentas != null && !cuentas.isEmpty()) {
+                        for (Cuenta cuenta : cuentas) {
+                            String tipoCuenta = (cuenta.getTipoCuenta() == 1) ? " (CAJA AHORRO)" : " (CUENTA CORRIENTE)";
+                            double saldo = cuenta.getSaldo();
                 %>
-                    <option value="<%= i %>">
-                        <%= nombreMes %>: $<%= String.format("%.2f", pagoMes) %>
+                    <option value="<%= cuenta.getId() %>">
+                        <%= cuenta.getNumeroCuenta() %> - <%= tipoCuenta %> - Saldo: $<%= String.format("%.2f", saldo) %>
                     </option>
+                <%
+                        }
+                    } else {
+                %>
+                    <option value="">No tiene cuentas asociadas</option>
                 <%
                     }
                 %>
             </select>
         </div>
 
-        <form action="PagoPrestamo.jsp" method="POST" onsubmit="return confirmarPago()">
-            <input type="hidden" name="totalPrestamos" value="<%= totalPrestamos %>"/>
-
-            <div class="form-group">
-                <label for="cuenta">Cuenta a debitar:</label>
-                <select id="cuenta" name="cuenta" required>
-                    <option value="">Seleccione...</option>
-                    <%
-                        if (cuentas != null && !cuentas.isEmpty()) {
-                            for (Cuenta cuenta : cuentas) {
-                                String tipoCuenta = (cuenta.getTipoCuenta() == 1) ? " (CAJA AHORRO)" : " (CUENTA CORRIENTE)";
-                                double saldo = cuenta.getSaldo();
-                    %>
-                        <option value="<%= cuenta.getId() %>">
-                            <%= cuenta.getNumeroCuenta() %> - <%= tipoCuenta %> - Saldo: $<%= String.format("%.2f", saldo) %>
-                        </option>
-                    <%
-                            }
-                        } else {
-                    %>
-                        <option value="">No tiene cuentas asociadas</option>
-                    <%
+        <!-- Tabla de cuotas -->
+        <h3>Cuotas Pendientes</h3>
+        <table class="tabla-cuotas">
+            <thead>
+                <tr>
+                    <th>ID Préstamo</th>
+                    <th>Cuota #</th>
+                    <th>Monto</th>
+                    <th>Fecha de Vencimiento</th>
+                    <th>Estado</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%
+                    if (cuotas.isEmpty()) {
+                %>
+                    <tr>
+                        <td colspan="6">No hay cuotas pendientes para este cliente.</td>
+                    </tr>
+                <%
+                    } else {
+                        for (Cuota cuota : cuotas) {
+                            String estado = cuota.isPagada() ? "Pagada" : "Pendiente";
+                %>
+                    <tr>
+                        <td><%= cuota.getIdPrestamo() %></td>
+                        <td><%= cuota.getNumeroCuota() %></td>
+                        <td>$<%= String.format("%.2f", cuota.getMonto()) %></td>
+                        <td><%= cuota.getFechaPago() != null ? cuota.getFechaPago() : "Pendiente" %></td>
+                        <td><%= estado %></td>
+                        <td>
+                            <% if (!cuota.isPagada()) { %>
+                                <form action="PagoDePrestamo.jsp" method="POST" onsubmit="return confirmarPago(<%= cuota.getId() %>, <%= cuota.getMonto() %>)">
+                                    <input type="hidden" name="cuotaId" id="cuotaId" />
+                                    <input type="hidden" name="cuentaId" value="<%= request.getParameter("cuenta") %>" />
+                                    <button type="submit" class="btn-pagar">Pagar</button>
+                                </form>
+                            <% } %>
+                        </td>
+                    </tr>
+                <%
                         }
-                    %>
-                </select>
-            </div>
+                    }
+                %>
+            </tbody>
+        </table>
 
-            <div class="form-group">
-                <button type="submit" class="btn-pagar">Pagar</button>
-            </div>
-        </form>
+   
 
         <a href="Cliente.jsp">Volver</a>
 

@@ -12,8 +12,8 @@ public class Conexion {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             // Modificar la URL de conexión para incluir la zona horaria
-            String url = "jdbc:mysql://localhost:3307/tpint_grupo_6_lab4?useSSL=false&serverTimezone=America/Argentina/Buenos_Aires";
-            this.connection = DriverManager.getConnection(url, "root", "1996");
+            String url = "jdbc:mysql://localhost:3306/tpint_grupo_6_lab4?useSSL=false&serverTimezone=America/Argentina/Buenos_Aires";
+            this.connection = DriverManager.getConnection(url, "root", "root");
             this.connection.setAutoCommit(false);
         } catch (Exception e) {
             e.printStackTrace();
