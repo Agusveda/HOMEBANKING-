@@ -2,12 +2,10 @@
 <%@ page import="dao.MovimientoDao"%>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="java.util.List"%>
-<%@ page import="java.util.Calendar"%>
+<%@ page import="java.util.Collections"%>
 <%@ page import="Entidades.Cuenta"%>
 <%@ page import="Entidades.Prestamo"%>
 <%@ page import="Entidades.Cuota"%>
-<%@ page import="java.util.Collections"%>
-<%@ page import="java.io.IOException"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -42,26 +40,6 @@
             Integer idClienteObj = (Integer) session.getAttribute("IdCliente");
             String mensaje = "";
 
-            if (request.getMethod().equalsIgnoreCase("POST")) {
-                // Capturar datos del formulario
-                int cuotaId = Integer.parseInt(request.getParameter("cuotaId"));
-                int cuentaId = Integer.parseInt(request.getParameter("cuentaId"));
-                float montoPago = Float.parseFloat(request.getParameter("montoPago"));
-
-                MovimientoDao movimientoDao = new MovimientoDaoImp();
-                try {
-                    // Realizar el pago
-                    boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
-                    if (exito) {
-                        mensaje = "El pago se realizó con éxito.";
-                    } else {
-                        mensaje = "Ocurrió un error al realizar el pago.";
-                    }
-                } catch (Exception e) {
-                    mensaje = "Error: " + e.getMessage();
-                }
-            }
-
             if (idClienteObj == null) {
         %>
                 <p>Error: No se encontró el ID del cliente en la sesión.</p>
@@ -71,8 +49,8 @@
                 int idCliente = idClienteObj;
                 MovimientoDao movimientoDao = new MovimientoDaoImp();
                 double totalPrestamos = 0;
+                double totalCuotasPendientes = 0;
                 ArrayList<Cuenta> cuentas = new ArrayList<>();
-                List<Float> pagosAcumulados = new ArrayList<>(Collections.nCopies(12, 0f));
                 List<Prestamo> prestamos = new ArrayList<>();
                 List<Cuota> cuotas = new ArrayList<>();
 
@@ -87,9 +65,21 @@
                         cuotas.addAll(movimientoDao.obtenerCuotas(idCliente, prestamo.getId()));
                     }
 
+                    // Obtener suma de cuotas pendientes
+                    totalCuotasPendientes = movimientoDao.obtenerSumaCuotasPendientes(idCliente);
+
+                    if (request.getMethod().equalsIgnoreCase("POST")) {
+                        int cuotaId = Integer.parseInt(request.getParameter("cuotaId"));
+                        int cuentaId = Integer.parseInt(request.getParameter("cuentaId"));
+                        float montoPago = Float.parseFloat(request.getParameter("montoPago"));
+
+                        // Realizar el pago
+                        boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
+                        mensaje = exito ? "El pago se realizó con éxito." : "Ocurrió un error al realizar el pago.";
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    totalPrestamos = 0;
+                    mensaje = "Error al obtener datos: " + e.getMessage();
                 }
         %>
 
@@ -103,8 +93,12 @@
         %>
 
         <div class="form-group">
-            <label for="monto">Monto total de préstamos:</label>
-            <span>$<%= (totalPrestamos == 0) ? "0" : String.format("%.2f", totalPrestamos) %></span>
+
+        </div>
+
+        <div class="form-group">
+            <label for="cuotas-pendientes">Monto total de cuotas pendientes:</label>
+            <span>$<%= String.format("%.2f", totalCuotasPendientes) %></span>
         </div>
 
         <!-- Tabla de cuotas -->
@@ -131,6 +125,7 @@
                     } else {
                         for (Cuota cuota : cuotas) {
                             String estado = cuota.isPagada() ? "Pagada" : "Pendiente";
+                            Cuenta cuenta = cuentas.isEmpty() ? null : cuentas.get(0);
                 %>
                     <tr>
                         <td><%= cuota.getIdPrestamo() %></td>
@@ -139,10 +134,10 @@
                         <td><%= cuota.getFechaPago() != null ? cuota.getFechaPago() : "Pendiente" %></td>
                         <td><%= estado %></td>
                         <td>
-                            <% if (!cuota.isPagada()) { %>
+                            <% if (!cuota.isPagada() && cuenta != null) { %>
                                 <form action="" method="POST" onsubmit="return confirmarPago(<%= cuota.getId() %>, <%= cuota.getMonto() %>)">
                                     <input type="hidden" name="cuotaId" value="<%= cuota.getId() %>" />
-                                    <input type="hidden" name="cuentaId" value="<%= cuentas.get(0).getId() %>" />
+         							 <input type="hidden" name="cuentaId" value="<%= cuenta.getId() %>" />
                                     <input type="hidden" name="montoPago" value="<%= cuota.getMonto() %>" />
                                     <button type="submit" class="btn-pagar">Pagar</button>
                                 </form>

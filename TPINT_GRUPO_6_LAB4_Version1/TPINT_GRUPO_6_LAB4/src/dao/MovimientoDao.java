@@ -29,15 +29,19 @@ public interface MovimientoDao
     public boolean CargarPrestamoEnCuenta(int idcuenta, float monto);
     public double obtenerTotalPrestamosConfirmados(int idCliente);
     
+	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
+	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
+	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
+	public double obtenerSumaCuotasPendientes(int idCliente);
+
+	
+	
     ///REPORTE DE MOVIMIENTO
     public float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
     
     // REPORTE DE TRANSFERENCIAS
     public float EgresoDeCliente(int DNICLIENTE);
     public float IngresoDeCliente(int DNICLIENTE);
-	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
-	
-	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
-	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
+    
 
 }
