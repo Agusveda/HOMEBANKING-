@@ -63,7 +63,8 @@ public class ServletCliente extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     	String action = request.getParameter("action");
-
+    	  
+           
     	if ("loadProvinces".equals(action)) {	 
  	 // Obtener el id de la nacionalidad seleccionada
      String nacionalidadId = request.getParameter("txtNacionalidad");
@@ -75,49 +76,7 @@ public class ServletCliente extends HttpServlet {
      System.out.println("Localidad seleccionada: " + localidadId);
 
 
-     if (nacionalidadId != null && !nacionalidadId.isEmpty()) {
-         int idNacionalidad = Integer.parseInt(nacionalidadId);
-
-         // Crear una instancia de ClienteDaoImp
-         ClienteDaoImp clienteDao = new ClienteDaoImp();
-
-         // Llamar al método listProvincias() de ClienteDaoImp
-         ArrayList<Provincia> provincias = clienteDao.listProvincias(idNacionalidad);
-
-         // Poner la lista de provincias en el request
-         request.setAttribute("provincias", provincias);
-     }
-
-     provinciaId = request.getParameter("txtProvincia");
-     System.out.println("Provincia seleccionada: " + provinciaId);
-     
-     if (provinciaId != null && !provinciaId.isEmpty()) {
-         // Verificar si se recibe el idProvincia correctamente
-         System.out.println("Provincia seleccionada: " + provinciaId);
-
-         int idProvincia = Integer.parseInt(provinciaId);
-
-         // Crear una instancia de ClienteDaoImp (o la clase correspondiente)
-         ClienteDaoImp clienteDao = new ClienteDaoImp();
-
-         // Llamar al método listLocalidades() de ClienteDaoImp
-         ArrayList<Localidad> localidades = clienteDao.listLocalidades(idProvincia);
-
-         // Verificar cuántas localidades se encuentran
-         System.out.println("Cantidad de localidades encontradas: " + localidades.size());
-
-         // Poner la lista de localidades en el request
-         request.setAttribute("localidades", localidades);
-     } else {
-         // Si no se recibe idProvincia
-         System.out.println("No se ha recibido idProvincia o está vacío.");
-     }
-
-     // Redirigir o forward a la página JSP para mostrar las localidades
-     request.getRequestDispatcher("AltaCliente.jsp").forward(request, response);
-     
-
-    	}
+    
     	
     	// Modificar de Cliente
         if (request.getParameter("btnModificarCliente") != null) {
@@ -178,6 +137,7 @@ public class ServletCliente extends HttpServlet {
             if (contrasena1 == null || contrasena2 == null || !contrasena1.equals(contrasena2)) {
                 request.setAttribute("mensajeError", "La contraseña no coincide");
                 System.out.println("Mensaje de error: Las contraseñas no coinciden.");
+                
                 /*
                 RequestDispatcher dispatcher = request.getRequestDispatcher("/AltaCliente.jsp");
                 dispatcher.forward(request, response)*/
@@ -244,9 +204,10 @@ public class ServletCliente extends HttpServlet {
             if (insertado) {
                 request.setAttribute("mensaje", "Cliente registrado exitosamente.");
              // Restablecer valores de los desplegables
-             // request.setAttribute("nacionalidad",null);
+                request.setAttribute("limpiarFormulario", true);
                 request.setAttribute("provincias", null);
                 request.setAttribute("localidades", null);
+               
             } else {
                 request.setAttribute("mensajeError", "Hubo un error al registrar el cliente.");
                 System.out.println("Mensaje: Cliente registrado exitosamente.");
@@ -287,6 +248,51 @@ public class ServletCliente extends HttpServlet {
                 }
             } 
         }
+        
+        
+        if (nacionalidadId != null && !nacionalidadId.isEmpty()) {
+            int idNacionalidad = Integer.parseInt(nacionalidadId);
+
+            // Crear una instancia de ClienteDaoImp
+            ClienteDaoImp clienteDao = new ClienteDaoImp();
+
+            // Llamar al método listProvincias() de ClienteDaoImp
+            ArrayList<Provincia> provincias = clienteDao.listProvincias(idNacionalidad);
+
+            // Poner la lista de provincias en el request
+            request.setAttribute("provincias", provincias);
+        }
+        
+        provinciaId = request.getParameter("txtProvincia");
+        System.out.println("Provincia seleccionada: " + provinciaId);
+        
+        if (provinciaId != null && !provinciaId.isEmpty()) {
+            // Verificar si se recibe el idProvincia correctamente
+            System.out.println("Provincia seleccionada: " + provinciaId);
+
+            int idProvincia = Integer.parseInt(provinciaId);
+
+            // Crear una instancia de ClienteDaoImp (o la clase correspondiente)
+            ClienteDaoImp clienteDao = new ClienteDaoImp();
+
+            // Llamar al método listLocalidades() de ClienteDaoImp
+            ArrayList<Localidad> localidades = clienteDao.listLocalidades(idProvincia);
+
+            // Verificar cuántas localidades se encuentran
+            System.out.println("Cantidad de localidades encontradas: " + localidades.size());
+
+            // Poner la lista de localidades en el request
+            request.setAttribute("localidades", localidades);
+        } else {
+            // Si no se recibe idProvincia
+            System.out.println("No se ha recibido idProvincia o está vacío.");
+        }
+
+        // Redirigir o forward a la página JSP para mostrar las localidades
+        request.getRequestDispatcher("AltaCliente.jsp").forward(request, response);
+        
+
+       	}
         
         String mail = request.getParameter("txtEmail");
 		String nuevaContraseña  = request.getParameter("txtPassNue");

@@ -16,9 +16,9 @@
     <title>Alta de Cliente</title>
     <style>
         .mensaje-cuadro {
-            background-color: #f8d7da; /* Fondo rojo claro */
-            color: #721c24; /* Texto rojo oscuro */
-            border: 1px solid #f5c6cb; /* Borde suave */
+            background-color: #f5f5f5; 
+            color: #721c24; 
+            border: 1px solid #f5c6cb; 
             padding: 15px;
             margin: 10px 0;
             border-radius: 5px;
@@ -69,12 +69,12 @@
            <p>
     <label class="form-label" for="nacionalidad">Nacionalidad</label>
     <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
-        <option value="">Seleccione</option>
-        <option value="1" <%= "1".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Argentina</option>
-        <option value="2" <%= "2".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Brasil</option>
-        <option value="3" <%= "3".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Chile</option>
-        <option value="4" <%= "4".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Uruguay</option>
-        <option value="5" <%= "5".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Paraguay</option>
+ <option value="" <%= (request.getAttribute("limpiarFormulario") != null || "".equals(request.getParameter("txtNacionalidad"))) ? "selected" : "" %>>Seleccione</option>
+        <option value="1" <%= "1".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Argentina (+54)</option>
+        <option value="2" <%= "2".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Brasil(+55)</option>
+        <option value="3" <%= "3".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Chile(+56)</option>
+        <option value="4" <%= "4".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Uruguay(+598)</option>
+        <option value="5" <%= "5".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Paraguay(+595)</option>
     </select>
 </p>
 
