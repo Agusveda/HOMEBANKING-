@@ -14,54 +14,53 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <link rel="stylesheet" type="text/css" href="css/altclien.css">
     <title>Alta de Cliente</title>
-    
     <style>
-    	        .mensaje {
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    font-weight: bold;
-    text-align: center;
-    
-    
-	}
-
-	.mensaje-exito {
-    background-color: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-	}
-
-	.mensaje-error {
-    background-color: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-	}
+        .mensaje-cuadro {
+            background-color: #f8d7da; /* Fondo rojo claro */
+            color: #721c24; /* Texto rojo oscuro */
+            border: 1px solid #f5c6cb; /* Borde suave */
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+		    .mensaje-error {
+		    color: red;
+		    font-weight: bold;
+		}
+		
+			.mensaje-exito {
+		    color: green;
+		    font-weight: bold;
+		}
     </style>
     
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
+
+	<div class="mensaje-cuadro">
+	    <% 
+	        String mensaje = (String) request.getAttribute("mensaje");
+	        String mensajeError = (String) request.getAttribute("mensajeError");
+	    %>
+	    <% if (mensaje != null) { %>
+	        <div class="mensaje mensaje-exito">
+	            <%= mensaje %>
+	        </div>
+	    <% } %>
+	    <% if (mensajeError != null) { %>
+	        <div class="mensaje mensaje-error">
+	            <%= mensajeError %>
+	        </div>
+	    <% } %>
+	</div>
+
+
 
   <div class="form-register">
         <h4>Alta de Cliente</h4>
         
-        <% 
-	    String mensaje = (String) request.getAttribute("mensaje");
-	    String mensajeError = (String) request.getAttribute("mensajeError");
-	    %>
-		    <% if (mensaje != null) { %>
-			    <div class="mensaje mensaje-exito">
-			        <%= mensaje %>
-			    </div>
-			<% } %>
-			<% if (mensajeError != null) { %>
-			    <div class="mensaje mensaje-error">
-			        <%= mensajeError %>
-			    </div>
-			<% } %>
-
-		       
+        
 
         <!-- Formulario para registrar cliente -->
         <form method="POST" action="ServletBanco" onsubmit="validaYConfirma(this)" >
@@ -121,8 +120,7 @@
     </select>
   
 </p>
-<fieldset>
-                <legend>Datos del Cliente</legend>
+
                 <p>
                     <label class="form-label" for="nombre">Nombre</label>
                     <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" required name="txtNombre" onkeypress="validarSoloLetras(event)">
@@ -165,7 +163,7 @@
                 </p>
                 <p>
                     <label class="form-label" for="telefono">Teléfono</label>
-                    <input class="controls" id="telefono" type="text" placeholder="Ingrese el teléfono" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
+                    <input class="controls" id="telefono" type="text" maxlength="10" placeholder="Ingrese el teléfono" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
                 </p>
                 <p>
                     <label class="form-label" for="usuario">Usuario</label>
@@ -269,7 +267,5 @@ function validaYConfirma(form){
 
 </script>
     
-    
-    <jsp:include page="Footer.jsp"/>
 </body>
 </html>

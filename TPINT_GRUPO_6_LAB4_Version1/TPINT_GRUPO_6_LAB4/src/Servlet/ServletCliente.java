@@ -176,8 +176,11 @@ public class ServletCliente extends HttpServlet {
             String contrasena2 = request.getParameter("txtContrasena2");
 
             if (contrasena1 == null || contrasena2 == null || !contrasena1.equals(contrasena2)) {
-                request.setAttribute("mensajeError", "Las contraseñas no coinciden. Por favor, intente nuevamente.");
+                request.setAttribute("mensajeError", "La contraseña no coincide");
                 System.out.println("Mensaje de error: Las contraseñas no coinciden.");
+                /*
+                RequestDispatcher dispatcher = request.getRequestDispatcher("/AltaCliente.jsp");
+                dispatcher.forward(request, response)*/
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
