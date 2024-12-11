@@ -519,7 +519,8 @@ public class CuentaDaoImpl implements CuentaDao {
 	        resultSet = preparedStatement.executeQuery();
 
 	        
-	        if (resultSet.next()) {
+	        if (resultSet.next()) 
+	        {
 	            exists = resultSet.getInt(1) > 0;
 	        }
 	    } catch (SQLException e) {

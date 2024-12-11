@@ -12,25 +12,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Entidades.Cuenta;
 import Entidades.Movimiento;
+import Entidades.Usuario;
 import dao.CuentaDao;
 import daoImp.CuentaDaoImpl;
 import negocioImpl.CuentaNegocioImpl;
 import negocioImpl.MovimientoNegocioImpl;
+import negocioImpl.UsuarioNagocionImp;
 
 @WebServlet("/ServletCuenta")
 public class ServletCuenta extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
     	/// ALTA DE CUENTA
     	if (request.getParameter("btnAltaCuenta") != null) 
     	{
+    		Usuario usuario = new Usuario();
+    		UsuarioNagocionImp usuN = new UsuarioNagocionImp();
     		Movimiento movi = new Movimiento();
     		MovimientoNegocioImpl moviN = new MovimientoNegocioImpl();
     	    Cuenta cuenta = new Cuenta();
     	    CuentaNegocioImpl cuentaN = new CuentaNegocioImpl();
     	    int idCuenta = 0;
+    	    boolean b=false;
+    	    
+    	    /// VALIDACIONES
+    	    if (request.getParameter("txtIdCliente") != null)
+    	    {
+    	    	b = usuN.EsAdmin(Integer.parseInt(request.getParameter("txtIdCliente")));
+    	    	if (b)
+    	    	{
+    	    		request.setAttribute("mensajeError", "Los administradores no pueden crerse una cuenta");
+    	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
+    	    		return;    	    		
+    	    	}
+    	    }
     	    
     	    /// Movimiento de Alta cuenta
     	    movi.setTipoMovimiento(1);
@@ -41,7 +58,7 @@ public class ServletCuenta extends HttpServlet {
     	    cuenta.setIdCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
     	    cuenta.setTipoCuenta(Integer.parseInt(request.getParameter("txtTipoCuenta")));
     	    cuenta.setActivo(true);
-
+    	    
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    
     	    boolean insertado = cuentaNegocio.insertCuenta(cuenta);
@@ -68,7 +85,7 @@ public class ServletCuenta extends HttpServlet {
     	    dispatcher.forward(request, response);
     	    return; 
     	} 
-
+    	
     	if (request.getParameter("btnFiltrar") != null) {
     	    int DNI = Integer.parseInt(request.getParameter("txtBuscar"));
     	    
@@ -91,17 +108,17 @@ public class ServletCuenta extends HttpServlet {
     	    } else {
     	        System.out.println("Error al eliminar la cuenta.");
     	    }
-
+    	    
     	    ArrayList<Cuenta> lista = cuentaNegocio.ListarCuenta();
     	    System.out.println("Lista de cuentas después de eliminar: " + lista.size());
     	    request.setAttribute("listaCuenta", lista);
-
+    	    
     	    RequestDispatcher rd = request.getRequestDispatcher("/ListarCuenta.jsp");
     	    rd.forward(request, response);
     	    return;
     	}
-
-
+    	
+    	
     	if (request.getParameter("btnModificarCuenta") != null) {
     	    try {
     	        int idCuenta = Integer.parseInt(request.getParameter("txtIdCuenta"));
@@ -134,7 +151,7 @@ public class ServletCuenta extends HttpServlet {
     	            dispatcher.forward(request, response);
     	            return; // Detener el procesamiento
     	        }
-
+    	        
     	        // Proceder con la modificación si cumple las validaciones
     	        Cuenta cuenta = new Cuenta();
     	        cuenta.setId(idCuenta);
@@ -142,10 +159,10 @@ public class ServletCuenta extends HttpServlet {
     	        cuenta.setNumeroCuenta(numeroCuenta);
     	        cuenta.setCbu(cbu);
     	        cuenta.setSaldo(saldo);
-
+    	        
     	        CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	        boolean modificada = cuentaNegocio.modificarCuenta(cuenta);
-
+    	        
     	        String mensaje = modificada ? "Cuenta modificada exitosamente." : "Error al modificar la cuenta.";
     	        request.setAttribute("mensaje", mensaje);
     	        RequestDispatcher dispatcher = request.getRequestDispatcher("/ListarCuenta.jsp");
@@ -157,6 +174,6 @@ public class ServletCuenta extends HttpServlet {
     	        dispatcher.forward(request, response);
     	    }
     	}
-
+    	
      }
 }

@@ -1210,9 +1210,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		System.out.println("Iniciando inserción de movimiento...");
 
 		PreparedStatement statementMovimientoP = null;
-		PreparedStatement statementMovimientoN = null;
-		PreparedStatement statementCuenta = null;
-		PreparedStatement statementBajaSueldo = null;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 		if (conexion == null) {
 			System.out.println("No se pudo obtener la conexión a la base de datos.");
@@ -1230,6 +1227,12 @@ public class MovimientoDaoImp implements MovimientoDao {
 			statementMovimientoP.setFloat(1, movi.getImporte());
 			statementMovimientoP.setInt(2, idCue); // SE DEBERIA OBTENER ID DE CUENTA
 			statementMovimientoP.setString(3, movi.getDetalle());
+			
+			if (statementMovimientoP.executeUpdate() > 0) 
+			{
+				System.out.println("Inserción en Movimiento Positivo exitoso.");
+				isInsertExitoso = true;
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();

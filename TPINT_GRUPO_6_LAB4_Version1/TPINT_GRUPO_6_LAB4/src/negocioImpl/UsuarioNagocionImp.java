@@ -8,9 +8,17 @@ import negocio.UsuarioNagocio;
 public class UsuarioNagocionImp implements UsuarioNagocio {
 
 	private UsuarioDao UsuarioDao = new UsuarioDaoImp();
+	
 	@Override
-	public Cliente ObtenerDatosXidUsuario(int id) {
+	public Cliente ObtenerDatosXidUsuario(int id) 
+	{
 		return UsuarioDao.ObtenerDatosXidUsuario(id);
+	}
+	
+	@Override
+	public boolean EsAdmin(int idCliente) 
+	{
+		return UsuarioDao.EsAdmin(idCliente);
 	}
 
 }
