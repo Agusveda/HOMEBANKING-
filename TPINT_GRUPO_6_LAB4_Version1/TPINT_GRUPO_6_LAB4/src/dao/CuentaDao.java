@@ -19,6 +19,7 @@ public interface CuentaDao {
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 	public boolean ExisteId (int id);
 	public int ObtenerProximoIdCuenta();
+	public int CuentasPorCliente(int idCliente);
 	
 	//REPORTE CUENTAS
 	public float ReporteCuentas(); 

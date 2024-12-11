@@ -36,6 +36,7 @@ public class ServletCuenta extends HttpServlet {
     	    CuentaNegocioImpl cuentaN = new CuentaNegocioImpl();
     	    int idCuenta = 0;
     	    boolean b=false;
+    	    int cuentas = 0;
     	    
     	    /// VALIDACIONES
     	    
@@ -49,6 +50,16 @@ public class ServletCuenta extends HttpServlet {
     	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
     	    		return;    	    		
     	    	}
+    	    }
+    	    
+    	    // Validacion para que un cliente no tenga más de 3 cuentas.
+    	    if (request.getParameter("txtIdCliente") != null)
+    	    {
+    	    	cuentas = cuentaN.CuentasPorCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
+    	    	
+    	    		request.setAttribute("mensajeError", "Los clientes no pueden tener más de 3 cuentas");
+    	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
+    	    		return;    	    		
     	    }
     	    
     	    /// Movimiento de Alta cuenta

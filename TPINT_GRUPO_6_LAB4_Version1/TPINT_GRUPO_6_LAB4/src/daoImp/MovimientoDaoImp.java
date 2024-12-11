@@ -1203,16 +1203,18 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 		try {
 
+			// Inserción en la tabla Cliente con generación de ID
 			System.out.println("Preparando declaración de inserción para movimiento...");
 
 			statementMovimientoP = conexion.prepareStatement(IngresarMovimientoPositivoAlta);
 
 			statementMovimientoP.setFloat(1, movi.getImporte());
-			statementMovimientoP.setInt(2, idCue);
+			statementMovimientoP.setInt(2, idCue); // SE DEBERIA OBTENER ID DE CUENTA
 			statementMovimientoP.setString(3, movi.getDetalle());
 			
 			if (statementMovimientoP.executeUpdate() > 0) 
 			{
+				conexion.commit();
 				System.out.println("Inserción en Movimiento Positivo exitoso.");
 				isInsertExitoso = true;
 			}

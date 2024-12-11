@@ -23,6 +23,8 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
     private static final String ObtenerProximoIdCuenta = "select * from cuenta ORDER BY Id DESC LIMIT 1;";
+    private static final String CuentasPorCliente = "select * from cuenta where IdCliente = ? and Activo = 1;";
+    
     
     //REPORTE
     private static final String ReporteCuentas = "SELECT SUM(Saldo) AS saldo FROM cuenta";
@@ -579,6 +581,42 @@ public class CuentaDaoImpl implements CuentaDao {
 	    }
 
 	    return id;
+	}
+
+	@Override
+	public int CuentasPorCliente(int idCliente) 
+	{
+        int cuentas = 0;
+        PreparedStatement statement = null;
+        ResultSet rs = null;
+        Connection conexion = Conexion.getConexion().getSQLConexion();
+
+        try {
+            if (conexion == null || conexion.isClosed()) {
+                throw new SQLException("La conexión está cerrada.");
+            }
+
+            statement = conexion.prepareStatement(CuentasPorCliente);
+            statement.setInt(1, idCliente);
+            rs = statement.executeQuery();
+
+            if (rs.next()) 
+            {
+            	cuentas++;
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (statement != null) statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return cuentas;
 	}
 
     
