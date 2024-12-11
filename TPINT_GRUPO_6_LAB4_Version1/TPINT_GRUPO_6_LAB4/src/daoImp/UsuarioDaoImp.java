@@ -93,7 +93,7 @@ public class UsuarioDaoImp implements UsuarioDao {
 	        
 	        if (resultSet.next()) 
 	        {
-	        	if (resultSet.getInt("TipoUsuario") == 1)
+	        	if (resultSet.getInt("TipoUsario") == 1)
 	        	{
 	        		exists = resultSet.getInt(1) > 0;	        		
 	        	}

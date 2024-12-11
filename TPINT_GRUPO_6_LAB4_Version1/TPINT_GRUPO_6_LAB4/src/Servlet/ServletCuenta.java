@@ -38,10 +38,12 @@ public class ServletCuenta extends HttpServlet {
     	    boolean b=false;
     	    
     	    /// VALIDACIONES
+    	    
+    	    // Validacion para que el admin no se cree una cuenta y asi no puedan transferirle, etc.
     	    if (request.getParameter("txtIdCliente") != null)
     	    {
     	    	b = usuN.EsAdmin(Integer.parseInt(request.getParameter("txtIdCliente")));
-    	    	if (!b)
+    	    	if (b)
     	    	{
     	    		request.setAttribute("mensajeError", "Los administradores no pueden crerse una cuenta");
     	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
@@ -53,7 +55,6 @@ public class ServletCuenta extends HttpServlet {
     	    movi.setTipoMovimiento(1);
     	    movi.setImporte(10000);
     	    movi.setDetalle("alta de cuenta");
-    	    idCuenta = cuentaN.ObtenerProximoIdCuenta();
     	    
     	    cuenta.setIdCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
     	    cuenta.setTipoCuenta(Integer.parseInt(request.getParameter("txtTipoCuenta")));
@@ -62,11 +63,14 @@ public class ServletCuenta extends HttpServlet {
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    
     	    boolean insertado = cuentaNegocio.insertCuenta(cuenta);
-    	    moviN.insertarAltaCuenta(movi, idCuenta);
     	    String mensaje = "";
     	    
     	    if (insertado)
     	    {
+    	    	//Si la cuenta se agrego, buscamos el id cuenta generado y creamos el movimiento.
+    	    	idCuenta = cuentaN.ObtenerProximoIdCuenta();
+    	    	moviN.insertarAltaCuenta(movi, idCuenta);
+    	    	
     	    	mensaje = "Cuenta creada exitosamente.";
     	    	request.setAttribute("mensaje", mensaje);    	    	
     	    }
@@ -80,7 +84,7 @@ public class ServletCuenta extends HttpServlet {
     	    	}
     	    	request.setAttribute("mensajeError", mensaje);    	    	
     	    }
-
+    	    
     	    RequestDispatcher dispatcher = request.getRequestDispatcher("/AltaCuentas.jsp");
     	    dispatcher.forward(request, response);
     	    return; 

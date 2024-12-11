@@ -578,7 +578,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	        }
 	    }
 
-	    return id + 1;
+	    return id;
 	}
 
     
