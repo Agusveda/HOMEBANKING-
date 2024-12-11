@@ -19,8 +19,13 @@ import negocioImpl.CuentaNegocioImpl;
 public class ServletCuenta extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	if (request.getParameter("btnAltaCuenta") != null) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    {
+    	/// ALTA DE CUENTA
+    	if (request.getParameter("btnAltaCuenta") != null) 
+    	{
+    		
+    		
     	    Cuenta cuenta = new Cuenta();
     	    
     	    cuenta.setIdCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
@@ -30,12 +35,25 @@ public class ServletCuenta extends HttpServlet {
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    
     	    boolean insertado = cuentaNegocio.insertCuenta(cuenta);
+    	    String mensaje = "";
     	    
+    	    if (insertado)
+    	    {
+    	    	mensaje = "Cuenta creada exitosamente.";
+    	    	request.setAttribute("mensaje", mensaje);    	    	
+    	    }
+    	    else
+    	    {
+    	    	mensaje = "Error al crear cuenta mano";
+    	    	
+    	    	if (!cuentaNegocio.ExisteId(cuenta.getIdCliente()))
+    	    	{
+    	    		mensaje = "Ingrese un id de cliente valido porfavor.";
+    	    	}
+    	    	request.setAttribute("mensajeError", mensaje);    	    	
+    	    }
 
-    	    String mensaje = insertado ? "Cuenta creada exitosamente." : "Hubo un error al crear la cuenta.";
-    	    request.setAttribute("mensaje", mensaje);
-
-    	    RequestDispatcher dispatcher = request.getRequestDispatcher("/Administrador.jsp");
+    	    RequestDispatcher dispatcher = request.getRequestDispatcher("/AltaCuentas.jsp");
     	    dispatcher.forward(request, response);
     	    return; 
     	} 

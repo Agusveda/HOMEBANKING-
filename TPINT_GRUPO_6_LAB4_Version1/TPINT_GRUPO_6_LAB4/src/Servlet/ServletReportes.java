@@ -73,7 +73,11 @@ public class ServletReportes extends HttpServlet {
         float total = 0;
         float saldo = 0;
 		String TipoMovimientoStr = "";
-		int DNICliente = Integer.parseInt(request.getParameter("DNICliente"));
+		int DNICliente = 0;
+		if (request.getParameter("DNICliente") != null)
+		{
+			DNICliente = Integer.parseInt(request.getParameter("DNICliente"));			
+		}
         
         
         
@@ -139,7 +143,8 @@ public class ServletReportes extends HttpServlet {
         	}
         	
         	///REPORTE DE TRANSFERENCIAS
-        	if (id == 2) {
+        	if (id == 2) 
+        	{
         	    String dniStr = request.getParameter("DNICliente");
         	    
         	    if (dniStr == null || dniStr.isEmpty()) {

@@ -235,6 +235,7 @@ function validarSoloNumeros(event) {
         alert("Solo se permiten números.");
     }
 }
+
 function validarLongitudDni(input) {
 	const longitudExacta   = 8;
 	 

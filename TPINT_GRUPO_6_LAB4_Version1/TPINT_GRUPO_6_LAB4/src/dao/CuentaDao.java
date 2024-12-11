@@ -17,6 +17,7 @@ public interface CuentaDao {
 	public Cuenta obtenerCuentaPorId(int id);
 	public Cuenta obtenerCuentaPorIdCliente(int id);
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
+	public boolean ExisteId (int id);
 	
 	//REPORTE CUENTAS
 	public float ReporteCuentas(); 

@@ -65,7 +65,7 @@
 <form method="post" action="ServletCuenta" onsubmit="return confirmarAlta(this)">
     <fieldset>
         <legend>Alta de Cuenta</legend>
-         <p><label for="txtIdCliente">ID Cliente: </label><input type="text" name="txtIdCliente" required></p>
+         <p><label for="txtIdCliente">ID Cliente: </label><input type="text" name="txtIdCliente" onkeypress="validarSoloNumeros(event)"></p>
         <p><label for="txtTipoCuenta">Tipo de cuenta:</label>
             <select name="txtTipoCuenta">
                 <option value="1">Caja de ahorro</option>
@@ -80,7 +80,17 @@
 </form>
 <jsp:include page="Footer.jsp"/>
 
-    <script>
+    <script>    
+    function validarSoloNumeros(event) {
+        const key = event.key;
+        const regex = /^[0-9]$/;
+
+        if (!regex.test(key) && key !== "Backspace" && key !== "Tab" && key !== "Delete" && key !== "ArrowLeft" && key !== "ArrowRight") {
+            event.preventDefault(); // Evita que se ingrese un carácter no permitido
+            alert("Solo se permiten números.");
+        }
+    }
+
     function confirmarAlta(form) 
     {
         const confirmacion = confirm("¿Estás seguro de dar Alta a esta cuenta?");

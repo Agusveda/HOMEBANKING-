@@ -201,6 +201,7 @@
         	}
         	%>
     	</div>
+    	
     	<%
     	if(id == 2 )
 		{	
@@ -215,7 +216,6 @@
         
         <br>
         <br>
-    	<%} %>
     	
 <%
     Float ImporteEgreso = (Float) session.getAttribute("ImporteEgreso");
@@ -236,6 +236,7 @@
     <span class="ingreso">La cantidad de plata que se ingresó en la cuenta es </span>
     <span class="total"> <%= ImporteIngreso %> </span>
 </div>
+    	<%} %>
 
 
     	

@@ -76,6 +76,13 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	}
 
 
+	@Override
+	public boolean ExisteId(int id) 
+	{
+		return cuentaDao.ExisteId(id);
+	}
+
+
 	
 
 	

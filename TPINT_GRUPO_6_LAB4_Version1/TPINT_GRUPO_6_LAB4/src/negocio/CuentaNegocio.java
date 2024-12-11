@@ -17,5 +17,6 @@ public interface CuentaNegocio {
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 	public Cuenta obtenerCuentaPorIdCliente(int id);
 	public float ReporteCuentas(); 
+	public boolean ExisteId (int id);
 	
 }

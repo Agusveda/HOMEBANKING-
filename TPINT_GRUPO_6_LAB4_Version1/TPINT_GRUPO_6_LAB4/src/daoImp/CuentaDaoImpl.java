@@ -495,6 +495,47 @@ public class CuentaDaoImpl implements CuentaDao {
 		return saldo;
 	}
 
+	@Override
+	public boolean ExisteId(int dni) {
+		boolean exists = false;
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+
+	    try {
+	        
+	        connection = Conexion.getConexion().getSQLConexion();
+	        if (connection == null) {
+	            throw new SQLException("Conexión a la base de datos es nula");
+	        }
+
+	        
+	        String query = "SELECT COUNT(*) FROM cliente WHERE Id = ? and Activo = 1";
+	        preparedStatement = connection.prepareStatement(query);
+	        preparedStatement.setInt(1, dni);
+
+	        
+	        resultSet = preparedStatement.executeQuery();
+
+	        
+	        if (resultSet.next()) {
+	            exists = resultSet.getInt(1) > 0;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace(); 
+	    } finally {
+	        
+	        try {
+	            if (resultSet != null) resultSet.close();
+	            if (preparedStatement != null) preparedStatement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return exists;
+	}
+
     
     
     
