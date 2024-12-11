@@ -79,54 +79,7 @@ public class ServletCliente extends HttpServlet {
     
     	
     	// Modificar de Cliente
-        if (request.getParameter("btnModificarCliente") != null) {
-            Cliente cli = new Cliente();
-            Usuario usu = new Usuario();
-            ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
-
-            cli.setId(Integer.parseInt(request.getParameter("txtId")));
-            cli.setNombre(request.getParameter("txtNombre"));
-            cli.setApellido(request.getParameter("txtApellido"));
-            cli.setDni(Integer.parseInt(request.getParameter("txtDNI")));
-            cli.setCuil(Integer.parseInt(request.getParameter("txtCUIL")));
-            cli.setSexo(request.getParameter("txtSexo"));
-            cli.setNacionalidad(request.getParameter("txtNacionalidad"));
-            cli.setFechaNacimiento(request.getParameter("txtFechaNacimiento"));
-            cli.setDireccion(request.getParameter("txtDireccion"));
-            cli.setLocalidad(request.getParameter("txtLocalidad"));
-            cli.setProvincia(request.getParameter("txtProvincia"));
-            cli.setCorreoElectronico(request.getParameter("txtEmail"));
-            cli.setTelefono(Integer.parseInt(request.getParameter("txtTelefono")));
-
-            usu.setUsuario(request.getParameter("txtUsuario"));
-            usu.setContraseña(request.getParameter("txtContrasena"));
-            
-            int id = Integer.parseInt(request.getParameter("txtId"));
-            int dni = Integer.parseInt(request.getParameter("txtDNI"));
-            int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
-            String user = request.getParameter("txtUsuario");
-            
-            if (bandolero.ValidacionDniModificar(dni, id)) {
-                request.setAttribute("mensajeError", "El DNI ya existe en la base de datos. Por favor, intente con otro DNI.");
-                request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
-                return;
-            }
-            if (bandolero.ValidacionCuilModificar(cuil, id)) {
-                request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
-                request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
-                return;
-            }
-            if (bandolero.ValidacionUsuarioModificar(user, id)) {
-                request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
-                request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
-                return;
-            }
-
-            bandolero.ModificarCliente(cli, usu);
-            RequestDispatcher vari = request.getRequestDispatcher("/Administrador.jsp");
-            vari.forward(request, response);  
-            return;
-        }
+       
 
         // Manejo de alta de cliente
         if (request.getParameter("btnAltaCliente") != null) {
@@ -214,41 +167,6 @@ public class ServletCliente extends HttpServlet {
             }
             request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
         }
-
-        // Validación del login
-        String username = request.getParameter("txtuser");
-        String password = request.getParameter("txtpass");
-
-        if (username != null && password != null) 
-        {
-            ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
-            if (bandolero.verificarCredenciales(username, password) == null)
-            {
-            	request.getSession().setAttribute("Error", "Usuario o contraseña incorrectos");
-                request.getRequestDispatcher("/Error.jsp").forward(request, response);
-            }
-            Usuario usuario = bandolero.verificarCredenciales(username, password);
-            
-            Cliente cliente = bandolero.ObtenerDatosXid(usuario.getIdCliente()); //1. Cliente que inicia sesion
-            
-            if (usuario != null) {
-            	request.removeAttribute("mensajeError");
-                int tipoUsuario = usuario.getTipoUsuario();
-                request.getSession().setAttribute("IdCliente", usuario.getIdCliente());
-                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); //2. Nombre cliente sesion
-                request.getSession().setAttribute("tipoUsuario", tipoUsuario); //3. Tipo de usuario
-                
-                if (tipoUsuario == 1) 
-                {
-                    
-                    response.sendRedirect("Administrador.jsp");
-                } else {
-                
-                    response.sendRedirect("Cliente.jsp");
-                }
-            } 
-        }
-        
         
         if (nacionalidadId != null && !nacionalidadId.isEmpty()) {
             int idNacionalidad = Integer.parseInt(nacionalidadId);
@@ -293,6 +211,93 @@ public class ServletCliente extends HttpServlet {
         
 
        	}
+    	
+    	
+    	 if (request.getParameter("btnModificarCliente") != null) {
+             Cliente cli = new Cliente();
+             Usuario usu = new Usuario();
+             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
+
+             cli.setId(Integer.parseInt(request.getParameter("txtId")));
+             cli.setNombre(request.getParameter("txtNombre"));
+             cli.setApellido(request.getParameter("txtApellido"));
+             cli.setDni(Integer.parseInt(request.getParameter("txtDNI")));
+             cli.setCuil(Integer.parseInt(request.getParameter("txtCUIL")));
+             cli.setSexo(request.getParameter("txtSexo"));
+             cli.setNacionalidad(request.getParameter("txtNacionalidad"));
+             cli.setFechaNacimiento(request.getParameter("txtFechaNacimiento"));
+             cli.setDireccion(request.getParameter("txtDireccion"));
+             cli.setLocalidad(request.getParameter("txtLocalidad"));
+             cli.setProvincia(request.getParameter("txtProvincia"));
+             cli.setCorreoElectronico(request.getParameter("txtEmail"));
+             cli.setTelefono(Integer.parseInt(request.getParameter("txtTelefono")));
+
+             usu.setUsuario(request.getParameter("txtUsuario"));
+             usu.setContraseña(request.getParameter("txtContrasena"));
+             
+             int id = Integer.parseInt(request.getParameter("txtId"));
+             int dni = Integer.parseInt(request.getParameter("txtDNI"));
+             int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
+             String user = request.getParameter("txtUsuario");
+             
+             if (bandolero.ValidacionDniModificar(dni, id)) {
+                 request.setAttribute("mensajeError", "El DNI ya existe en la base de datos. Por favor, intente con otro DNI.");
+                 request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
+                 return;
+             }
+             if (bandolero.ValidacionCuilModificar(cuil, id)) {
+                 request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
+                 request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
+                 return;
+             }
+             if (bandolero.ValidacionUsuarioModificar(user, id)) {
+                 request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
+                 request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
+                 return;
+             }
+
+             bandolero.ModificarCliente(cli, usu);
+             RequestDispatcher vari = request.getRequestDispatcher("/Administrador.jsp");
+             vari.forward(request, response);  
+             return;
+         }
+
+        // Validación del login
+        String username = request.getParameter("txtuser");
+        String password = request.getParameter("txtpass");
+
+        if (username != null && password != null) 
+        {
+            ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
+            if (bandolero.verificarCredenciales(username, password) == null)
+            {
+            	request.getSession().setAttribute("Error", "Usuario o contraseña incorrectos");
+                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            }
+            Usuario usuario = bandolero.verificarCredenciales(username, password);
+            
+            Cliente cliente = bandolero.ObtenerDatosXid(usuario.getIdCliente()); //1. Cliente que inicia sesion
+            
+            if (usuario != null) {
+            	request.removeAttribute("mensajeError");
+                int tipoUsuario = usuario.getTipoUsuario();
+                request.getSession().setAttribute("IdCliente", usuario.getIdCliente());
+                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); //2. Nombre cliente sesion
+                request.getSession().setAttribute("tipoUsuario", tipoUsuario); //3. Tipo de usuario
+                
+                if (tipoUsuario == 1) 
+                {
+                    
+                    response.sendRedirect("Administrador.jsp");
+                } else {
+                
+                    response.sendRedirect("Cliente.jsp");
+                }
+            } 
+        }
+        
+        
+     
         
         String mail = request.getParameter("txtEmail");
 		String nuevaContraseña  = request.getParameter("txtPassNue");
