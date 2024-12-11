@@ -22,6 +22,7 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String ModificarCuenta = "UPDATE cuenta SET TipoCuenta = ?, NumeroCuenta = ?, CBU = ?, Saldo = ? WHERE Id = ?";
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
+    private static final String ObtenerProximoIdCuenta = "select * from cuenta ORDER BY Id DESC LIMIT 1;";
     
     //REPORTE
     private static final String ReporteCuentas = "SELECT SUM(Saldo) AS saldo FROM cuenta";
@@ -534,6 +535,49 @@ public class CuentaDaoImpl implements CuentaDao {
 	    }
 
 	    return exists;
+	}
+
+	@Override
+	public int ObtenerProximoIdCuenta() 
+	{
+		int id = 0;
+	    Connection connection = null;
+	    PreparedStatement preparedStatement = null;
+	    ResultSet resultSet = null;
+
+	    try {
+	        
+	        connection = Conexion.getConexion().getSQLConexion();
+	        if (connection == null) {
+	            throw new SQLException("Conexión a la base de datos es nula");
+	        }
+
+	        
+	        String query = ObtenerProximoIdCuenta;
+	        preparedStatement = connection.prepareStatement(query);
+
+	        
+	        resultSet = preparedStatement.executeQuery();
+
+	        
+	        if (resultSet.next()) 
+	        {
+	            id = resultSet.getInt("Id");
+	        }
+	        
+	    } catch (SQLException e) {
+	        e.printStackTrace(); 
+	    } finally {
+	        
+	        try {
+	            if (resultSet != null) resultSet.close();
+	            if (preparedStatement != null) preparedStatement.close();
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return id + 1;
 	}
 
     

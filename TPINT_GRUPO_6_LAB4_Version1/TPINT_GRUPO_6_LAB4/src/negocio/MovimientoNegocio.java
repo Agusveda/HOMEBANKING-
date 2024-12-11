@@ -11,6 +11,7 @@ public interface MovimientoNegocio
 	
 	public int ObtenerIdCuentaPorCBU (int CBU);
 	public boolean insertar(Movimiento movi, int idCue);
+	public boolean insertarAltaCuenta(Movimiento movi, int idCue);
 	public int ObtenerIdCuentaPorIdCliente(int IdCliente); 
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
 	public float ObtenerSaldoPorIdCuenta(int idCue);

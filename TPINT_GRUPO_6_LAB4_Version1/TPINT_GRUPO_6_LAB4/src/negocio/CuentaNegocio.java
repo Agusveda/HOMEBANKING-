@@ -18,5 +18,6 @@ public interface CuentaNegocio {
 	public Cuenta obtenerCuentaPorIdCliente(int id);
 	public float ReporteCuentas(); 
 	public boolean ExisteId (int id);
+	public int ObtenerProximoIdCuenta();
 	
 }

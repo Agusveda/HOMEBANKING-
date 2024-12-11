@@ -11,9 +11,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Entidades.Cuenta;
+import Entidades.Movimiento;
 import dao.CuentaDao;
 import daoImp.CuentaDaoImpl;
 import negocioImpl.CuentaNegocioImpl;
+import negocioImpl.MovimientoNegocioImpl;
 
 @WebServlet("/ServletCuenta")
 public class ServletCuenta extends HttpServlet {
@@ -24,9 +26,17 @@ public class ServletCuenta extends HttpServlet {
     	/// ALTA DE CUENTA
     	if (request.getParameter("btnAltaCuenta") != null) 
     	{
-    		
-    		
+    		Movimiento movi = new Movimiento();
+    		MovimientoNegocioImpl moviN = new MovimientoNegocioImpl();
     	    Cuenta cuenta = new Cuenta();
+    	    CuentaNegocioImpl cuentaN = new CuentaNegocioImpl();
+    	    int idCuenta = 0;
+    	    
+    	    /// Movimiento de Alta cuenta
+    	    movi.setTipoMovimiento(1);
+    	    movi.setImporte(10000);
+    	    movi.setDetalle("alta de cuenta");
+    	    idCuenta = cuentaN.ObtenerProximoIdCuenta();
     	    
     	    cuenta.setIdCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
     	    cuenta.setTipoCuenta(Integer.parseInt(request.getParameter("txtTipoCuenta")));
@@ -35,6 +45,7 @@ public class ServletCuenta extends HttpServlet {
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
     	    
     	    boolean insertado = cuentaNegocio.insertCuenta(cuenta);
+    	    moviN.insertarAltaCuenta(movi, idCuenta);
     	    String mensaje = "";
     	    
     	    if (insertado)

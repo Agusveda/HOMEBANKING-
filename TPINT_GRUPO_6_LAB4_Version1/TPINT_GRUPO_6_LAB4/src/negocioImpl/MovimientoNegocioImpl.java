@@ -93,4 +93,9 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		return MovimientoDao.IngresoDeCliente(DNICLIENTE);
 
 	}
+
+	@Override
+	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
+		return MovimientoDao.insertarAltaCuenta(movi, idCue);
+	}
 }

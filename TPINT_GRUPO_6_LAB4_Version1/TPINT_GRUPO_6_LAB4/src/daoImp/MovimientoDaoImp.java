@@ -25,6 +25,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String IngresarMovimientoPositivo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , ? , ? , ?)";
 	private static final String IngresarMovimientoNegativo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , -? , ? , ?)";
 	
+	//ALTA DE CUENTA
+	private static final String IngresarMovimientoPositivoAlta = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 1 , CURDATE() , ? , ? , ?)";
+
 	//CUENTAS
 	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
 	private static final String ModificarCuentaNegativo = "update cuenta SET Saldo = Saldo - ? where Id = ?";
@@ -1198,6 +1201,47 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    }
 
 	    return montoTotalPendiente;
+	}
+
+
+
+	@Override
+	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
+		System.out.println("Iniciando inserción de movimiento...");
+
+		PreparedStatement statementMovimientoP = null;
+		PreparedStatement statementMovimientoN = null;
+		PreparedStatement statementCuenta = null;
+		PreparedStatement statementBajaSueldo = null;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		if (conexion == null) {
+			System.out.println("No se pudo obtener la conexión a la base de datos.");
+			return false;
+		}
+		boolean isInsertExitoso = false;
+
+		try {
+
+			// Inserción en la tabla Cliente con generación de ID
+			System.out.println("Preparando declaración de inserción para movimiento...");
+
+			statementMovimientoP = conexion.prepareStatement(IngresarMovimientoPositivoAlta);
+
+			statementMovimientoP.setFloat(1, movi.getImporte());
+			statementMovimientoP.setInt(2, idCue); // SE DEBERIA OBTENER ID DE CUENTA
+			statementMovimientoP.setString(3, movi.getDetalle());
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error durante la inserción.");
+
+			try {
+				conexion.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return isInsertExitoso;
 	}
 
 

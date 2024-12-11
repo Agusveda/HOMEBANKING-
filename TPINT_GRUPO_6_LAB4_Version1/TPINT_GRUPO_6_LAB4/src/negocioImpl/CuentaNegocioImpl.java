@@ -83,6 +83,12 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	}
 
 
+	@Override
+	public int ObtenerProximoIdCuenta() {
+		return cuentaDao.ObtenerProximoIdCuenta();
+	}
+
+
 	
 
 	
