@@ -1,11 +1,10 @@
-<%@ page import="daoImp.MovimientoDaoImp"%>
-<%@ page import="dao.MovimientoDao"%>
-<%@ page import="java.util.ArrayList"%>
-<%@ page import="java.util.List"%>
-<%@ page import="java.util.Collections"%>
-<%@ page import="Entidades.Cuenta"%>
-<%@ page import="Entidades.Prestamo"%>
-<%@ page import="Entidades.Cuota"%>
+<%@ page import="daoImp.MovimientoDaoImp" %>
+<%@ page import="dao.MovimientoDao" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="Entidades.Cuenta" %>
+<%@ page import="Entidades.Prestamo" %>
+<%@ page import="Entidades.Cuota" %>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
@@ -15,13 +14,20 @@
     <link rel="stylesheet" type="text/css" href="css/PagoPrestamo.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <script type="text/javascript">
+        // Función para confirmar el pago antes de proceder
         function confirmarPago(cuotaId, montoPago) {
+            var cuentaSeleccionada = document.getElementById("cuenta").options[document.getElementById("cuenta").selectedIndex].value;
+            if (!cuentaSeleccionada) {
+                alert("Por favor, seleccione una cuenta antes de continuar.");
+                return false;
+            }
             var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: $" + montoPago);
             if (confirmacion) {
                 document.getElementById("cuotaId").value = cuotaId;
-                return true; 
+                document.getElementById("cuentaId").value = cuentaSeleccionada; 
+                return true;
             } else {
-                return false; 
+                return false;
             }
         }
     </script>
@@ -68,14 +74,27 @@
                     // Obtener suma de cuotas pendientes
                     totalCuotasPendientes = movimientoDao.obtenerSumaCuotasPendientes(idCliente);
 
+                    // Procesar el pago si se hace un POST
                     if (request.getMethod().equalsIgnoreCase("POST")) {
-                        int cuotaId = Integer.parseInt(request.getParameter("cuotaId"));
-                        int cuentaId = Integer.parseInt(request.getParameter("cuentaId"));
-                        float montoPago = Float.parseFloat(request.getParameter("montoPago"));
+                        String cuotaIdParam = request.getParameter("cuotaId");
+                        String cuentaIdParam = request.getParameter("cuentaId");
+                        String montoPagoParam = request.getParameter("montoPago");
 
-                        // Realizar el pago
-                        boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
-                        mensaje = exito ? "El pago se realizó con éxito." : "Ocurrió un error al realizar el pago.";
+                        // Validar que los parámetros no sean nulos ni vacíos
+                        if (cuotaIdParam != null && !cuotaIdParam.isEmpty() &&
+                            cuentaIdParam != null && !cuentaIdParam.isEmpty() &&
+                            montoPagoParam != null && !montoPagoParam.isEmpty()) {
+
+                            int cuotaId = Integer.parseInt(cuotaIdParam);
+                            int cuentaId = Integer.parseInt(cuentaIdParam);
+                            float montoPago = Float.parseFloat(montoPagoParam);
+
+                            // Realizar el pago
+                            boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
+                            mensaje = exito ? "El pago se realizó con éxito." : "Ocurrió un error al realizar el pago.";
+                        } else {
+                            mensaje = "Faltan parámetros requeridos para realizar el pago.";
+                        }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -83,7 +102,6 @@
                 }
         %>
 
-        <!-- Mensaje de resultado -->
         <%
             if (!mensaje.isEmpty()) {
         %>
@@ -93,7 +111,27 @@
         %>
 
         <div class="form-group">
-
+            <label for="cuenta">Cuenta a debitar:</label>
+            <select id="cuenta" name="cuentaId" required>
+                <option value="">Seleccione...</option>
+                <%
+                    if (cuentas != null && !cuentas.isEmpty()) {
+                        for (Cuenta cuenta : cuentas) {
+                            String tipoCuenta = (cuenta.getTipoCuenta() == 1) ? " (CAJA AHORRO)" : " (CUENTA CORRIENTE)";
+                            double saldo = cuenta.getSaldo();
+                %>
+                    <option value="<%= cuenta.getId() %>">
+                        <%= cuenta.getNumeroCuenta() %> - <%= tipoCuenta %> - Saldo: $<%= String.format("%.2f", saldo) %>
+                    </option>
+                <%
+                        }
+                    } else {
+                %>
+                    <option value="">No tiene cuentas asociadas</option>
+                <%
+                    }
+                %>
+            </select>
         </div>
 
         <div class="form-group">
@@ -125,7 +163,6 @@
                     } else {
                         for (Cuota cuota : cuotas) {
                             String estado = cuota.isPagada() ? "Pagada" : "Pendiente";
-                            Cuenta cuenta = cuentas.isEmpty() ? null : cuentas.get(0);
                 %>
                     <tr>
                         <td><%= cuota.getIdPrestamo() %></td>
@@ -134,10 +171,10 @@
                         <td><%= cuota.getFechaPago() != null ? cuota.getFechaPago() : "Pendiente" %></td>
                         <td><%= estado %></td>
                         <td>
-                            <% if (!cuota.isPagada() && cuenta != null) { %>
+                            <% if (!cuota.isPagada()) { %>
                                 <form action="" method="POST" onsubmit="return confirmarPago(<%= cuota.getId() %>, <%= cuota.getMonto() %>)">
-                                    <input type="hidden" name="cuotaId" value="<%= cuota.getId() %>" />
-         							 <input type="hidden" name="cuentaId" value="<%= cuenta.getId() %>" />
+                                    <input type="hidden" name="cuotaId" id="cuotaId" value="<%= cuota.getId() %>" />
+                                    <input type="hidden" name="cuentaId" id="cuentaId" value="<%= request.getParameter("cuentaId") %>" />
                                     <input type="hidden" name="montoPago" value="<%= cuota.getMonto() %>" />
                                     <button type="submit" class="btn-pagar">Pagar</button>
                                 </form>
