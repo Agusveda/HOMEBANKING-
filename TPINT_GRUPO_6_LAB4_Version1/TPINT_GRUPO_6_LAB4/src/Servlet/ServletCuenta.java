@@ -57,9 +57,13 @@ public class ServletCuenta extends HttpServlet {
     	    {
     	    	cuentas = cuentaN.CuentasPorCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
     	    	
+    	    	if(cuentas >= 3)
+    	    	{
     	    		request.setAttribute("mensajeError", "Los clientes no pueden tener más de 3 cuentas");
     	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
-    	    		return;    	    		
+    	    		return;    	    		    	    		
+    	    	}
+    	    	
     	    }
     	    
     	    /// Movimiento de Alta cuenta
