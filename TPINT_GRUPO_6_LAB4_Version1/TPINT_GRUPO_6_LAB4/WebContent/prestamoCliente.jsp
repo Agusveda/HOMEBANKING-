@@ -58,10 +58,11 @@
         <label for="cuotas">Cantidad de Cuotas:</label>
         <select id="cuotas" name="cuotas" required>
             <option value="">Seleccione...</option>
+            <option value="1">1 cuota</option>
+            <option value="3">3 cuotas</option>
             <option value="6">6 cuotas</option>
+            <option value="9">9 cuotas</option>
             <option value="12">12 cuotas</option>
-            <option value="24">24 cuotas</option>
-            <option value="36">36 cuotas</option>
         </select>
         
         <label for="cuenta">Cuenta de Depósito:</label>

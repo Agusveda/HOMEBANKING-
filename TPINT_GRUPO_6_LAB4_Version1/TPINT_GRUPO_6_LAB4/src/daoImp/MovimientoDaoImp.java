@@ -991,8 +991,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return prestamos;
 	}
 
-
-	
 	@Override
 	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo) {
 	    List<Cuota> cuotas = new ArrayList<>();
@@ -1001,16 +999,13 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    ResultSet rs = null;
 
 	    try {
-	        // Obtener la conexión a la base de datos
 	        con = Conexion.getConexion().getSQLConexion();
 
-	        // Verificar si la conexión está cerrada y reconectar si es necesario
 	        if (con == null || con.isClosed()) {
 	            System.out.println("Conexión cerrada, intentando reconectar...");
 	            con = Conexion.getConexion().getSQLConexion();
 	        }
 
-	        // Base de la consulta SQL
 	        String sqlBase = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada " +
 	                         "FROM cuota cu " +
 	                         "JOIN prestamo p ON cu.IdPrestamo = p.Id " +
@@ -1025,10 +1020,10 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	        // Preparar la consulta
 	        ps = con.prepareStatement(sqlBase);
-	        ps.setInt(1, idCliente);  // Configurar el idCliente
+	        ps.setInt(1, idCliente);  
 
 	        if (idPrestamo != 0) {
-	            ps.setInt(2, idPrestamo);  // Configurar el idPrestamo solo si se pasa
+	            ps.setInt(2, idPrestamo); 
 	        }
 
 	        // Ejecutar la consulta
@@ -1047,14 +1042,13 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	            cuotas.add(cuota);
 
-	            // Depuración: Mostrar cuota obtenida
 	            System.out.println("Cuota obtenida: " + cuota.getId() + ", " + cuota.getNumeroCuota() + ", Monto: " + cuota.getMonto());
 	        }
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	        System.out.println("Error al obtener las cuotas.");
 	    } finally {
-	        // Asegurarse de cerrar los recursos
+
 	        try {
 	            if (rs != null) rs.close();
 	            if (ps != null) ps.close();
@@ -1064,7 +1058,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	        }
 	    }
 
-	    // Si no se encontraron cuotas, log de la situación
 	    if (cuotas.isEmpty()) {
 	        System.out.println("No se encontraron cuotas para el cliente con ID: " + idCliente);
 	    }
@@ -1080,18 +1073,15 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    PreparedStatement psUpdateCuota = null;
 
 	    try {
-	        // Obtener conexión
 	        conn = Conexion.getConexion().getSQLConexion();
 
-	        // Verificar si la conexión está cerrada y reconectar si es necesario
 	        if (conn == null || conn.isClosed()) {
 	            System.out.println("Conexión cerrada, intentando reconectar...");
 	            conn = Conexion.getConexion().getSQLConexion();
 	        }
 
-	        conn.setAutoCommit(false); // Iniciar la transacción
+	        conn.setAutoCommit(false); 
 
-	        // Verificar saldo suficiente
 	        String sqlSaldo = "SELECT Saldo FROM cuenta WHERE Id = ?";
 	        psSaldo = conn.prepareStatement(sqlSaldo);
 	        psSaldo.setInt(1, cuentaId);
@@ -1106,36 +1096,34 @@ public class MovimientoDaoImp implements MovimientoDao {
 	            throw new Exception("La cuenta no existe.");
 	        }
 
-	        // Actualizar el saldo de la cuenta
 	        String sqlUpdateCuenta = "UPDATE cuenta SET Saldo = Saldo - ? WHERE Id = ?";
 	        psUpdateCuenta = conn.prepareStatement(sqlUpdateCuenta);
 	        psUpdateCuenta.setFloat(1, monto);
 	        psUpdateCuenta.setInt(2, cuentaId);
 	        psUpdateCuenta.executeUpdate();
 
-	        // Insertar el movimiento de pago de préstamo
 	        String sqlInsertMovimiento = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) " +
 	                                      "VALUES (?, NOW(), ?, ?, ?)";
 	        psInsertMovimiento = conn.prepareStatement(sqlInsertMovimiento);
 	        psInsertMovimiento.setInt(1, 3); // 3 representa el pago de préstamo
-	        psInsertMovimiento.setFloat(2, -monto); // Movimiento negativo
+	        psInsertMovimiento.setFloat(2, -monto); 
 	        psInsertMovimiento.setInt(3, cuentaId);
 	        psInsertMovimiento.setString(4, "Pago de préstamo (Cuota ID: " + cuotaId + ")");
 	        psInsertMovimiento.executeUpdate();
 
-	        // Actualizar la cuota como pagada
+
 	        String sqlUpdateCuota = "UPDATE cuota SET estaPagada = 1 WHERE Id = ?";
 	        psUpdateCuota = conn.prepareStatement(sqlUpdateCuota);
 	        psUpdateCuota.setInt(1, cuotaId);
 	        psUpdateCuota.executeUpdate();
 
-	        conn.commit(); // Confirmar la transacción
+	        conn.commit(); 
 	        return true;
 
 	    } catch (Exception e) {
 	        if (conn != null) {
 	            try {
-	                conn.rollback(); // Revertir la transacción en caso de error
+	                conn.rollback(); // 
 	            } catch (SQLException rollbackEx) {
 	                rollbackEx.printStackTrace();
 	            }
@@ -1144,7 +1132,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	        return false;
 
 	    } finally {
-	        // Cerrar recursos
 	        try {
 	            if (psSaldo != null) psSaldo.close();
 	            if (psUpdateCuenta != null) psUpdateCuenta.close();
@@ -1157,7 +1144,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    }
 	}
 
-
 	public double obtenerSumaCuotasPendientes(int idCliente) {
 	    Connection conn = null;
 	    PreparedStatement ps = null;
@@ -1165,16 +1151,14 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    double montoTotalPendiente = 0;
 
 	    try {
-	        // Obtener conexión
+
 	        conn = Conexion.getConexion().getSQLConexion();
 
-	        // Verificar si la conexión está cerrada y reconectar si es necesario
 	        if (conn == null || conn.isClosed()) {
 	            System.out.println("Conexión cerrada, intentando reconectar...");
 	            conn = Conexion.getConexion().getSQLConexion();
 	        }
 
-	        // Consulta para obtener la suma de las cuotas pendientes
 	        String sql = "SELECT SUM(cu.Monto) AS MontoTotalPendiente " +
 	                     "FROM cuota cu " +
 	                     "JOIN prestamo p ON cu.IdPrestamo = p.Id " +
@@ -1192,7 +1176,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	        montoTotalPendiente = 0;
 
 	    } finally {
-	        // Cerrar recursos
 	        try {
 	            if (rs != null) rs.close();
 	            if (ps != null) ps.close();
@@ -1205,8 +1188,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    return montoTotalPendiente;
 	}
 
-
-
+	
 	@Override
 	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -1221,13 +1203,12 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 		try {
 
-			// Inserción en la tabla Cliente con generación de ID
 			System.out.println("Preparando declaración de inserción para movimiento...");
 
 			statementMovimientoP = conexion.prepareStatement(IngresarMovimientoPositivoAlta);
 
 			statementMovimientoP.setFloat(1, movi.getImporte());
-			statementMovimientoP.setInt(2, idCue); // SE DEBERIA OBTENER ID DE CUENTA
+			statementMovimientoP.setInt(2, idCue);
 			statementMovimientoP.setString(3, movi.getDetalle());
 			
 			if (statementMovimientoP.executeUpdate() > 0) 
@@ -1248,7 +1229,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		}
 		return isInsertExitoso;
 	}
-
 
 }
 

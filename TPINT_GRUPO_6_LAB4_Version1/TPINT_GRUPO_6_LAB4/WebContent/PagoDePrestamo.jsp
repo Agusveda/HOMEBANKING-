@@ -24,7 +24,7 @@
             var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: $" + montoPago);
             if (confirmacion) {
                 document.getElementById("cuotaId").value = cuotaId;
-                document.getElementById("cuentaId").value = cuentaSeleccionada;  // Añadido para enviar la cuenta seleccionada
+                document.getElementById("cuentaId").value = cuentaSeleccionada; 
                 return true;
             } else {
                 return false;
@@ -102,7 +102,6 @@
                 }
         %>
 
-        <!-- Mensaje de resultado -->
         <%
             if (!mensaje.isEmpty()) {
         %>
