@@ -41,7 +41,7 @@ public class ServletCuenta extends HttpServlet {
     	    if (request.getParameter("txtIdCliente") != null)
     	    {
     	    	b = usuN.EsAdmin(Integer.parseInt(request.getParameter("txtIdCliente")));
-    	    	if (b)
+    	    	if (!b)
     	    	{
     	    		request.setAttribute("mensajeError", "Los administradores no pueden crerse una cuenta");
     	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
