@@ -1070,8 +1070,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    }
 
 	    return cuotas;
-	}
-
+	}	
+	
 	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
 	    Connection conn = null;
 	    PreparedStatement psSaldo = null;
@@ -1156,6 +1156,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 	        }
 	    }
 	}
+
+
 	public double obtenerSumaCuotasPendientes(int idCliente) {
 	    Connection conn = null;
 	    PreparedStatement ps = null;
