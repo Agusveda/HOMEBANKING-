@@ -23,7 +23,6 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
 
 <div class="encabezado">
     <h1>Listado de Clientes</h1>
@@ -119,7 +118,7 @@
     <button type="button" class="button button-blue" onclick="modificarCliente()">Modificar Cliente</button>
     <button type="button" class="button button-red" onclick="eliminarCliente()">Eliminar Cliente</button>
 </div>
-<jsp:include page="Footer.jsp"/>
+
 <script>
     let selectedRow = null;
     let selectedId = null;

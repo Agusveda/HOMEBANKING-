@@ -58,26 +58,29 @@
             </p>
             <p>
                 <label class="form-label" for="nombre">Nombre</label>
-                <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" value="<%= cli.getNombre() %>" required name="txtNombre">
+                <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" value="<%= cli.getNombre() %>" required name="txtNombre" onkeypress="validarSoloLetras(event)">
             </p>
             <p>
                 <label class="form-label" for="apellido">Apellido</label>
-                <input class="controls" id="apellido" type="text" placeholder="Ingrese el apellido" value="<%= cli.getApellido() %>" required name="txtApellido">
+                <input class="controls" id="apellido" type="text" placeholder="Ingrese el apellido" value="<%= cli.getApellido() %>" required name="txtApellido" onkeypress="validarSoloLetras(event)">
             </p>
             <p>
                 <label class="form-label" for="dni">DNI</label>
-                <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" Value="<%= cli.getDni() %>" required name="txtDNI">
+                <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" Value="<%= cli.getDni() %>" required name="txtDNI" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudDni(this)">
             </p>
             <p>
                 <label class="form-label" for="cuil">CUIL</label>
-                <input class="controls" id="cuil" type="number" placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL">
+                <input class="controls" id="cuil" type="number"  placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudCuil(this)" >
             </p>
-           <select class="controls" id="sexo" required name="txtSexo">
-    <option value="">Seleccione</option>
-    <option value="Masculino" <%= "Masculino".equals(cli.getSexo()) ? "selected" : "" %>>Masculino</option>
-    <option value="Femenino" <%= "Femenino".equals(cli.getSexo()) ? "selected" : "" %>>Femenino</option>
-    <option value="Otro" <%= "Otro".equals(cli.getSexo()) ? "selected" : "" %>>Otro</option>
-</select>
+            <p>
+            		<label class="form-label" for="sexo">Sexo</label>
+		           <select class="controls" id="sexo" required name="txtSexo">
+					    <option value="">Seleccione</option>
+					    <option value="Masculino" <%= "Masculino".equals(cli.getSexo()) ? "selected" : "" %>>Masculino</option>
+					    <option value="Femenino" <%= "Femenino".equals(cli.getSexo()) ? "selected" : "" %>>Femenino</option>
+					    <option value="Otro" <%= "Otro".equals(cli.getSexo()) ? "selected" : "" %>>Otro</option>
+				   </select>
+			</p>
             <p>
                 <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
                 <input class="controls" id="fechaNacimiento" type="date" Value="<%= cli.getFechaNacimiento() %>" required name="txtFechaNacimiento">
@@ -105,15 +108,15 @@
             </p>
             <p>
                 <label class="form-label" for="telefono">Teléfono</label>
-                <input class="controls" id="telefono" type="text" placeholder="Ingrese el teléfono" Value="<%= cli.getTelefono() %>" required name="txtTelefono">
+                <input class="controls" id="telefono" type="text" placeholder="Ingrese el teléfono" Value="<%= cli.getTelefono() %>" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
             </p>
-                        <p>
+            <p>
                 <label class="form-label" for="usuario">Usuario</label>
                 <input class="controls" id="usuario" type="text" placeholder="Ingrese el nombre de usuario" value="<%= cli.getUsuario() %>" required name="txtUsuario">
             </p>
             <p>
                 <label class="form-label" for="contrasena">Contraseña</label>
-                <input class="controls" id="contrasena" type="password" placeholder="Ingrese la contraseña" value="<%= cli.getContrasenia() %>" required name="txtContrasena">
+                <input class="controls" id="contrasena" type="password" readonly placeholder="Ingrese la contraseña" value="<%= cli.getContrasenia() %>" required name="txtContrasena">
             </p>
             
         </fieldset>
@@ -126,6 +129,73 @@
        
     </form>
     </div>
+    
+    <script>
+function confirmarAlta(form) 
+{
+    const confirmacion = confirm("¿Estás seguro de dar Alta este cliente?");
+    if (confirmacion) {
+        return true;
+    } else {
+        console.log("Alta cancelada.");
+        return false;
+    }
+}
+   
+    
+function validarSoloLetras(event) {
+    const key = event.key;
+    const regex = /^[a-zA-Z]+$/;
+
+    if (!regex.test(key) && key !== "Backspace") {
+        event.preventDefault(); // Evita que se ingrese el carácter no permitido
+        alert("Solo se permiten letras.");
+    }
+}
+
+function validarSoloNumeros(event) {
+    const key = event.key;
+    const regex = /^[0-9]$/;
+
+    if (!regex.test(key) && key !== "Backspace" && key !== "Tab" && key !== "Delete" && key !== "ArrowLeft" && key !== "ArrowRight") {
+        event.preventDefault(); // Evita que se ingrese un carácter no permitido
+        alert("Solo se permiten números.");
+    }
+}
+
+function validarLongitudDni(input) {
+	const longitudExacta   = 8;
+	 
+    if (input.value.length > longitudExacta) {
+        alert("El DNI no puede tener más de 8 dígitos.");
+        input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
+        return;
+    }
+    
+
+}
+
+function validarLongitudCuil(input) {
+    const longitudExacta   = 10;
+ 
+    if (input.value.length > longitudExacta) {
+        alert("El CUIL no puede tener más de 11 dígitos.");
+        input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
+        return;
+    }
+    
+}
+
+function validaYConfirma(form){
+	if(!confirmarAlta(form)){
+		return false;
+	}
+	return true;
+	
+}
+
+
+</script>
     
 
 <jsp:include page="Footer.jsp"/>

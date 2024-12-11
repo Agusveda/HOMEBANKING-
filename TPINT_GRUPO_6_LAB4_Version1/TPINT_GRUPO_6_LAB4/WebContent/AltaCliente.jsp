@@ -202,7 +202,7 @@
         </form>
     </div>
 
-<!-- Script para mostrar el modal -->
+
 <script>
 function confirmarAlta(form) 
 {
@@ -249,7 +249,7 @@ function validarLongitudDni(input) {
 }
 
 function validarLongitudCuil(input) {
-    const longitudExacta   = 11;
+    const longitudExacta   = 10;
  
     if (input.value.length > longitudExacta) {
         alert("El CUIL no puede tener más de 11 dígitos.");
@@ -259,32 +259,13 @@ function validarLongitudCuil(input) {
     
 }
 
-
-function validarContraseñas() {
-    const contrasena1 = document.getElementById("contrasena").value;
-    const contrasena2 = document.getElementById("contrasena2").value;
-
-    if (contrasena1 !== contrasena2) {
-        alert("Las contraseñas no coinciden. Por favor, intente nuevamente.");
-        return false; 
-    }
-
-    return true; 
-}
-
 function validaYConfirma(form){
-	/*
-	if(!validarContraseñas()){
-		return false;
-	}
-	*/
 	if(!confirmarAlta(form)){
 		return false;
 	}
 	return true;
 	
 }
-
 
 </script>
     
