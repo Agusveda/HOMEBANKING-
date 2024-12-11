@@ -1213,6 +1213,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 			
 			if (statementMovimientoP.executeUpdate() > 0) 
 			{
+				conexion.commit();
 				System.out.println("Inserción en Movimiento Positivo exitoso.");
 				isInsertExitoso = true;
 			}

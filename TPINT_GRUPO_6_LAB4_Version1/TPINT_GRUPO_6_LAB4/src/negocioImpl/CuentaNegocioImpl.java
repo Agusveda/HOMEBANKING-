@@ -89,6 +89,13 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	}
 
 
+	@Override
+	public int CuentasPorCliente(int idCliente) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
 	
 
 	
