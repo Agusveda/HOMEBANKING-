@@ -12,7 +12,7 @@ public class ContraseñaDiferente extends Exception{
 
 	@Override
 	public String getMessage() {
-		
 		return "Las contraseñas no son iguales!";
 	}
 }
+

@@ -16,6 +16,7 @@ import Entidades.Localidad;
 import Entidades.Provincia;
 import Entidades.Usuario;
 import Excepciones.ContraseñaDiferente;
+import Excepciones.UsuarioRepetido;
 import daoImp.ClienteDaoImp;
 
 @WebServlet("/ServletBanco")
@@ -146,12 +147,19 @@ public class ServletCliente extends HttpServlet {
                 request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
                 return;
             }
-            if (bandolero.ValidacionUsuario(user)) {
-                request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
-                System.out.println("Mensaje de error: El USUARIO ya existe en la base de datos.");
-                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);	
-                return;
-            }
+            
+            try {
+            	if (bandolero.ValidacionUsuario(user)) {
+            		throw new UsuarioRepetido("El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
+            	}
+				
+			} catch (UsuarioRepetido e) {
+				System.out.println("Excepción capturada: " + e.getMensajeError());
+		        request.setAttribute("mensajeError", e.getMensajeError());
+		        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+		        return;
+			}
+            
             
             
             boolean insertado = bandao.insertCliente(cli, usu);
