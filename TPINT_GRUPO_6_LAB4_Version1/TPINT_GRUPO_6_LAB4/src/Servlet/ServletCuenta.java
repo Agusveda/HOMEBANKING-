@@ -67,15 +67,15 @@ public class ServletCuenta extends HttpServlet {
     	    //Validación para que un cliente no tenga más de 3 cuentas.
     	    try {
     	        if (request.getParameter("txtIdCliente") != null) {
-    	            int idCliente = Integer.parseInt(request.getParameter("txtIdCliente"));
-    	            cuentas = cuentaN.CuentasPorCliente(idCliente);
-    	            
+    	        	int idCliente = Integer.parseInt(request.getParameter("txtIdCliente"));
+    	            cuentaN.verificarCuentasPorCliente(idCliente);
     	        }
     	    } catch (ClienteExcedeCantCuentas e) {
-    	        request.setAttribute("mensajeError", e.getMensajeError());
+    	        System.out.println("Excepción capturada: " + e.getMessage());
+    	        request.setAttribute("mensajeError", e.getMessage());
     	        request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
     	        return;
-    	    } 
+    	    }
     	    
     	    /// Movimiento de Alta cuenta
     	    movi.setTipoMovimiento(1);

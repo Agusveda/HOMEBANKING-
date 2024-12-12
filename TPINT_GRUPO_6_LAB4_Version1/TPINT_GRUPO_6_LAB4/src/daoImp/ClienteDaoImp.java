@@ -318,8 +318,10 @@ public boolean eliminarCliente(int idCliente) {
     Connection conexion = null;
     PreparedStatement stmt = null;
     PreparedStatement stmtU = null;
+    PreparedStatement stmtCuentas = null;
     boolean success = false;
     boolean success2 = false;
+    boolean success3 = false;
 
     try {
       
@@ -356,7 +358,7 @@ public boolean eliminarCliente(int idCliente) {
             conexion.rollback(); 
         }
 
-        
+        /// ELIMINAR USUARIO
         String query2 = "UPDATE usuario SET Activo = 0 WHERE idCliente = ?";
         stmtU = conexion.prepareStatement(query2);
         stmtU.setInt(1, idCliente);
@@ -369,6 +371,25 @@ public boolean eliminarCliente(int idCliente) {
         if (rowsAffected2 > 0) {
             success2 = true;
             System.out.println("Cliente eliminado exitosamente. Filas afectadas: " + rowsAffected2);
+            conexion.commit(); 
+        } else {
+            System.out.println("No se encontró ningún cliente con ID: " + idCliente);
+            conexion.rollback(); 
+        }
+        
+        ///ELIMINAR CUENTA
+        String query3 = "UPDATE cuenta SET Activo = 0 WHERE idCliente = ?";
+        stmtCuentas = conexion.prepareStatement(query3);
+        stmtCuentas.setInt(1, idCliente);
+
+        System.out.println("Ejecutando actualización para eliminar cliente con ID: " + idCliente);
+        int rowsAffected3 = stmtCuentas.executeUpdate();
+
+   
+ 
+        if (rowsAffected3 > 0) {
+            success3 = true;
+            System.out.println("Cliente eliminado exitosamente. Filas afectadas: " + rowsAffected3);
             conexion.commit(); 
         } else {
             System.out.println("No se encontró ningún cliente con ID: " + idCliente);

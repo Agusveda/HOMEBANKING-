@@ -20,7 +20,7 @@ public interface CuentaNegocio {
 	public float ReporteCuentas(); 
 	public boolean ExisteId (int id);
 	public int ObtenerProximoIdCuenta();
-	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
+	public void verificarCuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
 	public int ClienteInactivo(int idCliente);
 	
 }

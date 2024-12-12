@@ -586,45 +586,26 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	
 	@Override
-	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas 
+	public void verificarCuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas
 	{
-        int cuentas = 0;
-        PreparedStatement statement = null;
-        ResultSet rs = null;
-        Connection conexion = Conexion.getConexion().getSQLConexion();
+		int cuentas = 0;
+	    try (Connection conexion = Conexion.getConexion().getSQLConexion();
+	         PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) FROM Cuenta WHERE idCliente = ?")) {
 
-        try {
-            if (conexion == null || conexion.isClosed()) {
-                throw new SQLException("La conexión está cerrada.");
-            }
+	        statement.setInt(1, idCliente);
+	        try (ResultSet rs = statement.executeQuery()) {
+	            if (rs.next()) {
+	                cuentas = rs.getInt(1);
+	            }
+	        }
 
-            statement = conexion.prepareStatement(CuentasPorCliente);
-            statement.setInt(1, idCliente);
-            rs = statement.executeQuery();
-
-            if (rs.next()) 
-            {
-            	cuentas++;
-            }
-            
-
-            if(cuentas >=3) {
-            	throw new ClienteExcedeCantCuentas("Los clientes no pueden tener más de 3 cuentas");
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (statement != null) statement.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return cuentas;
+	        if (cuentas >= 3) {
+	            throw new ClienteExcedeCantCuentas("Los clientes no pueden tener más de 3 cuentas.");
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw new RuntimeException("Error al verificar las cuentas del cliente.", e);
+	    }
 	}
 	
 	@Override

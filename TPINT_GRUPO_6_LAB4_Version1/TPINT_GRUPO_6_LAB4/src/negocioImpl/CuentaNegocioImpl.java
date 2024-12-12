@@ -100,8 +100,10 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
 
 	@Override
-	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas {
-		return cuentaDao.CuentasPorCliente(idCliente);
+	public void verificarCuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas 
+	{
+		cuentaDao.verificarCuentasPorCliente(idCliente);
+		
 	}
 
 
