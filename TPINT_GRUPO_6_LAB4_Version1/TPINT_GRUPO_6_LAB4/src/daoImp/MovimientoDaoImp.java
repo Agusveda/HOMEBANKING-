@@ -20,15 +20,12 @@ import dao.MovimientoDao;
 
 public class MovimientoDaoImp implements MovimientoDao {
 	
-	//MOVIMIENTOS
 	private static final String ListarMovimientosPorCuenta = "Select * from movimiento where IdCuenta = ?";
 	private static final String IngresarMovimientoPositivo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , ? , ? , ?)";
 	private static final String IngresarMovimientoNegativo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , -? , ? , ?)";
 	
-	//ALTA DE CUENTA
 	private static final String IngresarMovimientoPositivoAlta = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 1 , CURDATE() , ? , ? , ?)";
 
-	//CUENTAS
 	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
 	private static final String ModificarCuentaNegativo = "update cuenta SET Saldo = Saldo - ? where Id = ?";
 	private static final String ObtenerIdCuentaPorCBU = "select Id from cuenta where CBU = ? and Activo = 1";
@@ -37,11 +34,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	
-	//PRESTAMOS
 	private static final String InsertarPrestamo = "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas, confirmacion) VALUES (?,?, ?, NOW(), ?, ?, ?, ?)";	
 	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where Id = ? ";
 	
-	//REPORTES
 	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE FechaMovimiento BETWEEN ? AND ? AND Importe > 0 and TipoMovimiento = ?";
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";	
@@ -380,6 +375,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return exists;
 	}
+
 	
 	@Override
 	public boolean insertarPrestamo(Prestamo prestamo) {
@@ -449,7 +445,10 @@ public class MovimientoDaoImp implements MovimientoDao {
 	    }
 
 	    return isInsertExitoso;
-	}
+	} 
+	
+	
+	
 
 	@Override
 	public ArrayList<Prestamo> ListPrestamosPedidos() {
@@ -503,59 +502,102 @@ public class MovimientoDaoImp implements MovimientoDao {
 	
 	
 	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
-		   Connection connection = null;
-		    PreparedStatement statement = null;
-		    boolean isUpdateExitoso = false;
-		    
-		    try {
-		        connection = Conexion.getConexion().getSQLConexion(); 
-		        if (connection == null) {
-		            System.out.println("No se pudo obtener la conexión a la base de datos.");
-		            return false;
-		        }
+	    Connection connection = null;
+	    PreparedStatement statement = null;
+	    boolean isUpdateExitoso = false;
 
-		        System.out.println("Actualizando préstamo con ID: " + idPrestamo);
-		        System.out.println("Nuevo estado de confirmación: " + confirmacion);
+	    try {
+	        connection = Conexion.getConexion().getSQLConexion(); 
+	        if (connection == null) {
+	            System.out.println("No se pudo obtener la conexión a la base de datos.");
+	            return false;
+	        }
 
-		        String updateQuery = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
-		        statement = connection.prepareStatement(updateQuery);
-		        statement.setInt(1, confirmacion);
-		        statement.setInt(2, idPrestamo);
+	        connection.setAutoCommit(false);
 
-		        int rowsAffected = statement.executeUpdate();
+	        System.out.println("Actualizando préstamo con ID: " + idPrestamo);
+	        System.out.println("Nuevo estado de confirmación: " + confirmacion);
 
-		        if (rowsAffected > 0) {
-		            System.out.println("El estado del préstamo se ha actualizado correctamente. Filas afectadas: " + rowsAffected);
-		            isUpdateExitoso = true;
-		        } else {
-		            System.out.println("No se actualizó ninguna fila. Verifica si el ID de préstamo es válido.");
-		        }
-		    } catch (SQLException e) {
-		        e.printStackTrace();
-		        System.out.println("Error durante la actualización.");
-		        if (connection != null) {
-		            try {
-		                connection.rollback(); 
-		            } catch (SQLException e1) {
-		                e1.printStackTrace();
-		            }
-		        }
-		    } finally {
-		        try {
-		            if (statement != null) {
-		                statement.close(); 
-		            }
-		            if (connection != null) {
-		                connection.setAutoCommit(true); 
-		               
-		            }
-		        } catch (SQLException e) {
-		            e.printStackTrace();
-		        }
-		    }
-		    return isUpdateExitoso;
-		}
+	        String updateQuery = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
+	        statement = connection.prepareStatement(updateQuery);
+	        statement.setInt(1, confirmacion);
+	        statement.setInt(2, idPrestamo);
 
+	        int rowsAffected = statement.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            System.out.println("El estado del préstamo se ha actualizado correctamente. Filas afectadas: " + rowsAffected);
+	            isUpdateExitoso = true;
+
+	            String sqlInsertMovimiento = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) " +
+	                    "VALUES (?, NOW(), ?, ?, ?)";
+	            
+	            try (PreparedStatement stmtMovimiento = connection.prepareStatement(sqlInsertMovimiento)) {
+	                stmtMovimiento.setInt(1, 2); // 
+	                stmtMovimiento.setFloat(2, obtenerImportePrestamo(idPrestamo, connection)); 
+	                stmtMovimiento.setInt(3, obtenerIdCuentaPrestamo(idPrestamo, connection)); 
+	                stmtMovimiento.setString(4, "Préstamo aprobado"); 
+	                stmtMovimiento.executeUpdate();
+	            }
+
+	            connection.commit(); 
+	        } else {
+	            System.out.println("No se actualizó ninguna fila. Verifica si el ID de préstamo es válido.");
+	            connection.rollback(); 
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la actualización.");
+	        if (connection != null) {
+	            try {
+	                connection.rollback(); 
+	            } catch (SQLException e1) {
+	                e1.printStackTrace();
+	            }
+	        }
+	    } finally {
+	        try {
+	            if (statement != null) {
+	                statement.close(); 
+	            }
+	            if (connection != null) {
+	                connection.setAutoCommit(true); 
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+	    return isUpdateExitoso;
+	}
+
+
+	private float obtenerImportePrestamo(int idPrestamo, Connection connection) throws SQLException {
+	    String query = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
+	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	        statement.setInt(1, idPrestamo);
+	        try (ResultSet resultSet = statement.executeQuery()) {
+	            if (resultSet.next()) {
+	                return resultSet.getFloat("ImportePedidoCliente");
+	            }
+	        }
+	    }
+	    return 0;
+	}
+
+	private int obtenerIdCuentaPrestamo(int idPrestamo, Connection connection) throws SQLException {
+	    String query = "SELECT IdCuenta FROM prestamo WHERE id = ?";
+	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	        statement.setInt(1, idPrestamo);
+	        try (ResultSet resultSet = statement.executeQuery()) {
+	            if (resultSet.next()) {
+	                return resultSet.getInt("IdCuenta");
+	            }
+	        }
+	    }
+	    return 0;
+	}
+	
+	
 	@Override
 	public ArrayList<Prestamo> ListPrestamosPedidosAutorizados() {
 		try {

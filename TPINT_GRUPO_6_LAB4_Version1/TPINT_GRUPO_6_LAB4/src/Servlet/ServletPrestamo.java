@@ -48,6 +48,15 @@ public class ServletPrestamo extends HttpServlet {
                 float importeCliente = Float.parseFloat(monto);
                 int cantCuo = Integer.parseInt(cuotas);
 
+                if (importeCliente < 1000) {
+                    request.setAttribute("mensajeError", "Monto minimo de prestamo es $1000.");
+                    RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
+                    dispatcher.forward(request, response);
+                    return; // Salimos de la función para evitar procesar más
+                }
+                
+                
+                
                 float interes = 0;
                 if (cantCuo <= 6) {
                     interes = 0;
