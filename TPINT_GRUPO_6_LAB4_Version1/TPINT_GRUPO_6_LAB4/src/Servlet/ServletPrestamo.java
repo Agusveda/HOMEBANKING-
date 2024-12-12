@@ -2,7 +2,6 @@ package Servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -11,18 +10,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import Entidades.Prestamo;
 import daoImp.MovimientoDaoImp;
-
+import negocio.MovimientoNegocio;
+import negocioImpl.MovimientoNegocioImpl;
 
 @WebServlet("/ServletPrestamo")
 public class ServletPrestamo extends HttpServlet {
     private static final long serialVersionUID = 1L;
+    private MovimientoNegocio movimientoNegocio;
 
     public ServletPrestamo() {
         super();
+        // Instancia de la capa de negocio
+        this.movimientoNegocio = new MovimientoNegocioImpl();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Aquí podrías agregar un tratamiento para GET si es necesario.
+        // Aquí podrías agregar lógica para manejar peticiones GET si es necesario.
     }
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -39,32 +42,19 @@ public class ServletPrestamo extends HttpServlet {
         Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
 
         if (idCliente != null) {
-            String monto = request.getParameter("monto");
-            String cuotas = request.getParameter("cuotas");
-            String idcuenta = request.getParameter("cuenta");
-            boolean confirmacion = false;
-
             try {
-                float importeCliente = Float.parseFloat(monto);
-                int cantCuo = Integer.parseInt(cuotas);
+                float importeCliente = Float.parseFloat(request.getParameter("monto"));
+                int cantCuo = Integer.parseInt(request.getParameter("cuotas"));
+                int idCuenta = Integer.parseInt(request.getParameter("cuenta"));
 
                 if (importeCliente < 1000) {
-                    request.setAttribute("mensajeError", "Monto minimo de prestamo es $1000.");
+                    request.setAttribute("mensajeError", "Monto mínimo de préstamo es $1000.");
                     RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
                     dispatcher.forward(request, response);
-                    return; // Salimos de la función para evitar procesar más
+                    return;
                 }
-                
-                
-                
-                float interes = 0;
-                if (cantCuo <= 6) {
-                    interes = 0;
-                } else if (cantCuo <= 12) {
-                    interes = 0.05f;
-                } else {
-                    interes = 0.10f;
-                }
+
+                float interes = (cantCuo <= 6) ? 0 : (cantCuo <= 12) ? 0.05f : 0.10f;
                 float importeConInteres = importeCliente * (1 + interes);
                 float impxmes = importeConInteres / cantCuo;
 
@@ -72,26 +62,24 @@ public class ServletPrestamo extends HttpServlet {
 
                 Prestamo prestamo = new Prestamo();
                 prestamo.setIdCliente(idCliente);
-                prestamo.setIdCuenta(Integer.parseInt(idcuenta));
+                prestamo.setIdCuenta(idCuenta);
                 prestamo.setImporteCliente(importeCliente);
                 prestamo.setFechaAlta(fechaAlta);
                 prestamo.setPlazoPago(cantCuo);
                 prestamo.setImpxmes(impxmes);
                 prestamo.setCantCuo(cantCuo);
-                prestamo.setconfimacion(confirmacion);
+                prestamo.setconfimacion(false);
 
-                MovimientoDaoImp prestamoDao = new MovimientoDaoImp();
-                boolean exito = prestamoDao.insertarPrestamo(prestamo);
+                boolean exito = movimientoNegocio.insertarPrestamo(prestamo);
 
                 if (exito) {
                     request.setAttribute("mensaje", "Pedido de préstamo confirmado.");
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
-                    dispatcher.forward(request, response);
                 } else {
                     request.setAttribute("mensajeError", "No se pudo procesar la solicitud de préstamo. Intente nuevamente.");
-                    RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
-                    dispatcher.forward(request, response);
                 }
+                RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
+                dispatcher.forward(request, response);
+
             } catch (NumberFormatException e) {
                 request.setAttribute("mensajeError", "Error en los datos ingresados. Asegúrese de que todos los campos sean correctos.");
                 RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
@@ -102,7 +90,6 @@ public class ServletPrestamo extends HttpServlet {
         }
     }
 
-    // Solicitudes para el administrador para Aceptar o denegar
     private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
@@ -121,10 +108,10 @@ public class ServletPrestamo extends HttpServlet {
             if (exito && confirmacion == 1) {
                 boolean exito2 = movimientoDao.CargarPrestamoEnCuenta(idcuenta, monto);
 
-                // Verifico si se cargó el monto correctamente
+             
                 if (exito2) {
                     response.sendRedirect("SolicitudesPrestamo.jsp");
-                    return; // Finaliza el método después de redirigir
+                    return; 
                 }
             }
 
@@ -133,16 +120,13 @@ public class ServletPrestamo extends HttpServlet {
         }
     }
 
-    // Procesa el pago de una cuota de préstamo
     private void procesarPagoCuota(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
-            // Parámetros del pago
             int cuotaId = Integer.parseInt(request.getParameter("cuotaId"));
             int cuentaId = Integer.parseInt(request.getParameter("cuentaId"));
             float montoPago = Float.parseFloat(request.getParameter("montoPago"));
 
-            MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
-            boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
+            boolean exito = movimientoNegocio.realizarPagoCuota(cuotaId, cuentaId, montoPago);
 
             if (exito) {
                 response.sendRedirect("pagoExitoso.jsp");
