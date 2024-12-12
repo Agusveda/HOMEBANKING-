@@ -272,13 +272,30 @@ public class ServletCliente extends HttpServlet {
                  return;
              }
              
+             try {
+             	if (bandolero.ValidacionUsuarioModificar(user, id)) {
+             		throw new UsuarioRepetido("El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
+             	}
+ 				
+ 			} catch (UsuarioRepetido e) {
+ 				System.out.println("Excepción capturada: " + e.getMensajeError());
+ 		        request.setAttribute("mensajeError", e.getMensajeError());
+ 		        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+ 		        return;
+ 			}
              
              
+             
+             
+          
+             /*
              if (bandolero.ValidacionUsuarioModificar(user, id)) {
-                 request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
+                 request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos.");
                  request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
                  return;
              }
+             */
+             
              boolean insertado2 = false;
              
              

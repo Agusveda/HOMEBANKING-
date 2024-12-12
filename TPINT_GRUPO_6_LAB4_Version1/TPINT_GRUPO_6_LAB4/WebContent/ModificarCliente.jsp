@@ -92,11 +92,14 @@
 			</p>
                      <p>
 				    <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
-				    <input class="controls" id="fechaNacimiento" type="text" 
+				    <input 
+				    	class="controls" 
+				    	id="fechaNacimiento" 
+				    	type="date" 
 				        value="<%=cli.getFechaNacimiento()%>"         
 				        maxlength="10" 
 				        placeholder="DD-MM-YYYY" 
-				        pattern="\d{2}-\d{2}-\d{4}" 
+				        pattern="\d{4}-\d{2}-\d{2}" 
 				        oninput="validateDateInput(this)"
 				        required name="txtFechaNacimiento" />
 					</p>
@@ -205,7 +208,7 @@ function validateDateInput(input) {
     input.value = input.value.replace(/[^0-9-]/g, '').slice(0, 10);
 
     // Validar formato y mostrar error si es incorrecto
-    const pattern = /^\d{2}-\d{2}-\d{4}$/; // Formato DD-MM-YYYY
+    const pattern = /^\d{4}-\d{2}-\d{2}$/; // Formato DD-MM-YYYY
     if (input.value && !pattern.test(input.value)) {
         input.setCustomValidity("Por favor, ingrese la fecha en el formato DD-MM-YYYY.");
     } else {

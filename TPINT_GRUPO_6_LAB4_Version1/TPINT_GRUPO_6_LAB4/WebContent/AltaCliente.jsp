@@ -158,8 +158,8 @@
 					    id="fechaNacimiento" 
 					    type="text" 
 					    maxlength="10" 
-					    placeholder="DD-MM-YYYY" 
-					    pattern="\d{2}-\d{2}-\d{4}" 
+					    placeholder="YYYY-MM-DD" 
+					    pattern="\d{4}-\d{2}-\d{2}" 
 					    oninput="validateDateInput(this)" 
 					    required name="txtFechaNacimiento" />
 				</p>
@@ -273,9 +273,9 @@ function validateDateInput(input) {
     input.value = input.value.replace(/[^0-9-]/g, '').slice(0, 10);
 
     
-    const pattern = /^\d{2}-\d{2}-\d{4}$/; // Formato DD-MM-YYYY
+    const pattern = /^\d{4}-\d{2}-\d{2}$/; // Formato DD-MM-YYYY
     if (input.value && !pattern.test(input.value)) {
-        input.setCustomValidity("Por favor, ingrese la fecha en el formato DD-MM-YYYY.");
+        input.setCustomValidity("Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
     } else {
         input.setCustomValidity(""); 
   }
