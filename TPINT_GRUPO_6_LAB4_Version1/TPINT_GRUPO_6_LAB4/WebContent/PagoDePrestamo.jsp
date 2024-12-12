@@ -92,6 +92,12 @@
                             // Realizar el pago
                             boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
                             mensaje = exito ? "El pago se realizó con éxito." : "Ocurrió un error al realizar el pago.";
+
+                            if (exito) {
+                                // Redirigir a la página Cliente.jsp
+                                response.sendRedirect("Cliente.jsp");
+                                return; // Importante: Evitar que se continúe ejecutando el código posterior.
+                            }
                         } else {
                             mensaje = "Faltan parámetros requeridos para realizar el pago.";
                         }

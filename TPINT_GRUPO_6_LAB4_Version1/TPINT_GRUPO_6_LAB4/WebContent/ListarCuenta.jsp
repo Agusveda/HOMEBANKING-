@@ -39,8 +39,8 @@
             <label for="tipoCuenta">Tipo de Cuenta:</label>
             <select id="tipoCuenta" name="tipoCuenta" onchange="this.form.submit()">
                 <option value="-1" <%= "-1".equals(request.getParameter("tipoCuenta")) ? "selected" : "" %>>Todos</option>
-                <option value="1" <%= "1".equals(request.getParameter("tipoCuenta")) ? "selected" : "" %>>Corriente</option>
-                <option value="2" <%= "2".equals(request.getParameter("tipoCuenta")) ? "selected" : "" %>>Ahorro</option>
+                <option value="1" <%= "1".equals(request.getParameter("tipoCuenta")) ? "selected" : "" %>>Ahorro</option>
+                <option value="2" <%= "2".equals(request.getParameter("tipoCuenta")) ? "selected" : "" %>>Cta. Corriente</option>
             </select>
         </p>
     </fieldset>
@@ -93,7 +93,7 @@
             <td><%= cuentaItem.getId() %></td>
             <td><%= cuentaItem.getCliente().getNombre() %></td>
             <td><%= cuentaItem.getCliente().getApellido() %></td>
-            <td><%= cuentaItem.getTipoCuenta() == 1 ? "Corriente" : "Ahorro" %></td>
+            <td><%= cuentaItem.getTipoCuenta() == 1 ? "Ahorro" : "Cta. Corriente" %></td>
             <td><%= cuentaItem.getFechaCreacion() %></td>
             <td><%= cuentaItem.getNumeroCuenta() %></td>
             <td><%= cuentaItem.getCbu() %></td>

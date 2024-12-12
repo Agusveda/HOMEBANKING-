@@ -61,10 +61,8 @@
             <th>ID Cliente</th>
              <th>ID Cuenta</th>
             <th>Importe Pedido</th>
-            <th>Fecha Alta</th>
-            <th>Importe Mensual</th>
-            <th>Cantidad Cuotas</th>
-           
+            <th>Cantidad Cuotas</th>  
+            <th>Fecha Solicitud</th>    
             <th>Acciones</th>
         </tr>
     </thead>
@@ -76,9 +74,8 @@
                     <td><%= prestamo.getIdCliente() %></td>
                     <td><%= prestamo.getIdCuenta() %></td>
                     <td><%= prestamo.getImporteCliente() %></td>
-                    <td><%= prestamo.getFechaAlta() %></td>
-                    <td><%= prestamo.getImpxmes() %></td>
                     <td><%= prestamo.getCantCuo() %></td>
+                    <td><%= prestamo.getFechaAlta() %></td>
                    
                     <td>
                         <!-- Formulario para aprobar el préstamo -->

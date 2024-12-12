@@ -63,7 +63,7 @@
         %>
         <tr>
             <td><%= cuentaItem.getId() %></td>
-            <td><%= cuentaItem.getTipoCuenta() == 1 ? "Corriente" : "Ahorro" %></td>
+            <td><%= cuentaItem.getTipoCuenta() == 1 ? "Ahorro" : "Cta. Corriente" %></td>
             <td><%= cuentaItem.getCbu() %></td>
             <td><%= cuentaItem.getSaldo() %></td>
             <td>
