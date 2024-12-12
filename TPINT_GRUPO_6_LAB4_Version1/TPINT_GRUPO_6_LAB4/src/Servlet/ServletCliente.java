@@ -306,19 +306,19 @@ public class ServletCliente extends HttpServlet {
             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             if (bandolero.verificarCredenciales(username, password) == null)
             {
-            	request.getSession().setAttribute("Error", "Usuario o contraseña incorrectos");
-                request.getRequestDispatcher("/Error.jsp").forward(request, response);
+            	request.getSession().setAttribute("mensajeError", "Usuario o contraseña incorrectos");
+                request.getRequestDispatcher("/Login.jsp").forward(request, response);
             }
             Usuario usuario = bandolero.verificarCredenciales(username, password);
             
-            Cliente cliente = bandolero.ObtenerDatosXid(usuario.getIdCliente()); //1. Cliente que inicia sesion
+            Cliente cliente = bandolero.ObtenerDatosXid(usuario.getIdCliente()); 
             
             if (usuario != null) {
             	request.removeAttribute("mensajeError");
                 int tipoUsuario = usuario.getTipoUsuario();
                 request.getSession().setAttribute("IdCliente", usuario.getIdCliente());
-                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); //2. Nombre cliente sesion
-                request.getSession().setAttribute("tipoUsuario", tipoUsuario); //3. Tipo de usuario
+                request.getSession().setAttribute("nombreCliente", cliente.getNombre()); 
+                request.getSession().setAttribute("tipoUsuario", tipoUsuario); 
                 
                 if (tipoUsuario == 1) 
                 {
