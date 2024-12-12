@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Entidades.Cuenta;
 import Entidades.Prestamo;
+import Excepciones.ClienteExcedeCantCuentas;
 
 public interface CuentaNegocio {
 	public boolean insertCuenta(Cuenta cuenta);
@@ -19,7 +20,7 @@ public interface CuentaNegocio {
 	public float ReporteCuentas(); 
 	public boolean ExisteId (int id);
 	public int ObtenerProximoIdCuenta();
-	public int CuentasPorCliente(int idCliente);
+	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
 	public int ClienteInactivo(int idCliente);
 	
 }

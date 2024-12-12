@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import Entidades.Cliente;
 import Entidades.Cuenta;
 import Entidades.Prestamo;
+import Excepciones.ClienteExcedeCantCuentas;
 import dao.CuentaDao;
 import daoImp.CuentaDaoImpl;
 import negocio.CuentaNegocio;
@@ -89,15 +90,18 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 	}
 
 
-	@Override
-	public int CuentasPorCliente(int idCliente) {
-		return cuentaDao.CuentasPorCliente(idCliente);
-	}
+	
 
 
 	@Override
 	public int ClienteInactivo(int idCliente) {
 		return cuentaDao.ClienteInactivo(idCliente);
+	}
+
+
+	@Override
+	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas {
+		return cuentaDao.CuentasPorCliente(idCliente);
 	}
 
 

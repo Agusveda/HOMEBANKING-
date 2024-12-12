@@ -47,7 +47,7 @@
 
         <% 
 	    String mensaje = (String) request.getAttribute("mensaje");
-	    String mensajeError = (String) request.getAttribute("mensajeError");
+        String mensajeError = (String) request.getAttribute("mensajeError");
 	    %>
 	    <!-- Mostrar alert en caso de mensajes -->
 	    <% if (mensaje != null) { %>

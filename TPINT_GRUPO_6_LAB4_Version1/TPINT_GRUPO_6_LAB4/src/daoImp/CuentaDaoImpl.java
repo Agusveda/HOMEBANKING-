@@ -10,6 +10,7 @@ import java.util.Random;
 
 import Entidades.Cliente;
 import Entidades.Cuenta;
+import Excepciones.ClienteExcedeCantCuentas;
 import dao.CuentaDao;
 
 public class CuentaDaoImpl implements CuentaDao {
@@ -585,7 +586,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
 	
 	@Override
-	public int CuentasPorCliente(int idCliente) 
+	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas 
 	{
         int cuentas = 0;
         PreparedStatement statement = null;
@@ -604,6 +605,9 @@ public class CuentaDaoImpl implements CuentaDao {
             if (rs.next()) 
             {
             	cuentas++;
+            }
+            if(cuentas >=3) {
+            	throw new ClienteExcedeCantCuentas("Los clientes no pueden tener más de 3 cuentas");
             }
 
         } catch (SQLException e) {

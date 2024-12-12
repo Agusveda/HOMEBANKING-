@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import Entidades.Cliente;
 import Entidades.Cuenta;
+import Excepciones.ClienteExcedeCantCuentas;
 
 public interface CuentaDao {
 	//CuentaDao
@@ -19,7 +20,7 @@ public interface CuentaDao {
 	public ArrayList<Cuenta> filtrarCuentaXTipoCuenta (int tipoCuenta);
 	public boolean ExisteId (int id);
 	public int ObtenerProximoIdCuenta();
-	public int CuentasPorCliente(int idCliente);
+	public int CuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
 	public int ClienteInactivo(int idCliente);
 	
 	//REPORTE CUENTAS
