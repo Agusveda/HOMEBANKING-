@@ -14,14 +14,10 @@
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 <<<<<<< HEAD
-<<<<<<< HEAD
 	<classpathentry kind="lib" path="C:/Eclipse/mysql-connector-java-8.0.16/mysql-connector-java-8.0.16.jar">
 =======
 	<classpathentry kind="lib" path="C:/Users/pquiros/Downloads/mysql-connector-java-5.1.47.jar">
 >>>>>>> Pedro2
-=======
-	<classpathentry kind="lib" path="C:/Users/Usuario/Documents/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47/mysql-connector-java-5.1.47-bin.jar">
->>>>>>> parent of 8c02759 (Capas)
 		<attributes>
 			<attribute name="org.eclipse.jst.component.dependency" value="/WEB-INF/lib"/>
 		</attributes>
