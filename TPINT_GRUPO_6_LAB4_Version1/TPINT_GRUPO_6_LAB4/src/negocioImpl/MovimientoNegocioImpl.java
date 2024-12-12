@@ -1,8 +1,10 @@
 package negocioImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Entidades.Cuenta;
+import Entidades.Cuota;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
 import daoImp.MovimientoDaoImp;
@@ -97,5 +99,47 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	@Override
 	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
 		return MovimientoDao.insertarAltaCuenta(movi, idCue);
+	}
+
+	@Override
+	public boolean insertarPrestamo(Prestamo prestamo) {
+		
+		return MovimientoDao.insertarPrestamo(prestamo);
+	}
+
+	@Override
+	public boolean CargarPrestamoEnCuenta(int idcuenta, float monto) {
+		
+		return CargarPrestamoEnCuenta(idcuenta, monto);
+	}
+
+	@Override
+	public double obtenerTotalPrestamosConfirmados(int idCliente) {
+		
+		return obtenerTotalPrestamosConfirmados(idCliente);
+	}
+
+	@Override
+	public List<Prestamo> obtenerPrestamosConfirmados(int idCliente) {
+
+		return obtenerPrestamosConfirmados(idCliente);
+	}
+
+	@Override
+	public List<Cuota> obtenerCuotas(int idCliente, int idPrestamo) {
+	
+		return obtenerCuotas(idCliente, idPrestamo);
+	}
+
+	@Override
+	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
+		
+		return realizarPagoCuota(cuotaId, cuentaId,monto) ;
+	}
+
+	@Override
+	public double obtenerSumaCuotasPendientes(int idCliente) {
+
+		return obtenerSumaCuotasPendientes(idCliente);
 	}
 }
