@@ -53,8 +53,7 @@ public class ServletCuenta extends HttpServlet {
     	    //Validación para que un cliente no tenga más de 3 cuentas.
     	    try {
     	        if (request.getParameter("txtIdCliente") != null) {
-    	            int idCliente = Integer.parseInt(request.getParameter("txtIdCliente"));
-    	            cuentas = cuentaN.CuentasPorCliente(idCliente);
+    	        	cuentas = cuentaN.CuentasPorCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
     	        }
     	    } catch (ClienteExcedeCantCuentas e) {
     	        request.setAttribute("mensajeError", e.getMensajeError());

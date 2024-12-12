@@ -606,7 +606,8 @@ public class CuentaDaoImpl implements CuentaDao {
             {
             	cuentas++;
             }
-            if(cuentas >=3) {
+            
+            if(cuentas >= 3) {
             	throw new ClienteExcedeCantCuentas("Los clientes no pueden tener más de 3 cuentas");
             }
 
