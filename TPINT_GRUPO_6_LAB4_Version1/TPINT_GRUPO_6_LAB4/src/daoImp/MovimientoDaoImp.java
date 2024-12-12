@@ -377,75 +377,102 @@ public class MovimientoDaoImp implements MovimientoDao {
 	}
 
 	
-	@Override
-	public boolean insertarPrestamo(Prestamo prestamo) {
-	    boolean isInsertExitoso = false;
-
-	    try (Connection connection = Conexion.getConexion().getSQLConexion()) {
-
-	        if (connection == null) {
-	            System.out.println("No se pudo obtener la conexión a la base de datos.");
-	            return false;
-	        }
-
-	        connection.setAutoCommit(false); // Deshabilitar el auto commit para control manual de la transacción
-
-	        // Utilizamos la consulta definida para insertar el préstamo
-	        try (PreparedStatement statement = connection.prepareStatement(InsertarPrestamo, Statement.RETURN_GENERATED_KEYS)) {
-	            // Asignamos los valores del objeto prestamo a los parámetros del PreparedStatement
-	            statement.setInt(1, prestamo.getIdCliente());
-	            statement.setInt(2, prestamo.getIdCuenta());
-	            statement.setFloat(3, prestamo.getImporteCliente());
-	            statement.setInt(4, prestamo.getPlazoPago());
-	            statement.setFloat(5, prestamo.getImpxmes());
-	            statement.setInt(6, prestamo.getCantCuo());
-	            statement.setInt(7, 0); // Asignamos el valor de confirmacion (0 = pendiente, o el valor que corresponda)
-
-	            int rowsAffected = statement.executeUpdate(); // Ejecutar la inserción del préstamo
-
-	            if (rowsAffected > 0) {
-	                ResultSet generatedKeys = statement.getGeneratedKeys();
-	                if (generatedKeys.next()) {
-	                    int idPrestamo = generatedKeys.getInt(1); // ID del préstamo recién insertado
-
-	                    // Insertar las cuotas asociadas
-	                    String insertarCuotaSQL = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
-	                    try (PreparedStatement statementCuota = connection.prepareStatement(insertarCuotaSQL)) {
-	                        for (int i = 1; i <= prestamo.getCantCuo(); i++) {
-	                            statementCuota.setInt(1, idPrestamo); // idPrestamo
-	                            statementCuota.setInt(2, i); // NumeroCuota
-	                            statementCuota.setFloat(3, prestamo.getImporteCliente() / prestamo.getCantCuo()); // Monto
-	                            statementCuota.setInt(4, 0); // estaPagada (0: pendiente)
-	                            statementCuota.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusMonths(i))); // FechaPago (fecha de vencimiento)
-
-	                            statementCuota.addBatch(); // Añadir la cuota al batch
-	                        }
-
-	                        int[] cuotasAfectadas = statementCuota.executeBatch();
-	                        if (cuotasAfectadas.length == prestamo.getCantCuo()) {
-	                            connection.commit(); // Si todo se insertó correctamente, realizar commit
-	                            System.out.println("El préstamo y sus cuotas se han insertado correctamente.");
-	                            isInsertExitoso = true;
-	                        } else {
-	                            connection.rollback(); // Si hubo un error en las cuotas, hacer rollback
-	                            System.out.println("Error al insertar las cuotas. Se realizó un rollback.");
-	                        }
-	                    }
-	                }
-	            }
-	        } catch (SQLException e) {
-	            connection.rollback();
-	            System.out.println("Error durante la inserción del préstamo o las cuotas. Se realizó un rollback.");
-	            e.printStackTrace();
-	        }
-
-	    } catch (SQLException e) {
-	        System.out.println("Error al obtener la conexión a la base de datos o al cerrar los recursos.");
-	        e.printStackTrace();
-	    }
-
-	    return isInsertExitoso;
-	} 
+    @Override
+    public boolean insertarPrestamo(Prestamo prestamo) {
+        boolean isInsertExitoso = false;
+ 
+        try (Connection connection = Conexion.getConexion().getSQLConexion()) {
+ 
+            if (connection == null) {
+                System.out.println("No se pudo obtener la conexión a la base de datos.");
+                return false;
+            }
+ 
+            connection.setAutoCommit(false); 
+ 
+            // Intereses generados segun cantidad de cuotas
+            float tasaInteres = 0;
+            switch (prestamo.getCantCuo()) {
+                case 1:
+                    tasaInteres = 0.0f; // Sin interés para 1 cuota
+                    break;
+                case 3:
+                    tasaInteres = 0.05f; // 5% para 3 cuotas
+                    break;
+                case 6:
+                    tasaInteres = 0.10f; // 10% para 6 cuotas
+                    break;
+                case 9:
+                    tasaInteres = 0.15f; // 15% para 9 cuotas
+                    break;
+                case 12:
+                    tasaInteres = 0.20f; // 20% para 12 cuotas
+                    break;
+                default:
+                    System.out.println("Número de cuotas no válido.");
+                    return false; 
+            }
+ 
+            
+            float montoRecibido = prestamo.getImporteCliente();
+            
+            
+            float montoConInteres = montoRecibido * (1 + tasaInteres);
+ 
+            try (PreparedStatement statement = connection.prepareStatement(InsertarPrestamo, Statement.RETURN_GENERATED_KEYS)) {
+                statement.setInt(1, prestamo.getIdCliente());
+                statement.setInt(2, prestamo.getIdCuenta());
+                statement.setFloat(3, montoRecibido); // Monto sin intereses
+                statement.setInt(4, prestamo.getPlazoPago());
+                statement.setFloat(5, prestamo.getImpxmes());
+                statement.setInt(6, prestamo.getCantCuo());
+                statement.setInt(7, 0); 
+ 
+                int rowsAffected = statement.executeUpdate(); 
+ 
+                if (rowsAffected > 0) {
+                    ResultSet generatedKeys = statement.getGeneratedKeys();
+                    if (generatedKeys.next()) {
+                        int idPrestamo = generatedKeys.getInt(1); 
+ 
+                       
+                        String insertarCuotaSQL = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
+                        try (PreparedStatement statementCuota = connection.prepareStatement(insertarCuotaSQL)) {
+                            for (int i = 1; i <= prestamo.getCantCuo(); i++) {
+                                statementCuota.setInt(1, idPrestamo); 
+                                statementCuota.setInt(2, i); 
+                                statementCuota.setFloat(3, montoConInteres / prestamo.getCantCuo()); 
+                                statementCuota.setInt(4, 0); // estaPagada (0: pendiente)
+                                statementCuota.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusMonths(i)));
+ 
+                                statementCuota.addBatch(); 
+                            }
+ 
+                            int[] cuotasAfectadas = statementCuota.executeBatch();
+                            if (cuotasAfectadas.length == prestamo.getCantCuo()) {
+                                connection.commit(); 
+                                System.out.println("El préstamo y sus cuotas se han insertado correctamente.");
+                                isInsertExitoso = true;
+                            } else {
+                                connection.rollback(); // Si hubo un error en las cuotas, hacer rollback
+                                System.out.println("Error al insertar las cuotas. Se realizó un rollback.");
+                            }
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                connection.rollback();
+                System.out.println("Error durante la inserción del préstamo o las cuotas. Se realizó un rollback.");
+                e.printStackTrace();
+            }
+ 
+        } catch (SQLException e) {
+            System.out.println("Error al obtener la conexión a la base de datos o al cerrar los recursos.");
+            e.printStackTrace();
+        }
+ 
+        return isInsertExitoso;
+    }
 	
 	
 	

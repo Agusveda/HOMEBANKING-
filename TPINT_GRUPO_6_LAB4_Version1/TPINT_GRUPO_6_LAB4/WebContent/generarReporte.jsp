@@ -217,7 +217,7 @@
     	<p style="font-size: 0.9em; color: gray;">Ejemplo: 44552521</p>
     	
        <label for="DNICliente">DNI del cliente:</label>
-<input type="text" id="DNICliente" name="DNICliente" pattern="\d*" title="Solo se permiten números" required>
+<input type="text" id="DNICliente" name="DNICliente" pattern="\d*" title="Solo se permiten números" oninput="this.value = this.value.replace(/[^0-9-]/g, '').slice(0, 10);" maxlength="8"  required>
 
         <br>
         
