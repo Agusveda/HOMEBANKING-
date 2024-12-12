@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import Entidades.Cuenta;
 import Entidades.Movimiento;
 import Entidades.Usuario;
+import Excepciones.ClienteExcedeCantCuentas;
 import dao.CuentaDao;
 import daoImp.CuentaDaoImpl;
 import negocioImpl.CuentaNegocioImpl;
@@ -53,18 +54,28 @@ public class ServletCuenta extends HttpServlet {
     	    }
     	    
     	    // Validacion para que un cliente no tenga más de 3 cuentas.
-    	    if (request.getParameter("txtIdCliente") != null)
-    	    {
-    	    	cuentas = cuentaN.CuentasPorCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
-    	    	
-    	    	if(cuentas >= 3)
+    	    try {
+    	    	if (request.getParameter("txtIdCliente") != null)
     	    	{
-    	    		request.setAttribute("mensajeError", "Los clientes no pueden tener más de 3 cuentas");
-    	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
-    	    		return;    	    		    	    		
+    	    		cuentas = cuentaN.CuentasPorCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
+    	    		
+    	    		if(cuentas >= 3)
+    	    		{
+    	    			throw new ClienteExcedeCantCuentas("Los clientes no pueden tener más de 3 cuentas.");
+    	    			/*
+    	    			request.setAttribute("mensajeError", "Los clientes no pueden tener más de 3 cuentas");
+    	    			request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
+    	    			return;    	 
+    	    			*/   		    	    		
+    	    		}
+    	    		
     	    	}
-    	    	
-    	    }
+				
+			} catch (ClienteExcedeCantCuentas  e) {
+				request.setAttribute("mensajeError", e.getMensajeError());
+			    request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
+			    return;
+			}
     	    
     	    /// Movimiento de Alta cuenta
     	    movi.setTipoMovimiento(1);
