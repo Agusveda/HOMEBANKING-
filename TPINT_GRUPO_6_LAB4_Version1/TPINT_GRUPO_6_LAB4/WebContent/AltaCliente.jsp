@@ -253,7 +253,7 @@ function validarLongitudDni(input) {
 }
 
 function validarLongitudCuil(input) {
-    const longitudExacta   = 10;
+    const longitudExacta   = 9;
  
     if (input.value.length > longitudExacta) {
         alert("El CUIL no puede tener más de 11 dígitos.");
