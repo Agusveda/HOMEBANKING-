@@ -32,7 +32,6 @@
 
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
 <div class="encabezado">
         <h1>Modificar Cuenta</h1>
 </div>
@@ -86,7 +85,6 @@
     }
 %>
 
-    <jsp:include page="Footer.jsp"/>
     
     
     

@@ -14,7 +14,6 @@
 </head>
 <body>
 
-<jsp:include page="Navbar.jsp"/>
 
 <div class="encabezado">
     <h1>Seleccione el reporte que desee</h1>
@@ -41,7 +40,6 @@
      </a>
 
 
- <jsp:include page="Footer.jsp"/>
 
 
 </body>

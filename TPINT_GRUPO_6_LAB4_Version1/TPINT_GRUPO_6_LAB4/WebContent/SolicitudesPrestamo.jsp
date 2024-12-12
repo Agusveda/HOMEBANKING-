@@ -20,7 +20,6 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
 <div class="encabezado">
     <h1>Solicitudes de Préstamo</h1>
 </div>
@@ -126,6 +125,5 @@
     }
  
 </script>
-<jsp:include page="Footer.jsp"/>
 </body>
 </html>

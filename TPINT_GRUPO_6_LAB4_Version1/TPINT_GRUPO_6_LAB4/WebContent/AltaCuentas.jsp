@@ -39,7 +39,6 @@
 
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
 
 <div class="encabezado">
 	<h1>Alta de Cuenta</h1>
@@ -78,7 +77,6 @@
          <p><input type="submit" value="Aceptar" name="btnAltaCuenta" class ="button-blue"></p>
     </fieldset>
 </form>
-<jsp:include page="Footer.jsp"/>
 
     <script>    
     function validarSoloNumeros(event) {

@@ -12,7 +12,6 @@
 
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
 <div class="encabezado">
         <h1>Modificar Cliente</h1>
 </div>
@@ -198,7 +197,6 @@ function validaYConfirma(form){
 </script>
     
 
-<jsp:include page="Footer.jsp"/>
 
 </body>
 </html>

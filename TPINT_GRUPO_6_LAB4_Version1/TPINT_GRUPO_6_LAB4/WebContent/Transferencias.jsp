@@ -52,7 +52,6 @@ function EventoSeleccionarCuenta()
 }
 </script>
 <body>
-    <jsp:include page="Navbar.jsp" />
     <div class="encabezado">
         <h1>Cuentas</h1>
     </div>
@@ -128,7 +127,7 @@ function EventoSeleccionarCuenta()
     <a href="Cliente.jsp">
         <input class="btnAtras" type="button" value="Atrás" name="btnAtras">
     </a>
-    <jsp:include page="Footer.jsp" />
+
     
     <script>
     function confirmarTransferencia(form) 

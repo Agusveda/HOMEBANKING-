@@ -26,7 +26,6 @@
 </script>
 
 <body>
-<jsp:include page="Navbar.jsp"/>
 
 <div class="encabezado">
     <h1>Listado de Cuentas</h1>
@@ -123,7 +122,6 @@
     </tbody>
 </table>
 
-<jsp:include page="Footer.jsp"/>
 
 <script>
     function confirmarEliminacion(form) {

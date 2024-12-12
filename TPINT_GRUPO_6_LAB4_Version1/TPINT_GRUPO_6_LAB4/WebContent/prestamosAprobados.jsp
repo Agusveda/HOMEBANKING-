@@ -18,8 +18,105 @@
     <style>
         .selected-row {
             background-color: #d3e0ea;
+            
         }
         
+            body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        color: #444;
+    }
+
+    /* Formularios */
+    form {
+        margin: 20px auto;
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        background-color: #fff;
+        width: 80%;
+        max-width: 600px;
+    }
+
+    fieldset {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    legend {
+        font-weight: bold;
+        color: #555;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    select {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fff;
+    }
+
+    /* Tablas */
+    table {
+        width: 90%;
+        margin: 20px auto;
+        border-collapse: collapse;
+        background-color: #fff;
+    }
+
+    table thead th {
+        background-color: #007BFF;
+        color: #fff;
+        text-align: left;
+        padding: 10px;
+    }
+
+    table tbody td {
+        border: 1px solid #ddd;
+        padding: 8px;
+    }
+
+    table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+    table tbody tr:hover {
+        background-color: #f1f1f1;
+        cursor: pointer;
+    }
+
+    table tbody tr td {
+        text-align: center;
+    }
+
+    /* Botones y enlaces */
+    button, input[type="submit"] {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover, input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
         
         
     </style>
@@ -28,7 +125,6 @@
     <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
 </head>
 <body>
-<jsp:include page="Navbar.jsp"/>
 
 <div class="encabezado">
     <h1>Solicitudes de Préstamo</h1>
@@ -96,8 +192,6 @@
         <% } %>
     </tbody>
 </table>
-
-<jsp:include page="Footer.jsp"/>
 
 <script>
 let selectedRow = null;

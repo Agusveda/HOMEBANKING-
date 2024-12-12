@@ -44,7 +44,6 @@
 
 <body>
 
-<jsp:include page="Navbar.jsp"/>
 <%
 	///REPORTE DE MOVIMIENTOS
 	String TipoMovimiento = "";
@@ -150,6 +149,9 @@
         <option value="3" >
                     Pago prestamo
         </option>
+        <option value="4" >
+                    Transferencia
+        </option>
         
         </select>
         <%
@@ -164,11 +166,19 @@
     	<p style="font-size: 0.9em; color: gray;">Ejemplo: 2024-12-06 (Año-Mes-Día)</p>
     	
         <label for="fechaInicio">Fecha Inicio:</label>
-        <input type="date" id="fechaInicio" name="fechaInicio" required>
+        <input type="date" id="fechaInicio" name="fechaInicio" 
+        maxlength="10" 
+        placeholder="YYYY-MM-DD" 
+        pattern="\d{4}-\d{2}-\d{2}" 
+        oninput="this.value = this.value.replace(/[^0-9-]/g, '').slice(0, 10);" required>
         <br>
         
         <label for="fechaFin">Fecha Fin:</label>
-        <input type="date" id="fechaFin" name="fechaFin" required>
+        <input type="date" id="fechaFin" name="fechaFin" 
+        maxlength="10" 
+        placeholder="YYYY-MM-DD" 
+        pattern="\d{4}-\d{2}-\d{2}" 
+        oninput="this.value = this.value.replace(/[^0-9-]/g, '').slice(0, 10);" required>
         <br>
         <br>
         <%
@@ -192,9 +202,6 @@
     			
     	   </div>
     	   
-	 <a href="Reportes.jsp">
-        <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
-     </a>
         	
         	<%
         	session.removeAttribute("total");
@@ -271,8 +278,6 @@
         <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
      </a>
      
- <jsp:include page="Footer.jsp"/>
-
 </body>
 
 

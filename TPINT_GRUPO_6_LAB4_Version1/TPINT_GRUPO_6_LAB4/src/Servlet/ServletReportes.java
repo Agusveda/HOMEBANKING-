@@ -123,6 +123,9 @@ public class ServletReportes extends HttpServlet {
 				case 3:
 					TipoMovimientoStr = "Pago de Prestamo";
 					break;
+				case 4:
+					TipoMovimientoStr = "Transferencia";
+					break;
 
 				default:
 					break;
