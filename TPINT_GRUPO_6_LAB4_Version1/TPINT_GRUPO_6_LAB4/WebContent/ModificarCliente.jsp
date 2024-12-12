@@ -32,6 +32,14 @@
 	}
 %>
 
+
+<%
+    String fechaNacimiento = cli.getFechaNacimiento();
+    String[] partes = fechaNacimiento.split("-");
+    String fechaFormateada = partes[2] + "-" + partes[1] + "-" + partes[0];
+%>
+
+
     <div class="form-register">
 
         
@@ -80,11 +88,13 @@
 					    <option value="Otro" <%= "Otro".equals(cli.getSexo()) ? "selected" : "" %>>Otro</option>
 				   </select>
 			</p>
-            <p>
-                <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
-                <input class="controls" id="fechaNacimiento" type="date" Value="<%= cli.getFechaNacimiento() %>" required name="txtFechaNacimiento">
-                
-            </p>
+                     <p>
+    <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
+    <input class="controls" id="fechaNacimiento" type="date" 
+        value="<%= fechaFormateada %>" 
+        required name="txtFechaNacimiento" />
+</p>
+           
             <p>
                 <label class="form-label" for="direccion">Dirección</label>
                 <input class="controls" id="direccion" type="text" placeholder="Ingrese la dirección" Value="<%= cli.getDireccion() %>" required name="txtDireccion">

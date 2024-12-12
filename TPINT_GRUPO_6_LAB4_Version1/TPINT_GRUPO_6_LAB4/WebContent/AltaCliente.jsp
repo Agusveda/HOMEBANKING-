@@ -151,10 +151,14 @@
                 </p>
     <p>
     
-                <p>
-                    <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
-                    <input class="controls" id="fechaNacimiento" type="date" required name="txtFechaNacimiento">
-                </p>
+                             <p>
+    <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
+    <input class="controls" id="fechaNacimiento" type="date" maxlength="10" 
+        placeholder="YYYY-MM-DD" 
+        pattern="\d{4}-\d{2}-\d{2}" 
+        oninput="this.value = this.value.replace(/[^0-9-]/g, '').slice(0, 10); required name="txtFechaNacimiento" />
+</p>
+
                 <p>
                     <label class="form-label" for="direccion">Dirección</label>
                     <input class="controls" id="direccion" type="text" placeholder="Ingrese la dirección" required name="txtDireccion">
