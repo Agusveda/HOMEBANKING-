@@ -35,6 +35,7 @@ public class ServletCuenta extends HttpServlet {
     	    int idCuenta = 0;
     	    boolean b=false;
     	    int cuentas = 0;
+    	    int clientes = 0;
     	    
     	    /// VALIDACIONES
     	    
@@ -48,6 +49,19 @@ public class ServletCuenta extends HttpServlet {
     	    		request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
     	    		return;    	    		
     	    	}
+    	    }
+    	    
+    	    // Validacion para que un cliente inactivo no agregue cuentas.
+    	    if (request.getParameter("txtIdCliente") != null)
+    	    {
+    	    		clientes = cuentaN.ClienteInactivo(Integer.parseInt(request.getParameter("txtIdCliente")));
+    	    		
+    	    		if(clientes > 0)
+    	    		{
+    	    			request.setAttribute("mensajeError", "El cliente no existe.");
+    	    			request.getRequestDispatcher("/AltaCuentas.jsp").forward(request, response);
+    	    			return;    	  		    	    		
+    	    		} 		
     	    }
     	    
     	    //Validación para que un cliente no tenga más de 3 cuentas.

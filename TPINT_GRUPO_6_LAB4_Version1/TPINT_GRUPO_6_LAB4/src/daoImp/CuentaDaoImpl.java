@@ -25,7 +25,7 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
     private static final String ObtenerProximoIdCuenta = "select * from cuenta ORDER BY Id DESC LIMIT 1;";
     private static final String CuentasPorCliente = "select * from cuenta where IdCliente = ? and Activo = 1;";
-    private static final String ClienteInactivo = "select * from cuenta where IdCliente = ? and Activo = 0;";
+    private static final String ClienteInactivo = "select * from cliente where Id = ? and Activo = 0;";
 
     //REPORTE
     private static final String ReporteCuentas = "SELECT SUM(Saldo) AS saldo FROM cuenta";
