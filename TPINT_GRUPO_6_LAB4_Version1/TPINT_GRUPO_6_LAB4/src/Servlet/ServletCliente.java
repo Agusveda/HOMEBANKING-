@@ -279,11 +279,22 @@ public class ServletCliente extends HttpServlet {
                  request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
                  return;
              }
-
-             bandolero.ModificarCliente(cli, usu);
-             RequestDispatcher vari = request.getRequestDispatcher("/ModificarCliente.jsp");
-             vari.forward(request, response);  
-             return;
+             boolean insertado2 = false;
+             
+             
+             insertado2 = bandolero.ModificarCliente(cli, usu);
+             if (insertado2) {
+                 request.setAttribute("mensaje", "Cliente modificado exitosamente.");
+              // Restablecer valores de los desplegables
+                 request.setAttribute("limpiarFormulario", true);
+                 request.setAttribute("provincias", null);
+                 request.setAttribute("localidades", null);                
+             } else 
+             {
+                 request.setAttribute("mensajeError", "Hubo un error al modificar el cliente.");
+                 System.out.println("Mensaje: Cliente modificado exitosamente.");
+             }
+             request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
          }
 
         // Validación del login

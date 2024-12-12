@@ -34,9 +34,11 @@
 
 
 <%
+/**
     String fechaNacimiento = cli.getFechaNacimiento();
     String[] partes = fechaNacimiento.split("-");
     String fechaFormateada = partes[2] + "-" + partes[1] + "-" + partes[0];
+**/
 %>
 
 
@@ -55,7 +57,7 @@
 		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
 		<% } %>
         
-        <form method="post" action="ServletBanco">
+        <form method="post" action="ServletBanco" onsubmit="return confirmarModificar(this)">
         <fieldset>
             <legend>Datos del Cliente</legend>
 
@@ -91,7 +93,11 @@
                      <p>
     <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
     <input class="controls" id="fechaNacimiento" type="date" 
-        value="<%= fechaFormateada %>" 
+        value="<%= cli.getFechaNacimiento() %>"         
+        maxlength="10" 
+        placeholder="YYYY-MM-DD" 
+        pattern="\d{4}-\d{2}-\d{2}" 
+        oninput="this.value = this.value.replace(/[^0-9-]/g, '').slice(0, 10);"
         required name="txtFechaNacimiento" />
 </p>
            
@@ -140,13 +146,13 @@
     </div>
     
     <script>
-function confirmarAlta(form) 
+function confirmarModificar(form) 
 {
-    const confirmacion = confirm("¿Estás seguro de dar Alta este cliente?");
+    const confirmacion = confirm("¿Estás seguro de modificar este cliente?");
     if (confirmacion) {
         return true;
     } else {
-        console.log("Alta cancelada.");
+        console.log("Modificacion cancelada.");
         return false;
     }
 }
