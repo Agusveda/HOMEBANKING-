@@ -25,7 +25,7 @@
     id = Integer.parseInt(clienteId); // Convierte el id a entero
     ClienteDaoImp ban = new ClienteDaoImp();
     cli = ban.ObtenerDatosXid(id);
-    	// Aquí puedes usar el id para cargar los datos del cliente o realizar alguna operación
+    	
 	} else 
 	{
     out.println("No se ha proporcionado un ID válido.");
@@ -75,11 +75,11 @@
             </p>
             <p>
                 <label class="form-label" for="dni">DNI</label>
-                <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" Value="<%= cli.getDni() %>" required name="txtDNI" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudDni(this)">
+                <input class="controls" id="dni" type="number" maxlength="8" placeholder="Ingrese el DNI" Value="<%= cli.getDni() %>" required name="txtDNI" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudDni(this)">
             </p>
             <p>
                 <label class="form-label" for="cuil">CUIL</label>
-                <input class="controls" id="cuil" type="number"  placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudCuil(this)" >
+                <input class="controls" id="cuil" type="number" maxlength="9"  placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudCuil(this)" >
             </p>
             <p>
             		<label class="form-label" for="sexo">Sexo</label>
@@ -93,7 +93,7 @@
                      <p>
     <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
     <input class="controls" id="fechaNacimiento" type="date" 
-        value="<%= cli.getFechaNacimiento() %>"         
+        value="<%=cli.getFechaNacimiento()%>"         
         maxlength="10" 
         placeholder="YYYY-MM-DD" 
         pattern="\d{4}-\d{2}-\d{2}" 
@@ -123,7 +123,7 @@
             </p>
             <p>
                 <label class="form-label" for="telefono">Teléfono</label>
-                <input class="controls" id="telefono" type="text" maxlength="10" placeholder="Ingrese el teléfono" Value="<%= cli.getTelefono() %>" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
+                <input class="controls" id="telefono" type="text" maxlength="8" placeholder="Ingrese el teléfono" Value="<%= cli.getTelefono() %>" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
             </p>
             <p>
                 <label class="form-label" for="usuario">Usuario</label>
@@ -191,7 +191,7 @@ function validarLongitudDni(input) {
 }
 
 function validarLongitudCuil(input) {
-    const longitudExacta   = 10;
+    const longitudExacta   = 9;
  
     if (input.value.length > longitudExacta) {
         alert("El CUIL no puede tener más de 11 dígitos.");
