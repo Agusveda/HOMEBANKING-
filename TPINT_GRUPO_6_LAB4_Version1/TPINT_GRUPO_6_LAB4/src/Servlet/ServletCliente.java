@@ -259,52 +259,29 @@ public class ServletCliente extends HttpServlet {
              int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
              String user = request.getParameter("txtUsuario");
              
-             try {
-             	if (bandolero.ValidacionDniModificar(dni, id)) {
-             		throw new DniRepetido("El DNI ya figura en la base de datos");
-             	}
- 				
- 			} catch (DniRepetido e) {
- 				System.out.println("Excepción capturada: " + e.getMensajeError());
- 		        request.setAttribute("mensajeError", e.getMensajeError());
- 		        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
- 		        return;
- 			}
-           
-             /*
+             
              if (bandolero.ValidacionDniModificar(dni, id)) {
                  request.setAttribute("mensajeError", "El DNI ya figura en la base de datos.");
                  request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
                  return;
              }
-             */
+             
              if (bandolero.ValidacionCuilModificar(cuil, id)) {
                  request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
                  request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
                  return;
              }
              
-             try {
-             	if (bandolero.ValidacionUsuarioModificar(user, id)) {
-             		throw new UsuarioRepetido("El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
-             	}
- 				
- 			} catch (UsuarioRepetido e) {
- 				System.out.println("Excepción capturada: " + e.getMensajeError());
- 		        request.setAttribute("mensajeError", e.getMensajeError());
- 		        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
- 		        return;
- 			}
              
-             /*
+             
              if (bandolero.ValidacionUsuarioModificar(user, id)) {
                  request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos. Por favor, intente con otro Usuario.");
                  request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
                  return;
-             }*/
+             }
 
              bandolero.ModificarCliente(cli, usu);
-             RequestDispatcher vari = request.getRequestDispatcher("/Administrador.jsp");
+             RequestDispatcher vari = request.getRequestDispatcher("/ModificarCliente.jsp");
              vari.forward(request, response);  
              return;
          }
