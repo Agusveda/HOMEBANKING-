@@ -91,8 +91,13 @@ public class CuentaNegocioImpl implements CuentaNegocio {
 
 	@Override
 	public int CuentasPorCliente(int idCliente) {
-		// TODO Auto-generated method stub
-		return 0;
+		return cuentaDao.CuentasPorCliente(idCliente);
+	}
+
+
+	@Override
+	public int ClienteInactivo(int idCliente) {
+		return cuentaDao.ClienteInactivo(idCliente);
 	}
 
 

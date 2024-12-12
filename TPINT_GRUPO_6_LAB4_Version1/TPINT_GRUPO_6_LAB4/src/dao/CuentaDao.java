@@ -20,6 +20,7 @@ public interface CuentaDao {
 	public boolean ExisteId (int id);
 	public int ObtenerProximoIdCuenta();
 	public int CuentasPorCliente(int idCliente);
+	public int ClienteInactivo(int idCliente);
 	
 	//REPORTE CUENTAS
 	public float ReporteCuentas(); 
