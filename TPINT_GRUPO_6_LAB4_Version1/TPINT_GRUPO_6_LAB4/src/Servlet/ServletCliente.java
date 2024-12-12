@@ -15,6 +15,7 @@ import Entidades.Cliente;
 import Entidades.Localidad;
 import Entidades.Provincia;
 import Entidades.Usuario;
+import Excepciones.ContraseñaDiferente;
 import daoImp.ClienteDaoImp;
 
 @WebServlet("/ServletBanco")
@@ -86,17 +87,19 @@ public class ServletCliente extends HttpServlet {
         	
             String contrasena1 = request.getParameter("txtContrasena1");
             String contrasena2 = request.getParameter("txtContrasena2");
-
-            if (contrasena1 == null || contrasena2 == null || !contrasena1.equals(contrasena2)) {
-                request.setAttribute("mensajeError", "La contraseña no coincide");
-                System.out.println("Mensaje de error: Las contraseñas no coinciden.");
-                
-                /*
-                RequestDispatcher dispatcher = request.getRequestDispatcher("/AltaCliente.jsp");
-                dispatcher.forward(request, response)*/
-                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
-                return;
-            }
+            
+            try {
+            	if (contrasena1 == null || contrasena2 == null || !contrasena1.equals(contrasena2)) {
+            		throw new ContraseñaDiferente();
+            	}
+				
+			} catch (ContraseñaDiferente e) {
+				// Manejo de la excepción personalizada
+		        System.out.println("Excepción capturada: " + e.getMessage());
+		        request.setAttribute("mensajeError", e.getMessage());
+		        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+		        return;
+			}
 			
             ClienteNegocioImpl bandolero = new ClienteNegocioImpl();
             
