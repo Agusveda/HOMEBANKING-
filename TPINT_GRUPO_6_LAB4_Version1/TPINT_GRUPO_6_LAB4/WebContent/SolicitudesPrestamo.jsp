@@ -91,7 +91,6 @@
                         <form action="ServletPrestamo" method="post" style="display:inline;">
                             <input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>">
                             <input type="hidden" name="confirmacion" value="0">
-                            <button type="submit" class="acciones-btn">Denegar</button>
                         </form>
                     </td>
                 </tr>
