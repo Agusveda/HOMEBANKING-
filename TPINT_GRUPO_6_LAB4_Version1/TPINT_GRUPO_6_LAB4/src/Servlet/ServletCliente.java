@@ -304,19 +304,22 @@ public class ServletCliente extends HttpServlet {
 		
 		ClienteNegocioImpl ClientN = new ClienteNegocioImpl();
 		
-		if(request.getParameter("btnCambiar") != null){
+		if(request.getParameter("btnCambiar") != null)
+		{
 			
-		if(ClientN.existeEmail(mail)) {
-			boolean result = ClientN.actualizarContrasenaPorEmail(mail, nuevaContraseña);
+			if(ClientN.existeEmail(mail)) 
+			{
+				boolean result = ClientN.actualizarContrasenaPorEmail(mail, nuevaContraseña);
 			
-			if (result) {
-                request.setAttribute("mensaje", " Contraseña actualizada exitosamente.");
-            } else {
-                request.setAttribute("mensaje","Error al actualizar la contraseña.");
-            }
-            request.getRequestDispatcher("/RecuperarContraseña.jsp").forward(request, response);	
-	}
-}
+				if (result) {
+					request.setAttribute("mensaje", " Contraseña actualizada exitosamente.");
+				} else 
+				{
+					request.setAttribute("mensaje","Error al actualizar la contraseña.");
+				}	
+				request.getRequestDispatcher("/RecuperarContraseña.jsp").forward(request, response);	
+			}
+		}
         
         
 }

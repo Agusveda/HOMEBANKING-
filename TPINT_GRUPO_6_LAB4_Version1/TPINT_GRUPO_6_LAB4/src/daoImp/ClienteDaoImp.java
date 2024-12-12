@@ -317,7 +317,9 @@ public Cliente ObtenerDatosXid(int id) {
 public boolean eliminarCliente(int idCliente) {
     Connection conexion = null;
     PreparedStatement stmt = null;
+    PreparedStatement stmtU = null;
     boolean success = false;
+    boolean success2 = false;
 
     try {
       
@@ -354,6 +356,26 @@ public boolean eliminarCliente(int idCliente) {
             conexion.rollback(); 
         }
 
+        
+        String query2 = "UPDATE usuario SET Activo = 0 WHERE idCliente = ?";
+        stmtU = conexion.prepareStatement(query2);
+        stmtU.setInt(1, idCliente);
+
+        System.out.println("Ejecutando actualización para eliminar cliente con ID: " + idCliente);
+        int rowsAffected2 = stmtU.executeUpdate();
+
+   
+ 
+        if (rowsAffected2 > 0) {
+            success2 = true;
+            System.out.println("Cliente eliminado exitosamente. Filas afectadas: " + rowsAffected2);
+            conexion.commit(); 
+        } else {
+            System.out.println("No se encontró ningún cliente con ID: " + idCliente);
+            conexion.rollback(); 
+        }
+
+        
     } catch (SQLException e) {
         System.out.println("Error de SQL al intentar eliminar el cliente.");
         e.printStackTrace();
@@ -745,7 +767,7 @@ public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena
         String query = "UPDATE usuario u "
                      + "INNER JOIN cliente c ON u.IdCliente = c.Id "
                      + "SET u.Contraseña = ? "
-                     + "WHERE c.CorreoElectronico = ?";
+                     + "WHERE c.CorreoElectronico = ? and u.Activo = 1";
         
         // Preparar la consulta
         ps = cn.prepareStatement(query);

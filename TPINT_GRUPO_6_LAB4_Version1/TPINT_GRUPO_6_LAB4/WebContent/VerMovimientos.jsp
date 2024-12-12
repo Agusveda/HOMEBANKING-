@@ -72,7 +72,6 @@ int idCuenta = (int) session.getAttribute("idCuenta");
     </fieldset>
     
     
- <jsp:include page="Footer.jsp"/>
 
 </body>
 
