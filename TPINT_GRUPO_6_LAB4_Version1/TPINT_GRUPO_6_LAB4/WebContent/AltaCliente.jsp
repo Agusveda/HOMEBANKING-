@@ -72,7 +72,7 @@
     <label class="form-label" for="nacionalidad">Nacionalidad</label>
     <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
  <option value="" <%= (request.getAttribute("limpiarFormulario") != null || "".equals(request.getParameter("txtNacionalidad"))) ? "selected" : "" %>>Seleccione</option>
-        <option value="1" <%= "1".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Argentina (+54)</option>
+        <option value="1" <%= "1".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Argentina (+54 11)</option>
         <option value="2" <%= "2".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Brasil(+55)</option>
         <option value="3" <%= "3".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Chile(+56)</option>
         <option value="4" <%= "4".equals(request.getParameter("txtNacionalidad")) ? "selected" : "" %>>Uruguay(+598)</option>
