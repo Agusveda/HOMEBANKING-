@@ -14,6 +14,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <link rel="stylesheet" type="text/css" href="css/Transferencias.css">
+        <link rel="stylesheet" type="text/css" href="css/Navbar.css">
+    	<link rel="stylesheet" type="text/css" href="css/Footer.css">
     <style>
         <jsp:include page="css/Transferencias.css"></jsp:include>
         #inputSaldo {
@@ -52,6 +55,9 @@ function EventoSeleccionarCuenta()
 }
 </script>
 <body>
+
+<jsp:include page="Navbar.jsp"/>
+
     <div class="encabezado">
         <h1>Cuentas</h1>
     </div>
@@ -122,11 +128,13 @@ function EventoSeleccionarCuenta()
                 <input id="btnAceptar" type="submit" value="Transferir" required name="btnAceptar">
             </p>
         </fieldset>
+
+    <a href="Cliente.jsp">
+        <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
+    </a>
+
     </form>
 	
-    <a href="Cliente.jsp">
-        <input class="btnAtras" type="button" value="Atrás" name="btnAtras">
-    </a>
 
     
     <script>
@@ -141,6 +149,8 @@ function EventoSeleccionarCuenta()
         }
     }
 	</script>
+
+ <jsp:include page="Footer.jsp"/>
     
 </body>
 </html>

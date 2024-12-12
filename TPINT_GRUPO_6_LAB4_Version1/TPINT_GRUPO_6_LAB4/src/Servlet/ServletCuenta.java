@@ -69,6 +69,7 @@ public class ServletCuenta extends HttpServlet {
     	        if (request.getParameter("txtIdCliente") != null) {
     	            int idCliente = Integer.parseInt(request.getParameter("txtIdCliente"));
     	            cuentas = cuentaN.CuentasPorCliente(idCliente);
+    	            
     	        }
     	    } catch (ClienteExcedeCantCuentas e) {
     	        request.setAttribute("mensajeError", e.getMensajeError());

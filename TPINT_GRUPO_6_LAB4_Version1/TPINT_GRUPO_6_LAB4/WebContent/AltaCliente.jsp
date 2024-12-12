@@ -12,7 +12,9 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <link rel="stylesheet" type="text/css" href="css/altclien.css">
+	        <link rel="stylesheet" type="text/css" href="css/altclien.css">
+
+
     <title>Alta de Cliente</title>
     <style>
         .mensaje-cuadro {
@@ -194,7 +196,7 @@
             
             <div class="botones-container">
                 <input class="botons" id="btnAceptar" type="submit" value="Aceptar" required name="btnAltaCliente">
-                <input class="botons" type="submit" value="Volver" id="btnVolver" onclick="window.location.href='Administrador.jsp'; return false;">
+
             </div>
             
         </form>

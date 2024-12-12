@@ -21,3 +21,137 @@
     bottom: 0;
     left: 0;
 }
+
+
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2, h3 {
+        color: #444;
+        text-align: center;
+    }
+
+
+    form {
+        max-width: 600px;
+        margin: 30px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #fff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    fieldset {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 15px;
+        margin-bottom: 15px;
+    }
+
+    legend {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #555;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 1em;
+        background-color: #f9f9f9;
+    }
+
+    input[type="number"]::-webkit-inner-spin-button, 
+    input[type="number"]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input:focus, select:focus {
+        outline: none;
+        border-color: #007bff;
+        box-shadow: 0 0 4px rgba(0, 123, 255, 0.25);
+    }
+
+    input[readonly] {
+        background-color: #e9ecef;
+        cursor: not-allowed;
+    }
+
+
+    input[type="submit"] {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        font-size: 1em;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #0056b3;
+    }
+
+
+    select {
+        background-color: #fff;
+        cursor: pointer;
+    }
+
+
+    @media (max-width: 768px) {
+        form {
+            padding: 15px;
+        }
+
+        input, select {
+            font-size: 0.9em;
+        }
+    }
+    
+    .BtnAtras {
+        background-color: #4fc3f7; 
+        color: white; 
+        font-size: 16px; /* Tamaño de fuente reducido */
+        padding: 8px 20px; /* Reducido el espacio interno */
+        border: none; 
+        border-radius: 5px; /* Bordes más sutiles */
+        cursor: pointer; 
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); 
+        display: inline-block; /* Asegura que se comporte como un botón */
+        margin: 10px 0; /* Espaciado superior e inferior */
+        text-align: center;
+    }
+
+    .BtnAtras:hover {
+        background-color: #29b6f6; 
+        transform: scale(1.05); 
+    }
+
+    .BtnAtras:active {
+        background-color: #0288d1; 
+        transform: scale(0.95); 
+    }
+
+    .BtnAtras-container {
+        text-align: left; 
+    }
