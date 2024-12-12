@@ -16,6 +16,7 @@ import Entidades.Localidad;
 import Entidades.Provincia;
 import Entidades.Usuario;
 import Excepciones.ContraseñaDiferente;
+import Excepciones.DniRepetido;
 import Excepciones.UsuarioRepetido;
 import daoImp.ClienteDaoImp;
 
@@ -135,12 +136,19 @@ public class ServletCliente extends HttpServlet {
             int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
             String user = request.getParameter("txtUsuario");
             
-            if (bandolero.ValidacionDni(dni)) {
-                request.setAttribute("mensajeError", "El DNI ya existe en la base de datos. Por favor, intente con otro DNI.");
-                System.out.println("Mensaje de error: El DNI ya existe en la base de datos.");
-                request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
-                return;
-            }
+            try {
+            	if (bandolero.ValidacionDni(dni)) {
+            		throw new DniRepetido("El DNI ya figura en la base de datos");
+            	}
+				
+			} catch (DniRepetido e) {
+				System.out.println("Excepción capturada: " + e.getMensajeError());
+		        request.setAttribute("mensajeError", e.getMensajeError());
+		        request.getRequestDispatcher("/AltaCliente.jsp").forward(request, response);
+		        return;
+			}
+            
+            
             if (bandolero.ValidacionCuil(cuil)) {
                 request.setAttribute("mensajeError", "El CUIL ya existe en la base de datos. Por favor, intente con otro CUIL.");
                 System.out.println("Mensaje de error: El CUIL ya existe en la base de datos.");
