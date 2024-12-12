@@ -22,9 +22,11 @@
                 <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
             </a>
             
+            <% if (tipoUsuario != null && tipoUsuario == 0) { %>
             <a href="InformacionPersonal.jsp" title="Ir a mi perfil">
                 <img src="img/icoInfo.png" alt="Ícono de información" />
             </a>
+            <% } %>
             
             <% if (tipoUsuario != null && tipoUsuario == 1) { %>
                 <!-- Mostrar la opción de Administrador solo si el usuario es administrador -->
