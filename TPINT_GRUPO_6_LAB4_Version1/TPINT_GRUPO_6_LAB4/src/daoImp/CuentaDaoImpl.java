@@ -590,7 +590,7 @@ public class CuentaDaoImpl implements CuentaDao {
 	{
 		int cuentas = 0;
 	    try (Connection conexion = Conexion.getConexion().getSQLConexion();
-	         PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) FROM Cuenta WHERE idCliente = ?")) {
+	         PreparedStatement statement = conexion.prepareStatement("SELECT COUNT(*) FROM Cuenta WHERE idCliente = ? and Activo = 1")) {
 
 	        statement.setInt(1, idCliente);
 	        try (ResultSet rs = statement.executeQuery()) {
