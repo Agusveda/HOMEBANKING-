@@ -1,6 +1,7 @@
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="negocioImpl.MovimientoNegocioImpl"%>
+<%@page import="negocioImpl.PrestamoNegocioImp"%>
 <%@ page import="daoImp.MovimientoDaoImp"%>
 <%@ page import="Entidades.Prestamo"%>
 <%@ page import="java.util.ArrayList"%>
@@ -145,17 +146,20 @@
 </form>
 
 <%
-    MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
-    ArrayList<Prestamo> prestamos;
-    String filtro = request.getParameter("txtfiltrar");
-    System.out.println("Filtro seleccionado: " + filtro);
+
+PrestamoNegocioImp prestamoNegocio = new PrestamoNegocioImp();
+ArrayList<Prestamo> prestamos;
+String filtro = request.getParameter("txtfiltrar");
+System.out.println("Filtro seleccionado: " + filtro);
+
+
 
     if (filtro == null || filtro.trim().isEmpty() || filtro.equals("todos")) {
     	System.out.println("Obteniendo todos los prestamos.");
-        prestamos = mov.ListPrestamosPedidosAutorizados();
+        prestamos = prestamoNegocio.ListPrestamosPedidosAutorizados();
     } else {
     	System.out.println("Filtrado por Importe:" + filtro);
-        prestamos = mov.filtrarClienteXImporteConfirmado(filtro);
+        prestamos = prestamoNegocio.filtrarClienteXImporteConfirmado(filtro);
     }
 %>
 

@@ -30,7 +30,7 @@
     <div class="parteIzq">
         <div class="menu">
             <ul>
-                <li> <a href="Administrador.jsp"> <span class="fa fa-home"></span> Panel Principal</a></li>
+         
                 <li> 
                     <a href="#"> <span class="fa fa-users"></span> Gestión de Clientes</a> 
                     <ul>

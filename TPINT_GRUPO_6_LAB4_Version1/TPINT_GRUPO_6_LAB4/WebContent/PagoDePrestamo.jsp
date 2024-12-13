@@ -1,5 +1,7 @@
 <%@ page import="daoImp.MovimientoDaoImp" %>
+<%@ page import="daoImp.PrestamoDaoImp" %>
 <%@ page import="dao.MovimientoDao" %>
+<%@page import="negocioImpl.PrestamoNegocioImp"%>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Entidades.Cuenta" %>
@@ -53,7 +55,8 @@
         <%
             } else {
                 int idCliente = idClienteObj;
-                MovimientoDao movimientoDao = new MovimientoDaoImp();
+               MovimientoDao movimientoDao = new MovimientoDaoImp();
+               PrestamoNegocioImp prestamoNegocio = new PrestamoNegocioImp();
                 double totalPrestamos = 0;
                 double totalCuotasPendientes = 0;
                 ArrayList<Cuenta> cuentas = new ArrayList<>();
@@ -62,17 +65,17 @@
 
                 try {
                     // Obtener datos
-                    totalPrestamos = movimientoDao.obtenerTotalPrestamosConfirmados(idCliente);
+                    totalPrestamos = prestamoNegocio.obtenerTotalPrestamosConfirmados(idCliente);
                     cuentas = movimientoDao.TraeCuentasPorIdCliente(idCliente);
-                    prestamos = movimientoDao.obtenerPrestamosConfirmados(idCliente);
+                    prestamos = prestamoNegocio.obtenerPrestamosConfirmados(idCliente);
 
                     // Obtener cuotas pendientes
                     for (Prestamo prestamo : prestamos) {
-                        cuotas.addAll(movimientoDao.obtenerCuotas(idCliente, prestamo.getId()));
+                        cuotas.addAll(prestamoNegocio.obtenerCuotas(idCliente, prestamo.getId()));
                     }
 
                     // Obtener suma de cuotas pendientes
-                    totalCuotasPendientes = movimientoDao.obtenerSumaCuotasPendientes(idCliente);
+                    totalCuotasPendientes = prestamoNegocio.obtenerSumaCuotasPendientes(idCliente);
 
                     // Procesar el pago si se hace un POST
                     if (request.getMethod().equalsIgnoreCase("POST")) {
@@ -90,7 +93,7 @@
                             float montoPago = Float.parseFloat(montoPagoParam);
 
                             // Realizar el pago
-                            boolean exito = movimientoDao.realizarPagoCuota(cuotaId, cuentaId, montoPago);
+                            boolean exito = prestamoNegocio.realizarPagoCuota(cuotaId, cuentaId, montoPago);
                             mensaje = exito ? "El pago se realizó con éxito." : "Ocurrió un error al realizar el pago.";
 
                             if (exito) {
