@@ -11,17 +11,21 @@ import javax.servlet.http.HttpServletResponse;
 import Entidades.Prestamo;
 import daoImp.MovimientoDaoImp;
 import negocio.MovimientoNegocio;
+import negocio.PrestamoNegocio;
 import negocioImpl.MovimientoNegocioImpl;
+import negocioImpl.PrestamoNegocioImp;
 
 @WebServlet("/ServletPrestamo")
 public class ServletPrestamo extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private MovimientoNegocio movimientoNegocio;
+    private PrestamoNegocioImp prestamoNegocio;
 
     public ServletPrestamo() {
         super();
         // Instancia de la capa de negocio
         this.movimientoNegocio = new MovimientoNegocioImpl();
+        this.prestamoNegocio = new PrestamoNegocioImp();
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -70,7 +74,9 @@ public class ServletPrestamo extends HttpServlet {
                 prestamo.setCantCuo(cantCuo);
                 prestamo.setconfimacion(false);
 
-                boolean exito = movimientoNegocio.insertarPrestamo(prestamo);
+               // boolean exito = movimientoNegocio.insertarPrestamo(prestamo);
+                boolean exito = prestamoNegocio.insertarPrestamo(prestamo);
+                
 
                 if (exito) {
                     request.setAttribute("mensaje", "Pedido de préstamo confirmado.");
@@ -102,11 +108,12 @@ public class ServletPrestamo extends HttpServlet {
             System.out.println("monto: " + request.getParameter("monto"));
             System.out.println("cuenta: " + request.getParameter("cuenta"));
 
-            MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
-            boolean exito = movimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
+            //MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
+            //boolean exito = movimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
+            boolean exito = prestamoNegocio.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
 
             if (exito && confirmacion == 1) {
-                boolean exito2 = movimientoDao.CargarPrestamoEnCuenta(idcuenta, monto);
+                boolean exito2 = prestamoNegocio.CargarPrestamoEnCuenta(idcuenta, monto);
 
              
                 if (exito2) {
@@ -126,7 +133,7 @@ public class ServletPrestamo extends HttpServlet {
             int cuentaId = Integer.parseInt(request.getParameter("cuentaId"));
             float montoPago = Float.parseFloat(request.getParameter("montoPago"));
 
-            boolean exito = movimientoNegocio.realizarPagoCuota(cuotaId, cuentaId, montoPago);
+            boolean exito = prestamoNegocio.realizarPagoCuota(cuotaId, cuentaId, montoPago);
 
             if (exito) {
                 response.sendRedirect("pagoExitoso.jsp");

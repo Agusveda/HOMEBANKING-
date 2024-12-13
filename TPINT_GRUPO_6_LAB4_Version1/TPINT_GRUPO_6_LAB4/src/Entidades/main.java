@@ -7,7 +7,7 @@ import Entidades.Prestamo;
 public class main {
 
 	public static void main(String[] args) {
-		
+	/*	
 		MovimientoNegocioImpl mov = new MovimientoNegocioImpl();
 	    int cont = 0;
 
@@ -29,6 +29,8 @@ public class main {
 	    }
 
 	    System.out.println("Total de consultas ejecutadas: " + cont);
+	    */
+		System.out.println("Test");
     }
 }
      

@@ -22,7 +22,7 @@ public interface CuentaDao {
 	public int ObtenerProximoIdCuenta();
 	public void verificarCuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
 	public int ClienteInactivo(int idCliente);
-	
+
 	
 	//REPORTE CUENTAS
 	public float ReporteCuentas(); 

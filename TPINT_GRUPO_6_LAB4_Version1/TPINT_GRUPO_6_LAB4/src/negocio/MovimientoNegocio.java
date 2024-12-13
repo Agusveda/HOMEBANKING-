@@ -10,14 +10,28 @@ import Entidades.Prestamo;
 
 public interface MovimientoNegocio 
 {
+	
+	int ObtenerIdCuentaPorIdCliente(int IdCliente); 
 	int ObtenerIdCuentaPorCBU(int CBU);
 	boolean insertar(Movimiento movi, int idCue);
 	boolean insertarAltaCuenta(Movimiento movi, int idCue);
-	int ObtenerIdCuentaPorIdCliente(int IdCliente); 
-	ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
-	float ObtenerSaldoPorIdCuenta(int idCue); 
 	ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue);
+	float ObtenerSaldoPorIdCuenta(int idCue); 
 	boolean ExisteCBU(int Cbu);
+	float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
+	ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
+    float EgresoDeCliente(int DNICLIENTE);
+    float IngresoDeCliente(int DNICLIENTE);
+	/*
+	int ObtenerIdCuentaPorIdCliente(int IdCliente); 
+	int ObtenerIdCuentaPorCBU(int CBU);
+	boolean insertar(Movimiento movi, int idCue);
+	boolean insertarAltaCuenta(Movimiento movi, int idCue);
+	ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue);
+	float ObtenerSaldoPorIdCuenta(int idCue); 
+	boolean ExisteCBU(int Cbu);
+	float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
+	ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
     boolean insertarPrestamo(Prestamo prestamo);
     ArrayList<Prestamo> ListPrestamosPedidos();
     boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
@@ -30,7 +44,7 @@ public interface MovimientoNegocio
 	List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
 	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
 	double obtenerSumaCuotasPendientes(int idCliente);
-    float ReporteMovimiento(int TipoMovimiento, String FechaInicio, String FechaFinal); 
     float EgresoDeCliente(int DNICLIENTE);
     float IngresoDeCliente(int DNICLIENTE);
+    */
 }
