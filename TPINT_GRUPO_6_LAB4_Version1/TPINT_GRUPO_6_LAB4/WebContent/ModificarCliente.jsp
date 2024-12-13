@@ -98,7 +98,7 @@
 				    	type="date" 
 				        value="<%=cli.getFechaNacimiento()%>"         
 				        maxlength="10" 
-				        placeholder="DD-MM-YYYY" 
+				        placeholder="YYYY-MM-DD" 
 				        pattern="\d{4}-\d{2}-\d{2}" 
 				        oninput="validateDateInput(this)"
 				        required name="txtFechaNacimiento" />

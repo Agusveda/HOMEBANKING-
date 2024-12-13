@@ -23,7 +23,7 @@ private static final String insertCliente = "INSERT INTO Cliente (DNI,CUIL,Nombr
 private static final String insertUsuario = "INSERT INTO usuario (NombreUsuario, Contraseña, idCliente, TipoUsario, Activo) VALUES (?, ?, ?,?,?)";
 private static final String modificarCliente = "update cliente SET DNI= ?, CUIL= ?, Nombre=?, Apellido=?, Sexo=?, Nacionalidad=?, FechaNacimiento=?, Direccion=?, Localidad=?, Provincia= ?, CorreoElectronico=?, Telefono=? , Activo= 1 where id = ?;";
 private static final String modificarUsuario = "update usuario SET NombreUsuario=?, Contraseña=? where idCliente =?";
-private static final String ListarClienteUsuario = "SELECT c.*, u.NombreUsuario, u.Contraseña FROM cliente c JOIN usuario u on u.Id = c.Id where c.Activo=1;";
+private static final String ListarClienteUsuario = "SELECT c.*, u.NombreUsuario, u.Contraseña FROM cliente c JOIN usuario u on u.IdCliente = c.Id where c.Activo=1;";
 private static final String ObtenerPorId = "select * from cliente where id=?";
 private static final String ObtenerUsuarioPorId = "select NombreUsuario, Contraseña from usuario where idCliente=?;";
 private static final String ExisteDNI = "SELECT COUNT(*) AS total FROM cliente WHERE dni = ?";
@@ -846,7 +846,7 @@ public boolean ValidacionDniModificar(int dni, int id)
         }
 
         
-        String query = "SELECT COUNT(*) FROM cliente WHERE DNI = ? and IdCliente != ? and Activo = 1";
+        String query = "SELECT COUNT(*) FROM cliente WHERE DNI = ? and Id != ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, dni);
         preparedStatement.setInt(2, id);
@@ -892,7 +892,7 @@ public boolean ValidacionCuilModificar(int cuil, int id) {
         }
 
         
-        String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ? and IdCliente != ? and Activo = 1";
+        String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ? and Id != ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, cuil);
         preparedStatement.setInt(2, id);
