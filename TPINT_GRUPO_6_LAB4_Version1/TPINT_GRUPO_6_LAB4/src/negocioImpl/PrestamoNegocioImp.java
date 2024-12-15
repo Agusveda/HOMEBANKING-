@@ -31,6 +31,11 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 		
 		return prestamoDao.ListPrestamosPedidosAutorizados();
 	}
+	
+	public ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente) {
+		return prestamoDao.obtenerPrestamosEnEspera(idCliente);
+	}  
+	
 	@Override
 	public boolean CargarPrestamoEnCuenta(int idcuenta, float monto) {
 		return prestamoDao.CargarPrestamoEnCuenta(idcuenta,monto);

@@ -103,6 +103,10 @@ public class Prestamo {
 				+ fechaAlta + ", plazoPago=" + plazoPago + ", Impxmes=" + Impxmes + ", cantCuo=" + cantCuo
 				+ ", confimacion=" + confimacion + "]";
 	}
+
+
+
+	
 	
 
 }

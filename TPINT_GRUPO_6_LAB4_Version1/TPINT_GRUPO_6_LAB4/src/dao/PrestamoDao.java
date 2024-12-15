@@ -19,7 +19,8 @@ public interface PrestamoDao {
 	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
 	double obtenerSumaCuotasPendientes(int idCliente);
 	ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
-	ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);  
+	ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);
+	ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente);  
 	
 	//ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
     //float EgresoDeCliente(int DNICLIENTE);

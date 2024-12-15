@@ -2,6 +2,8 @@ package Servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -95,6 +97,8 @@ public class ServletPrestamo extends HttpServlet {
             response.sendRedirect("login.jsp");
         }
     }
+    
+    
 
     private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
@@ -149,5 +153,49 @@ public class ServletPrestamo extends HttpServlet {
         } catch (NumberFormatException e) {
             response.sendRedirect("errorPago.jsp");
         }
+    }
+    
+    
+    private void procesarPréstamosEnEspera(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    	 try {
+    		 String idClienteStr = request.getParameter("idClien");
+    		    if (idClienteStr == null || idClienteStr.isEmpty()) {
+    		        throw new NumberFormatException("El parámetro idCliente es obligatorio.");
+    		    }
+
+    		    // Parsear idCliente
+    		    int idCliente = Integer.parseInt(idClienteStr);
+    		    System.out.println("ID Cliente recibido: " + idCliente);  // Mensaje de depuración
+
+    		    // Obtener los préstamos en espera utilizando la lógica del negocio
+    		    PrestamoNegocio prestamoNegocio = new PrestamoNegocioImp();
+    		    List<Prestamo> prestamosEnEspera = prestamoNegocio.obtenerPrestamosEnEspera(idCliente);
+
+    		    // Comprobar si se encontraron préstamos en espera
+    		    if (prestamosEnEspera == null || prestamosEnEspera.isEmpty()) {
+    		        System.out.println("No se encontraron préstamos en espera para el cliente con ID: " + idCliente);
+    		        // Puedes agregar una notificación para el usuario si lo deseas
+    		        request.setAttribute("mensaje", "No tienes préstamos en espera.");
+    		    } else {
+    		        System.out.println("Préstamos en espera encontrados: " + prestamosEnEspera.size());  // Mostrar el tamaño de la lista
+    		    }
+
+    		    // Pasar los préstamos a la vista (JSP)
+    		    request.setAttribute("prestamosEnEspera", prestamosEnEspera);
+    		    RequestDispatcher dispatcher = request.getRequestDispatcher("ProcesoDePrestamo.jsp");
+    		    dispatcher.forward(request, response);
+
+    		} catch (NumberFormatException e) {
+    		    // Manejo de error en caso de número inválido o parámetro faltante
+    		    e.printStackTrace();
+    		    request.setAttribute("error", "Error al procesar el ID de cliente: " + e.getMessage());
+    		    response.sendRedirect("error.jsp"); // Redirigir a página de error
+
+    		} catch (Exception e) {
+    		    // Capturar cualquier otra excepción inesperada
+    		    e.printStackTrace();
+    		    request.setAttribute("error", "Ocurrió un error al obtener los préstamos en espera.");
+    		    response.sendRedirect("error.jsp");
+    		}
     }
 }

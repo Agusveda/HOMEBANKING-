@@ -46,6 +46,31 @@
     	{
         	text-align: left; 
     	}
+    	
+    	 .BtnRedirigir {
+        background-color: #4fc3f7;
+        color: white;
+        font-size: 16px;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+        display: inline-block;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .BtnRedirigir:hover {
+        background-color: #29b6f6;
+        transform: scale(1.05);
+    }
+
+    .BtnRedirigir:active {
+        background-color: #0288d1;
+        transform: scale(0.95);
+    }
 	</style>
 
 </head>
@@ -58,6 +83,12 @@
 
 
 <div class="container">
+<%
+Integer idClien = (Integer) session.getAttribute("IdCliente"); 
+%>
+ <a href="ProcesoDePrestamo.jsp?idCliente=<%= idClien %>">
+    <input class="BtnRedirigir" type="button" value="Préstamos en espera">
+</a>
 
 <%-- Mostrar el mensaje de error o éxito --%>
 <% 

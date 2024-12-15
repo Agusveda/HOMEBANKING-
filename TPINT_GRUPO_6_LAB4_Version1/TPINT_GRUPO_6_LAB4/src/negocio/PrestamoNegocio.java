@@ -20,4 +20,6 @@ public interface PrestamoNegocio {
 	double obtenerSumaCuotasPendientes(int idCliente);
 	ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
 	ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);  
+	ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente);  
+
 }

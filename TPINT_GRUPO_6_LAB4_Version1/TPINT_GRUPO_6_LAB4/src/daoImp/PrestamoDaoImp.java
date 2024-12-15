@@ -316,6 +316,40 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    
 	    return PretAut;
 	}
+	
+	
+	
+	@Override
+	public ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente) {
+		ArrayList<Prestamo> PretAut = new ArrayList<>();
+	    String query = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, ImportePagarXmes, CantidadCuotas, confirmacion FROM prestamo WHERE confirmacion = 0 AND IdCliente = ?";
+	    
+	    try (Connection con = Conexion.getConexion().getSQLConexion();
+	         PreparedStatement ps = con.prepareStatement(query)) {
+	        
+	        ps.setInt(1, idCliente); 
+	        
+	        try (ResultSet rs = ps.executeQuery()) {
+	            while (rs.next()) {
+	                Prestamo pre = new Prestamo();
+	                pre.setId(rs.getInt("Id"));
+	                pre.setIdCliente(rs.getInt("IdCliente"));
+	                pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
+	                pre.setFechaAlta(rs.getDate("FechaAlta"));
+	                pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
+	                pre.setCantCuo(rs.getInt("CantidadCuotas"));
+	                pre.setconfimacion(rs.getBoolean("confirmacion"));
+	                PretAut.add(pre);
+	            }
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
+	        e.printStackTrace();
+	    }
+
+	    return PretAut;
+	}
+	
 
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
