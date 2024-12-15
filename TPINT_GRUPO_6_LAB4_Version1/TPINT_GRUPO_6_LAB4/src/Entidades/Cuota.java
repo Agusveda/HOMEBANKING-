@@ -1,12 +1,13 @@
 package Entidades;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 public class Cuota {
     private int Id;
     private int IdPrestamo;
     private int NumeroCuota;
-    private double Monto; 
+    private float Monto; 
     private Date FechaPago;
     private boolean estaPagada; // Nuevo atributo
 
@@ -57,16 +58,22 @@ public class Cuota {
         return Monto;
     }
 
-    public void setMonto(double monto) {
+    public void setMonto(float monto) {
         Monto = monto;
     }
 
     public Date getFechaPago() {
         return FechaPago;
     }
-
+    
+    //Usaremos java.sql.Date para almacenar las fechas en la base de datos, pero LocalDate para las operaciones dentro de la lógica de negocio.
     public void setFechaPago(Date fechaPago) {
         FechaPago = fechaPago;
+    }
+
+    public void setFechaPago(LocalDate fechaPago) {
+        // Convertimos LocalDate a java.sql.Date
+        FechaPago = Date.valueOf(fechaPago);
     }
 
     public boolean isPagada() {

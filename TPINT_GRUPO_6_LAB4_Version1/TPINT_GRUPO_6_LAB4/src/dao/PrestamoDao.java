@@ -8,7 +8,7 @@ import Entidades.Cuota;
 import Entidades.Prestamo;
 
 public interface PrestamoDao {
-    boolean insertarPrestamo(Prestamo prestamo);
+   // boolean insertarPrestamo(Prestamo prestamo);
     ArrayList<Prestamo> ListPrestamosPedidos();
     boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
     ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
@@ -26,5 +26,7 @@ public interface PrestamoDao {
     //float EgresoDeCliente(int DNICLIENTE);
     //float IngresoDeCliente(int DNICLIENTE);
 	// ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
-	// ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);     
+	// ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);   
+	
+	boolean insertarPrestamo(Prestamo prestamo, List<Cuota> cuotas);
 }

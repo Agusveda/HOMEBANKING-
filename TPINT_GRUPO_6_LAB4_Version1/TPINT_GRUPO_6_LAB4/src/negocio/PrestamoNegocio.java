@@ -8,7 +8,7 @@ import Entidades.Cuota;
 import Entidades.Prestamo;
 
 public interface PrestamoNegocio {
-    boolean insertarPrestamo(Prestamo prestamo);
+   // boolean insertarPrestamo(Prestamo prestamo);
     ArrayList<Prestamo> ListPrestamosPedidos();
     boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
     ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
@@ -20,6 +20,12 @@ public interface PrestamoNegocio {
 	double obtenerSumaCuotasPendientes(int idCliente);
 	ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
 	ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);  
-	ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente);  
+	ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente);
+//	boolean solicitarPrestamo(Prestamo prestamo);  
+	
+	
+	//nuevos
+	boolean solicitarPrestamo(Prestamo prestamo);
+	List<Cuota> generarCuotas(Prestamo prestamo, float montoConInteres);  
 
 }
