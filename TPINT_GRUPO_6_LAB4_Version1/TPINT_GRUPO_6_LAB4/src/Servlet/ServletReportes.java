@@ -108,9 +108,8 @@ public class ServletReportes extends HttpServlet {
         			return;
         		}
         		
-        		
         		int TipoMovimiento = Integer.parseInt(request.getParameter("TipoMovimiento"));
-        		total = MoviN.ReporteMovimiento(TipoMovimiento, fechaInicio, fechaFin);
+        		
         	    
         	    //OBTENEMOS EL NOMBRE DEL MOVIMIENTO PARA MOSTRARLO EN EL REPORTE
         	    switch (TipoMovimiento) {
@@ -134,6 +133,7 @@ public class ServletReportes extends HttpServlet {
         	    //Lo ponemos en una Session para pasarlo al JSP
         	    request.getSession().setAttribute("TipoMovimiento", TipoMovimientoStr);
         	    
+        	    total = MoviN.ReporteMovimiento(TipoMovimiento, fechaInicio, fechaFin);
         	    if (total != 0)
         	    {
         	    	 request.setAttribute("mensaje", "Reporte realizado exitosamente.");

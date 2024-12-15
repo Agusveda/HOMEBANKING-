@@ -427,7 +427,7 @@ public boolean eliminarCliente(int idCliente) {
 
 public Usuario verificarCredenciales(String username, String password) {
 	Usuario usuario = null;
-    String query = "SELECT * FROM usuario WHERE NombreUsuario = ? AND Contraseña = ?";
+    String query = "SELECT * FROM usuario WHERE NombreUsuario = ? AND Contraseña = ? and Activo=1";
 
     Connection conn = null;
     PreparedStatement stmt = null;

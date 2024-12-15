@@ -168,5 +168,4 @@ Integer idClien = (Integer) session.getAttribute("IdCliente");
 
 
 </body>
-<jsp:include page="Footer.jsp"/>
 </html>
