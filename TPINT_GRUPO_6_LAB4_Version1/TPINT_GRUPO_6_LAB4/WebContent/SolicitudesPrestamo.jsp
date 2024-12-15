@@ -91,7 +91,11 @@
                         <!-- Formulario para denegar el préstamo -->
                         <form action="ServletPrestamo" method="post" style="display:inline;">
                             <input type="hidden" name="idPrestamo" value="<%= prestamo.getId() %>">
-                            <input type="hidden" name="confirmacion" value="0">
+                            <input type="hidden" name="confirmacion" value="2">
+                          <input type="hidden" name="cuenta" value="<%= prestamo.getIdCuenta() %>"> 
+
+                             <input type="hidden" name="monto" value="<%= prestamo.getImporteCliente() %>">
+                            <button type="submit" class="acciones-btn">Denegar</button>
                         </form>
                     </td>
                 </tr>

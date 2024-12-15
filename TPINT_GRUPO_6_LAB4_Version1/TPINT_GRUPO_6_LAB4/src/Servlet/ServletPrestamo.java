@@ -110,8 +110,9 @@ public class ServletPrestamo extends HttpServlet {
 
             //MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
             //boolean exito = movimientoDao.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
+            String confirmacionStr = request.getParameter("confirmacion");
+            System.out.println("Confirmación recibida en el servlet: " + confirmacionStr);
             boolean exito = prestamoNegocio.actualizarConfirmacionPrestamo(idPrestamo, confirmacion);
-
             if (exito && confirmacion == 1) {
                 boolean exito2 = prestamoNegocio.CargarPrestamoEnCuenta(idcuenta, monto);
 
@@ -120,6 +121,11 @@ public class ServletPrestamo extends HttpServlet {
                     response.sendRedirect("SolicitudesPrestamo.jsp");
                     return; 
                 }
+            }
+            else if (exito && confirmacion == 2) {
+                
+                response.sendRedirect("SolicitudesPrestamo.jsp");
+                return;
             }
 
         } catch (NumberFormatException e) {
