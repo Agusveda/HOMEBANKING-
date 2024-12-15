@@ -18,14 +18,21 @@ import dao.PrestamoDao;
 public class PrestamoDaoImp implements PrestamoDao{
 	private static final String InsertarPrestamo = "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, PlazoPago, ImportePagarXmes, CantidadCuotas, confirmacion) VALUES (?,?, ?, NOW(), ?, ?, ?, ?)";	
 	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where Id = ? ";
-
+	private static final String ListarPrestamosPedidosAutorizados = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
+	private static final String InsertarCuotasEnPrestamo = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
+	private static final String ListarTodosPrestamos = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
+	private static final String ActualizarConfirmacionPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
+	private static final String ObtenerImportePrestamo = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
+	private static final String ObtenerIdCuentaPrestamo = "SELECT IdCuenta FROM prestamo WHERE id = ?";
+	private static final String ObtenerPrestamosPendientes = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, ImportePagarXmes, CantidadCuotas, private static final String confirmacion FROM prestamo WHERE confirmacion = 0 AND IdCliente = ?";
+	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.PlazoPago, p.ImportePagarXmes, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
+	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
 
 	@Override
     public boolean insertarPrestamo(Prestamo prestamo) {
         boolean isInsertExitoso = false;
  
         try (Connection connection = Conexion.getConexion().getSQLConexion()) {
- 
             if (connection == null) {
                 System.out.println("No se pudo obtener la conexión a la base de datos.");
                 return false;
@@ -55,11 +62,9 @@ public class PrestamoDaoImp implements PrestamoDao{
                     System.out.println("Número de cuotas no válido.");
                     return false; 
             }
- 
-            
+    
             float montoRecibido = prestamo.getImporteCliente();
-            
-            
+     
             float montoConInteres = montoRecibido * (1 + tasaInteres);
  
             try (PreparedStatement statement = connection.prepareStatement(InsertarPrestamo, Statement.RETURN_GENERATED_KEYS)) {
@@ -77,17 +82,15 @@ public class PrestamoDaoImp implements PrestamoDao{
                     ResultSet generatedKeys = statement.getGeneratedKeys();
                     if (generatedKeys.next()) {
                         int idPrestamo = generatedKeys.getInt(1); 
- 
                        
-                        String insertarCuotaSQL = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
-                        try (PreparedStatement statementCuota = connection.prepareStatement(insertarCuotaSQL)) {
+                     
+                        try (PreparedStatement statementCuota = connection.prepareStatement(InsertarCuotasEnPrestamo)) {
                             for (int i = 1; i <= prestamo.getCantCuo(); i++) {
                                 statementCuota.setInt(1, idPrestamo); 
                                 statementCuota.setInt(2, i); 
                                 statementCuota.setFloat(3, montoConInteres / prestamo.getCantCuo()); 
                                 statementCuota.setInt(4, 0); // estaPagada (0: pendiente)
                                 statementCuota.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusMonths(i)));
- 
                                 statementCuota.addBatch(); 
                             }
  
@@ -117,9 +120,6 @@ public class PrestamoDaoImp implements PrestamoDao{
         return isInsertExitoso;
     }
 
-	
-	
-
 	@Override
 	public ArrayList<Prestamo> ListPrestamosPedidos() {
 		try {
@@ -132,8 +132,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    
 	    ArrayList<Prestamo> ListaPrestamos = new ArrayList<Prestamo>();
 	    
-	    String query = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
-	    
 	    Connection con = Conexion.getConexion().getSQLConexion();
 	    
 	    if (con == null) {
@@ -143,7 +141,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        System.out.println("Conexión a la base de datos establecida.");
 	    }
 	    
-	    try (PreparedStatement ps = con.prepareStatement(query);
+	    try (PreparedStatement ps = con.prepareStatement(ListarTodosPrestamos);
 	         ResultSet rs = ps.executeQuery()) {
 	        
 	        while (rs.next()) {
@@ -154,22 +152,16 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
 	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
-	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
-	        
-	          
-	            ListaPrestamos.add(pre);
-	            
+	            pre.setCantCuo(rs.getInt("CantidadCuotas"));	     	          
+	            ListaPrestamos.add(pre);            
 	        }
 	        
 	    } catch (SQLException e) {
 	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
 	        e.printStackTrace();
-	    }
-	    
-	    
+	    }    
 	    return ListaPrestamos;
 	}
-
 	
 	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
 	    Connection connection = null;
@@ -188,8 +180,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        System.out.println("Actualizando préstamo con ID: " + idPrestamo);
 	        System.out.println("Nuevo estado de confirmación: " + confirmacion);
 
-	        String updateQuery = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
-	        statement = connection.prepareStatement(updateQuery);
+	        statement = connection.prepareStatement(ActualizarConfirmacionPrestamo);
 	        statement.setInt(1, confirmacion);
 	        statement.setInt(2, idPrestamo);
 
@@ -240,10 +231,8 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    return isUpdateExitoso;
 	}
 
-
 	private float obtenerImportePrestamo(int idPrestamo, Connection connection) throws SQLException {
-	    String query = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
-	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	    try (PreparedStatement statement = connection.prepareStatement(ObtenerImportePrestamo)) {
 	        statement.setInt(1, idPrestamo);
 	        try (ResultSet resultSet = statement.executeQuery()) {
 	            if (resultSet.next()) {
@@ -255,8 +244,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	}
 
 	private int obtenerIdCuentaPrestamo(int idPrestamo, Connection connection) throws SQLException {
-	    String query = "SELECT IdCuenta FROM prestamo WHERE id = ?";
-	    try (PreparedStatement statement = connection.prepareStatement(query)) {
+	    try (PreparedStatement statement = connection.prepareStatement(ObtenerIdCuentaPrestamo)) {
 	        statement.setInt(1, idPrestamo);
 	        try (ResultSet resultSet = statement.executeQuery()) {
 	            if (resultSet.next()) {
@@ -266,7 +254,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    }
 	    return 0;
 	}
-
 	
 	@Override
 	public ArrayList<Prestamo> ListPrestamosPedidosAutorizados() {
@@ -280,8 +267,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    
 	    ArrayList<Prestamo> PretAut = new ArrayList<Prestamo>();
 	    
-	    String query = "SELECT Id, IdCliente, ImportePedidoCliente,FechaAlta,ImportePagarXmes,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 1 ";
-	    
 	    Connection con = Conexion.getConexion().getSQLConexion();
 	    
 	    if (con == null) {
@@ -291,7 +276,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        System.out.println("Conexión a la base de datos establecida.");
 	    }
 	    
-	    try (PreparedStatement ps = con.prepareStatement(query);
+	    try (PreparedStatement ps = con.prepareStatement(ListarPrestamosPedidosAutorizados);
 	         ResultSet rs = ps.executeQuery()) {
 	        
 	        while (rs.next()) {
@@ -302,30 +287,23 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
 	            pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
-	            pre.setconfimacion(rs.getBoolean("confirmacion"));
-	          
-	            PretAut.add(pre);
-	            
+	            pre.setconfimacion(rs.getBoolean("confirmacion"));          
+	            PretAut.add(pre);            
 	        }
 	        
 	    } catch (SQLException e) {
 	        System.out.println("Error al ejecutar la consulta: " + e.getMessage());
 	        e.printStackTrace();
-	    }
-	    
-	    
+	    }	    
 	    return PretAut;
-	}
-	
-	
+	}	
 	
 	@Override
 	public ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente) {
 		ArrayList<Prestamo> PretAut = new ArrayList<>();
-	    String query = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, ImportePagarXmes, CantidadCuotas, confirmacion FROM prestamo WHERE confirmacion = 0 AND IdCliente = ?";
-	    
+		
 	    try (Connection con = Conexion.getConexion().getSQLConexion();
-	         PreparedStatement ps = con.prepareStatement(query)) {
+	         PreparedStatement ps = con.prepareStatement(ObtenerPrestamosPendientes)) {
 	        
 	        ps.setInt(1, idCliente); 
 	        
@@ -348,8 +326,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    }
 
 	    return PretAut;
-	}
-	
+	}	
 
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
@@ -403,7 +380,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    return lista;
 	}
 
-
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado(String orden) {
 		ArrayList<Prestamo> lista = new ArrayList<>();
@@ -452,14 +428,11 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            e.printStackTrace();
 	        }
 	    }
-
-	    return lista;
-		
+	    return lista;		
 	}
 
 	@Override
-	public boolean CargarPrestamoEnCuenta(int IdCuenta, float monto) {
-			 
+	public boolean CargarPrestamoEnCuenta(int IdCuenta, float monto) {		 
 			   Connection connection = null;
 			   PreparedStatement statement = null;
 			   boolean isInsertExitoso = false;
@@ -475,8 +448,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 			       statement = connection.prepareStatement(CargarPrestamoEnCuenta);
 			       statement.setFloat(1, monto);
 			       statement.setFloat(2, IdCuenta);
-			    
-			
+			    			
 			       int rowsAffected = statement.executeUpdate();
 			       
 			       if (rowsAffected > 0) {
@@ -511,15 +483,13 @@ public class PrestamoDaoImp implements PrestamoDao{
 			   }
 			   return isInsertExitoso;
 		}
-
 	
 	@Override
 	public double obtenerTotalPrestamosConfirmados(int idCliente) {
 	    double totalPrestamos = 0;
 	    Connection con = null;
 	    
-	    try {
-	    	
+	    try {    	
 	        con = Conexion.getConexion().getSQLConexion();
 
 	        if (con == null || con.isClosed()) {
@@ -553,30 +523,18 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    ResultSet rs = null;
 
 	    try {
-	        // Obtener la conexión a la base de datos
 	        con = Conexion.getConexion().getSQLConexion();
-
-	        // Verificar si la conexión está cerrada y reconectar si es necesario
 	        if (con == null || con.isClosed()) {
 	            System.out.println("Conexión cerrada, intentando reconectar...");
 	            con = Conexion.getConexion().getSQLConexion();
 	        }
 
-	        // Consulta SQL base
-	        String sqlBase = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, " +
-	                         "p.FechaAlta, p.PlazoPago, p.ImportePagarXmes, p.CantidadCuotas, p.confirmacion " +
-	                         "FROM prestamo p " +
-	                         "WHERE p.IdCliente = ? AND p.confirmacion = 1";
+	        ps = con.prepareStatement(ObtenerPrestamosConfirmados);
+	        ps.setInt(1, idCliente);
 
-	        // Preparar la consulta
-	        ps = con.prepareStatement(sqlBase);
-	        ps.setInt(1, idCliente);  // Configurar el idCliente
-
-	        // Ejecutar la consulta
-	        System.out.println("Ejecutando SQL: " + sqlBase); // Log de la consulta
+	        System.out.println("Ejecutando SQL: " + ObtenerPrestamosConfirmados); 
 	        rs = ps.executeQuery();
 
-	        // Procesar los resultados
 	        while (rs.next()) {
 	            Prestamo prestamo = new Prestamo();
 	            prestamo.setId(rs.getInt("Id"));
@@ -595,7 +553,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        e.printStackTrace();
 	        System.out.println("Error al obtener los préstamos.");
 	    } finally {
-	        // Asegurarse de cerrar los recursos
+	    	
 	        try {
 	            if (rs != null) rs.close();
 	            if (ps != null) ps.close();
@@ -604,7 +562,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            e.printStackTrace();
 	        }
 	    }
-
 	    return prestamos;
 	}
 
@@ -623,31 +580,23 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            con = Conexion.getConexion().getSQLConexion();
 	        }
 
-	        String sqlBase = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada " +
-	                         "FROM cuota cu " +
-	                         "JOIN prestamo p ON cu.IdPrestamo = p.Id " +
-	                         "WHERE p.IdCliente = ? AND p.confirmacion = 1 ";
-
-	        // Si se especifica un idPrestamo, filtrar por ese préstamo
 	        if (idPrestamo != 0) {
-	            sqlBase += "AND p.Id = ? ";
+	        	ObtenerCuotasDePrestamo += "AND p.Id = ? ";
 	        }
 
-	        sqlBase += "ORDER BY cu.FechaPago, cu.NumeroCuota";  
+	        ObtenerCuotasDePrestamo += "ORDER BY cu.FechaPago, cu.NumeroCuota";  
 
 	        // Preparar la consulta
-	        ps = con.prepareStatement(sqlBase);
+	        ps = con.prepareStatement(ObtenerCuotasDePrestamo);
 	        ps.setInt(1, idCliente);  
 
 	        if (idPrestamo != 0) {
 	            ps.setInt(2, idPrestamo); 
 	        }
 
-	        // Ejecutar la consulta
-	        System.out.println("Ejecutando SQL: " + sqlBase); // Log de la consulta
+	        System.out.println("Ejecutando SQL: " + ObtenerCuotasDePrestamo); // Log de la consulta
 	        rs = ps.executeQuery();
 
-	        // Procesar los resultados
 	        while (rs.next()) {
 	            Cuota cuota = new Cuota();
 	            cuota.setId(rs.getInt("Id"));
@@ -729,7 +678,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        psInsertMovimiento.setString(4, "Pago de préstamo (Cuota ID: " + cuotaId + ")");
 	        psInsertMovimiento.executeUpdate();
 
-
 	        String sqlUpdateCuota = "UPDATE cuota SET estaPagada = 1 WHERE Id = ?";
 	        psUpdateCuota = conn.prepareStatement(sqlUpdateCuota);
 	        psUpdateCuota.setInt(1, cuotaId);
@@ -770,7 +718,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    double montoTotalPendiente = 0;
 
 	    try {
-
 	        conn = Conexion.getConexion().getSQLConexion();
 
 	        if (conn == null || conn.isClosed()) {
@@ -803,9 +750,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            closeEx.printStackTrace();
 	        }
 	    }
-
 	    return montoTotalPendiente;
 	}
-
 }
-

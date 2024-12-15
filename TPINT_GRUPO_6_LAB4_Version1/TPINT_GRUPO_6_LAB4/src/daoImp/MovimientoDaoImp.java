@@ -1,21 +1,12 @@
 package daoImp;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
-
-import Entidades.Cliente;
 import Entidades.Cuenta;
-import Entidades.Cuota;
 import Entidades.Movimiento;
-import Entidades.Nacionalidades;
-import Entidades.Prestamo;
 import dao.MovimientoDao;
 
 public class MovimientoDaoImp implements MovimientoDao {
@@ -118,7 +109,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
-
 		PreparedStatement statementMovimientoP = null;
 		PreparedStatement statementMovimientoN = null;
 		PreparedStatement statementCuenta = null;
@@ -131,10 +121,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 		boolean isInsertExitoso = false;
 
 		try {
-
-			// Inserción en la tabla Cliente con generación de ID
 			System.out.println("Preparando declaración de inserción para movimiento...");
-
 			statementMovimientoP = conexion.prepareStatement(IngresarMovimientoPositivo);
 
 			statementMovimientoP.setFloat(1, movi.getImporte());
@@ -145,9 +132,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 				System.out.println("Inserción en Movimiento Positivo exitoso.");
 
 				// INSERCION NEGATIVA DE LA TABLA CLIENTE
-
 				statementMovimientoN = conexion.prepareStatement(IngresarMovimientoNegativo);
-
 				statementMovimientoN.setFloat(1, movi.getImporte());
 				statementMovimientoN.setInt(2, idCue);
 				statementMovimientoN.setString(3, movi.getDetalle());
@@ -155,9 +140,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 				if (statementMovimientoN.executeUpdate() > 0) {
 					System.out.println("Inserción en Movimiento negativo exitoso.");
 
-					// Inserción en Cuenta
 					System.out.println("Preparando declaración de inserción para cuenta.");
-
 
 					statementBajaSueldo = conexion.prepareStatement(ModificarCuentaNegativo);
 					statementBajaSueldo.setFloat(1, movi.getImporte());
@@ -169,10 +152,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 						statementCuenta = conexion.prepareStatement(ModificarCuentaPositivo);
 						statementCuenta.setFloat(1, movi.getImporte());
 						statementCuenta.setInt(2, movi.getIdCuenta());
-						// Ejecutar la inserción de Usuario
 						if (statementCuenta.executeUpdate() > 0) {
 							System.out.println("Inserción en Cuenta exitosa.");
-
 							conexion.commit();
 							isInsertExitoso = true;
 						}
@@ -191,7 +172,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		}
 		return isInsertExitoso;
 	}
-
 
 	@Override
 	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
@@ -319,8 +299,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		return saldo;
 	}
 	
-
-	
 	///SECCION DE VALIDACIONES
 	@Override
 	public boolean ExisteCBU(int Cbu) 
@@ -415,7 +393,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 		return total;
 	}
 
-
 	@Override
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
 	    ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
@@ -463,8 +440,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return CuentasCliente;
 	}
-
-
 
 	@Override
 	public float IngresoDeCliente(int DNICLIENTE) 
@@ -548,5 +523,4 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return total;
 	}
-
 }
