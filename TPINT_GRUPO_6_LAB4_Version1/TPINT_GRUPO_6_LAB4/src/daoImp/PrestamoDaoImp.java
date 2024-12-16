@@ -24,9 +24,9 @@ public class PrestamoDaoImp implements PrestamoDao{
 	private static final String ActualizarConfirmacionPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
 	private static final String ObtenerImportePrestamo = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
 	private static final String ObtenerIdCuentaPrestamo = "SELECT IdCuenta FROM prestamo WHERE id = ?";
-	private static final String ObtenerPrestamosPendientes = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, CantidadCuotas, private static final String confirmacion FROM prestamo WHERE confirmacion = 0 AND IdCliente = ?";
-	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.PlazoPago, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
-	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
+	private static final String ObtenerPrestamosPendientes = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, CantidadCuotas, confirmacion FROM prestamo WHERE confirmacion = 0 AND IdCliente = ?";
+	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
+//	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
 	private static final String AprobarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE Id = ?";
 	
 	@Override
@@ -62,12 +62,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	                                statementCuota.setInt(1, idPrestamo);
 	                                statementCuota.setInt(2, cuota.getNumeroCuota());
 	                                statementCuota.setDouble(3, cuota.getMonto());
-	                                statementCuota.setInt(4, 0); // Esta cuota está no pagada
-
-	                                // Convertir fecha de java.util.Date a java.sql.Date
-	                             //   java.util.Date utilDate = cuota.getFechaPago();
-	                               // java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime()); // Conversión
-
+	                                statementCuota.setInt(4, 0); // Esta cuota no está pagada
 	                                statementCuota.setDate(5, cuota.getFechaPago()); 
 	                                statementCuota.addBatch();
 	                            }
@@ -437,7 +432,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setIdCliente(rs.getInt("IdCliente"));
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
-	            //pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
 	            pre.setconfimacion(rs.getBoolean("confirmacion"));          
 	            PretAut.add(pre);            
@@ -466,7 +460,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	                pre.setIdCliente(rs.getInt("IdCliente"));
 	                pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	                pre.setFechaAlta(rs.getDate("FechaAlta"));
-	             //   pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	                pre.setCantCuo(rs.getInt("CantidadCuotas"));
 	                pre.setconfimacion(rs.getBoolean("confirmacion"));
 	                PretAut.add(pre);
@@ -507,7 +500,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setIdCliente(rs.getInt("IdCliente"));
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
-	           // pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
 	            pre.setconfimacion(rs.getBoolean("confirmacion"));
 	            lista.add(pre);
@@ -694,8 +686,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            prestamo.setIdCuenta(rs.getInt("IdCuenta"));
 	            prestamo.setImporteCliente(rs.getFloat("ImporteCliente"));
 	            prestamo.setFechaAlta(rs.getDate("FechaAlta"));
-	            prestamo.setPlazoPago(rs.getInt("PlazoPago"));
-	          //  prestamo.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            prestamo.setCantCuo(rs.getInt("CantidadCuotas"));
 	            prestamo.setconfimacion(rs.getBoolean("confirmacion"));
 
@@ -724,6 +714,20 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    PreparedStatement ps = null;
 	    ResultSet rs = null;
 
+	    // Construcción de la consulta SQL de forma estática
+	    String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada "
+	                                     + "FROM cuota cu "
+	                                     + "JOIN prestamo p ON cu.IdPrestamo = p.Id "
+	                                     + "WHERE p.IdCliente = ? AND p.confirmacion = 1 ";
+
+	    // Si idPrestamo es diferente de 0, añadimos la condición correspondiente
+	    if (idPrestamo != 0) {
+	        ObtenerCuotasDePrestamo += "AND p.Id = ? ";
+	    }
+
+	    // Agregamos la ordenación al final de la consulta
+	    ObtenerCuotasDePrestamo += "ORDER BY cu.FechaPago, cu.NumeroCuota";
+
 	    try {
 	        con = Conexion.getConexion().getSQLConexion();
 
@@ -732,18 +736,13 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            con = Conexion.getConexion().getSQLConexion();
 	        }
 
-	        if (idPrestamo != 0) {
-	        	ObtenerCuotasDePrestamo += "AND p.Id = ? ";
-	        }
-
-	        ObtenerCuotasDePrestamo += "ORDER BY cu.FechaPago, cu.NumeroCuota";  
-
 	        // Preparar la consulta
 	        ps = con.prepareStatement(ObtenerCuotasDePrestamo);
-	        ps.setInt(1, idCliente);  
+	        ps.setInt(1, idCliente);  // Siempre se pasa el idCliente
 
+	        // Si idPrestamo es diferente de 0, entonces agregamos el parámetro para idPrestamo
 	        if (idPrestamo != 0) {
-	            ps.setInt(2, idPrestamo); 
+	            ps.setInt(2, idPrestamo);
 	        }
 
 	        System.out.println("Ejecutando SQL: " + ObtenerCuotasDePrestamo); // Log de la consulta
@@ -766,7 +765,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        e.printStackTrace();
 	        System.out.println("Error al obtener las cuotas.");
 	    } finally {
-
 	        try {
 	            if (rs != null) rs.close();
 	            if (ps != null) ps.close();
@@ -781,7 +779,8 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    }
 
 	    return cuotas;
-	}	
+	}
+
 	
 	@Override
 	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {

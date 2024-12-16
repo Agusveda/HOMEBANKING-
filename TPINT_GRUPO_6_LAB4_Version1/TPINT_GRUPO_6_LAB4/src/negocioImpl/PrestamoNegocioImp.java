@@ -24,21 +24,27 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 
 	        if (confirmacionExitosa) {
 	            // 2. Obtener el importe del préstamo
-	        	
 	            float importePrestamo = prestamoDao.obtenerImportePrestamo(idPrestamo);
 
 	            // 3. Crear el movimiento para registrar el alta del préstamo
 	            Movimiento movimiento = new Movimiento();
 	            movimiento.setImporte(importePrestamo);  
 	            movimiento.setTipoMovimiento(2); // Tipo 2: Alta de préstamo
-	            movimiento.setDetalle("Alta de préstamo"); // Este es el detalle que se maneja en la capa de negocio
+	            movimiento.setDetalle("Alta de préstamo: Confirmado"); // Detalle del movimiento
 
 	            // 4. Registrar el movimiento llamando al DAO
 	            boolean movimientoInsertado = movimientoDao.insertarMovimientoAltaPrestamoConfirmado(movimiento, idCuenta);
 
 	            if (movimientoInsertado) {
-	                System.out.println("El préstamo y el movimiento fueron procesados exitosamente.");
-	                exito = true;
+	                // 5. Acreditar el préstamo en la cuenta
+	                boolean prestamoAcreditado = prestamoDao.CargarPrestamoEnCuenta(idCuenta, importePrestamo);
+
+	                if (prestamoAcreditado) {
+	                    System.out.println("El préstamo y el movimiento fueron procesados exitosamente.");
+	                    exito = true;
+	                } else {
+	                    System.out.println("Error al acreditar el préstamo en la cuenta.");
+	                }
 	            } else {
 	                System.out.println("Error al registrar el movimiento.");
 	            }
@@ -52,6 +58,7 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 
 	    return exito;
 	}
+
 
 	@Override
 	public boolean solicitarPrestamo(Prestamo prestamo) {
