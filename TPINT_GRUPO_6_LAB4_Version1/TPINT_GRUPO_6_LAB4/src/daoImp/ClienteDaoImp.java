@@ -476,7 +476,11 @@ public Usuario verificarCredenciales(String username, String password) {
 @Override
 public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
     ArrayList<Cliente> lista = new ArrayList<>();
-    String query = "SELECT * FROM cliente WHERE Activo = 1 AND UPPER(Sexo) = UPPER(?)";
+    /*
+     UPPER(c.Sexo) = UPPER(?): Compara de forma case-insensitive el valor del campo Sexo con el parámetro que pases al ?.
+     */
+    
+    String query = "SELECT c.*, u.* FROM cliente c INNER JOIN usuario u ON u.IdCliente = c.Id WHERE c.Activo = 1 AND UPPER(c.Sexo) = UPPER(?)";
     
    
     Connection conexion = null;
