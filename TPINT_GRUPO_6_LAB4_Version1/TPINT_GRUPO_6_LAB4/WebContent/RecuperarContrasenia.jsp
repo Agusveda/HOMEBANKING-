@@ -102,3 +102,104 @@ function reloadPage() {
 </script>
 
 </html>
+
+public class PutGetBlobs {
+   public static void main(String[] args) 
+   throws SQLException 
+   {
+       // Registrar el controlador JDBC nativo.
+       try {
+          Class.forName("com.ibm.db2.jdbc.app.DB2Driver");
+      } catch (Exception e) {
+          System.exit(1);  // Error de configuración.
+      }
+          
+      // Establecer una conexión y una sentencia con las que trabajar.
+      Connection c = DriverManager.getConnection("jdbc:db2:*local");    
+      Statement s = c.createStatement();
+      
+      // Borrar ejecuciones anteriores de esta aplicación.
+      try {
+          s.executeUpdate("DROP TABLE CUJOSQL.BLOBTABLE");
+      } catch (SQLException e) {
+          // Ignorarlo y suponer que la tabla no existía.
+      }
+
+      // Crear una tabla con una columna BLOB. El tamaño de la columna BLOB
+      // predeterminado es 1 MB.
+      s.executeUpdate("CREATE TABLE CUJOSQL.BLOBTABLE (COL1 BLOB)");
+
+      // Crear un objeto PreparedStatement que permita colocar
+      // un nuevo objeto Blob en la base de datos.
+      PreparedStatement ps = c.prepareStatement("INSERT INTO CUJOSQL.BLOBTABLE VALUES(?)");
+
+      // Crear un valor BLOB grande...
+      Random random = new Random ();
+      byte [] inByteArray = new byte[500000];
+      random.nextBytes (inByteArray);
+
+      // Establecer el parámetro PreparedStatement. Nota: esto no es 
+      // portable a todos los controladores JDBC. Los controladores JDBC no tienen 
+      // soporte al utilizar setBytes para columnas BLOB. Esto se utiliza para
+      // permitir generar nuevos BLOB. También permite que
+      // los controladores JDBC 1.0 trabajar con columnas que contengan datos BLOB.
+      ps.setBytes(1, inByteArray);
+
+      // Procesar la sentencia, insertando el BLOB en la base de datos.
+      ps.executeUpdate();
+
+      // Procesar una consulta y obtener el BLOB que se acaba de insertar  
+      // a partir de la base de datos como objeto Blob.
+      ResultSet rs = s.executeQuery("SELECT * FROM CUJOSQL.BLOBTABLE");
+      rs.next();
+      Blob blob = rs.getBlob(1);
+      public class PutGetBlobs {
+   public static void main(String[] args) 
+   throws SQLException 
+   {
+       // Registrar el controlador JDBC nativo.
+       try {
+          Class.forName("com.ibm.db2.jdbc.app.DB2Driver");
+      } catch (Exception e) {
+          System.exit(1);  // Error de configuración.
+      }
+          
+      // Establecer una conexión y una sentencia con las que trabajar.
+      Connection c = DriverManager.getConnection("jdbc:db2:*local");    
+      Statement s = c.createStatement();
+      
+      // Borrar ejecuciones anteriores de esta aplicación.
+      try {
+          s.executeUpdate("DROP TABLE CUJOSQL.BLOBTABLE");
+      } catch (SQLException e) {
+          // Ignorarlo y suponer que la tabla no existía.
+      }
+
+      // Crear una tabla con una columna BLOB. El tamaño de la columna BLOB
+      // predeterminado es 1 MB.
+      s.executeUpdate("CREATE TABLE CUJOSQL.BLOBTABLE (COL1 BLOB)");
+
+      // Crear un objeto PreparedStatement que permita colocar
+      // un nuevo objeto Blob en la base de datos.
+      PreparedStatement ps = c.prepareStatement("INSERT INTO CUJOSQL.BLOBTABLE VALUES(?)");
+
+      // Crear un valor BLOB grande...
+      Random random = new Random ();
+      byte [] inByteArray = new byte[500000];
+      random.nextBytes (inByteArray);
+
+      // Establecer el parámetro PreparedStatement. Nota: esto no es 
+      // portable a todos los controladores JDBC. Los controladores JDBC no tienen 
+      // soporte al utilizar setBytes para columnas BLOB. Esto se utiliza para
+      // permitir generar nuevos BLOB. También permite que
+      // los controladores JDBC 1.0 trabajar con columnas que contengan datos BLOB.
+      ps.setBytes(1, inByteArray);
+
+      // Procesar la sentencia, insertando el BLOB en la base de datos.
+      ps.executeUpdate();
+
+      // Procesar una consulta y obtener el BLOB que se acaba de insertar  
+      // a partir de la base de datos como objeto Blob.
+      ResultSet rs = s.executeQuery("SELECT * FROM CUJOSQL.BLOBTABLE");
+      rs.next();
+      Blob blob = rs.getBlob(1);
