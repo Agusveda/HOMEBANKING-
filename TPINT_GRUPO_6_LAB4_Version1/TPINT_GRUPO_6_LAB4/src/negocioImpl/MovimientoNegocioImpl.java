@@ -65,5 +65,9 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 		// TODO Auto-generated method stub
 		return false;
 	}
+	@Override
+	public boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta) {
+		return movimientoDao.insertarMovimientosTransferencia(movimiento, idCuenta);
+	}
 
 }

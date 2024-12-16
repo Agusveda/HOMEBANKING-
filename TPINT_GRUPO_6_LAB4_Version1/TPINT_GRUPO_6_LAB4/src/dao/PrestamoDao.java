@@ -15,7 +15,7 @@ public interface PrestamoDao {
     double obtenerTotalPrestamosConfirmados(int idCliente);
 	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
 	List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
-	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
+	//boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
 	double obtenerSumaCuotasPendientes(int idCliente);
 	ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
 	ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);
@@ -23,4 +23,6 @@ public interface PrestamoDao {
 	
 	boolean insertarPrestamo(Prestamo prestamo, List<Cuota> cuotas);
 	boolean confirmacionPrestamo(int idPrestamo);
+	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
+	boolean actualizarEstadoCuota(int cuotaId, boolean estaPagada);
 }

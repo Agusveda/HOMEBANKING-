@@ -1,3 +1,12 @@
+/Entidades/
+/Excepciones/
+/Servlet/
+/dao/
 /daoImp/
+<<<<<<< HEAD
 /Servlet/
 /Entidades/
+=======
+/negocio/
+/negocioImpl/
+>>>>>>> Pedro

@@ -11,19 +11,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Pago de Préstamo</title>
+    <title>Pago de PrÃ©stamo</title>
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/PagoPrestamo.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
     <script type="text/javascript">
-        // Función para confirmar el pago antes de proceder
+        // FunciÃ³n para confirmar el pago antes de proceder
         function confirmarPago(cuotaId, montoPago) {
             var cuentaSeleccionada = document.getElementById("cuenta").options[document.getElementById("cuenta").selectedIndex].value;
             if (!cuentaSeleccionada) {
                 alert("Por favor, seleccione una cuenta antes de continuar.");
                 return false;
             }
-            var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: $" + montoPago);
+            var confirmacion = confirm("Â¿EstÃ¡s seguro de realizar el pago?\nMonto a pagar: $" + montoPago);
             if (confirmacion) {
                 document.getElementById("cuotaId").value = cuotaId;
                 document.getElementById("cuentaId").value = cuentaSeleccionada; 
@@ -38,11 +38,11 @@
     <jsp:include page="Navbar.jsp"/>
 
     <div class="encabezado">
-        <h1>Formulario de Pago de Préstamo</h1>
+        <h1>Formulario de Pago de PrÃ©stamo</h1>
     </div>
 
     <div class="container">
-        <h2>Pagar Préstamo</h2>
+        <h2>Pagar PrÃ©stamo</h2>
 
         <%
             Integer idClienteObj = (Integer) session.getAttribute("IdCliente");
@@ -50,7 +50,7 @@
 
             if (idClienteObj == null) {
         %>
-                <p>Error: No se encontró el ID del cliente en la sesión.</p>
+                <p>Error: No se encontrÃ³ el ID del cliente en la sesiÃ³n.</p>
                 <a href="Cliente.jsp">Volver</a>
         <%
             } else {
@@ -83,7 +83,7 @@
                         String cuentaIdParam = request.getParameter("cuentaId");
                         String montoPagoParam = request.getParameter("montoPago");
 
-                        // Validar que los parámetros no sean nulos ni vacíos
+                        // Validar que los parÃ¡metros no sean nulos ni vacÃ­os
                         if (cuotaIdParam != null && !cuotaIdParam.isEmpty() &&
                             cuentaIdParam != null && !cuentaIdParam.isEmpty() &&
                             montoPagoParam != null && !montoPagoParam.isEmpty()) {
@@ -94,15 +94,15 @@
 
                             // Realizar el pago
                             boolean exito = prestamoNegocio.realizarPagoCuota(cuotaId, cuentaId, montoPago);
-                            mensaje = exito ? "El pago se realizó con éxito." : "Ocurrió un error al realizar el pago.";
+                            mensaje = exito ? "El pago se realizÃ³ con Ã©xito." : "OcurriÃ³ un error al realizar el pago.";
 
                             if (exito) {
-                                // Redirigir a la página Cliente.jsp
+                                // Redirigir a la pÃ¡gina Cliente.jsp
                                 response.sendRedirect("Cliente.jsp");
-                                return; // Importante: Evitar que se continúe ejecutando el código posterior.
+                                return; // Importante: Evitar que se continÃºe ejecutando el cÃ³digo posterior.
                             }
                         } else {
-                            mensaje = "Faltan parámetros requeridos para realizar el pago.";
+                            mensaje = "Faltan parÃ¡metros requeridos para realizar el pago.";
                         }
                     }
                 } catch (Exception e) {
@@ -153,12 +153,12 @@
         <table class="tabla-cuotas">
             <thead>
                 <tr>
-                    <th>ID Préstamo</th>
+                    <th>ID PrÃ©stamo</th>
                     <th>Cuota #</th>
                     <th>Monto</th>
                     <th>Fecha de Vencimiento</th>
                     <th>Estado</th>
-                    <th>Acción</th>
+                    <th>AcciÃ³n</th>
                 </tr>
             </thead>
             <tbody>

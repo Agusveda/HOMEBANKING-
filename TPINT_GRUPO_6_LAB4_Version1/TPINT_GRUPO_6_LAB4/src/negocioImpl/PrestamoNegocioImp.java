@@ -15,6 +15,52 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	private MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
 
 	@Override
+	public boolean realizarPagoCuotaConMovimiento(int cuotaId, int cuentaId, float monto) {
+	    boolean exito = false;
+
+	    try {
+	        // Validar saldo de la cuenta antes de proceder
+	        float saldoActual = movimientoDao.ObtenerSaldoPorIdCuenta(cuentaId);
+	        System.out.println("Saldo actual: " + saldoActual);  // Imprimir saldo actual
+	        System.out.println("Monto a pagar: " + monto);         // Imprimir monto
+
+	        // Verificar si el saldo es suficiente para realizar el pago
+	        if (saldoActual < monto) {
+	            System.out.println("Saldo insuficiente para realizar el pago.");
+	            return false;
+	        }
+
+	        // Crear el movimiento de pago
+	        Movimiento movimiento = new Movimiento();
+	        movimiento.setImporte(-monto); // Débito
+	        movimiento.setTipoMovimiento(3); // Código para pago de cuota
+	        movimiento.setDetalle("Pago de cuota (ID Cuota: " + cuotaId + ")");
+
+	        // Insertar movimiento de pago
+	        boolean movimientoRegistrado = movimientoDao.insertarMovimientoPagoCuota(movimiento, cuentaId);
+
+	        // Solo actualizar la cuota si el movimiento fue registrado con éxito
+	        if (movimientoRegistrado) {
+	            boolean cuotaActualizada = prestamoDao.actualizarEstadoCuota(cuotaId, true);
+	            if (cuotaActualizada) {
+	                exito = true;
+	                System.out.println("Pago de cuota realizado exitosamente.");
+	            } else {
+	                System.out.println("Error al actualizar el estado de la cuota.");
+	            }
+	        } else {
+	            System.out.println("Error al registrar el movimiento.");
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante el proceso de pago de cuota.");
+	    }
+
+	    return exito;
+	}
+	
+	@Override
 	public boolean confirmarPrestamoConMovimiento(int idPrestamo, int idCuenta) {
 	    boolean exito = false;
 
@@ -160,10 +206,6 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 		return prestamoDao.obtenerCuotas(idCliente,idPrestamo);
 	}
 
-	@Override
-	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
-		return prestamoDao.realizarPagoCuota(cuotaId,cuentaId,monto);
-	}
 
 	@Override
 	public double obtenerSumaCuotasPendientes(int idCliente) {
@@ -179,4 +221,10 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado(String orden) {
 		return prestamoDao.filtrarClienteXImporteConfirmado(orden);
 	}
+
+	@Override
+	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
+		return prestamoDao.realizarPagoCuota(cuotaId,cuentaId,monto);
+	}
+
 }
