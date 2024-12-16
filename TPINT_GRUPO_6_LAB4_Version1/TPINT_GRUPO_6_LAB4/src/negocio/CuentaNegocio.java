@@ -3,6 +3,7 @@ package negocio;
 import java.util.ArrayList;
 
 import Entidades.Cuenta;
+import Entidades.Movimiento;
 import Entidades.Prestamo;
 import Excepciones.ClienteExcedeCantCuentas;
 
@@ -22,5 +23,5 @@ public interface CuentaNegocio {
 	public int ObtenerProximoIdCuenta();
 	public void verificarCuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
 	public int ClienteInactivo(int idCliente);
-	
+	boolean insertarCuentaConMovimiento(Cuenta cuenta, Movimiento movimiento);
 }

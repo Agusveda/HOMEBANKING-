@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 public class ServletVerMovimiento extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-
     public ServletVerMovimiento() {
         super();
     }
@@ -22,31 +21,19 @@ public class ServletVerMovimiento extends HttpServlet {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
-
-
+	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		if (request.getParameter("btnVerMovimientos") != null)
 		{
     	    int id = Integer.parseInt(request.getParameter("idCuenta"));
     	    request.getSession().setAttribute("idCuenta", id);
+    	    System.out.println("idCuenta desde el Servlet (almacenado en sesión): " + id);
     	    RequestDispatcher rd = request.getRequestDispatcher("/VerMovimientos.jsp");
     	    rd.forward(request, response);
     	    
-    	    /**
-			request.setAttribute("idCuenta", id);
-    	    return;
-    	    **/
 		}
-		
-		
-		
-		
-		
-		
-		
 		
 		doGet(request, response);
 	}
-
 }

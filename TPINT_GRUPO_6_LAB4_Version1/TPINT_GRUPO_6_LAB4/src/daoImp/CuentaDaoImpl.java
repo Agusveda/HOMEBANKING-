@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.mysql.jdbc.Statement;
+
 import Entidades.Cliente;
 import Entidades.Cuenta;
 import Excepciones.ClienteExcedeCantCuentas;
@@ -16,7 +18,6 @@ import dao.CuentaDao;
 public class CuentaDaoImpl implements CuentaDao {
 
     private static final String insertCuenta = "INSERT INTO cuenta ( IdCliente, TipoCuenta, FechaCreacion , NumeroCuenta, CBU, Saldo, Activo) VALUES ( ?, ?, CURDATE(), ?, ?, 10000, ?)";
- // private static final String ListarCuenta = "SELECT cuenta.id AS ID,cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cliente.DNI = ?";
     private static final String ListarCuenta = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id WHERE cuenta.Activo = 1";
     private static final String ListarCuentaTodos = "SELECT cuenta.id AS ID, cliente.nombre AS Nombre, cliente.apellido AS Apellido, cliente.dni AS DNI, cuenta.tipocuenta AS TipoCuenta, cuenta.FechaCreacion AS FechaCreacion, cuenta.NumeroCuenta, cuenta.CBU AS CBU, cuenta.Saldo AS Saldo, cuenta.Activo AS Activo FROM cuenta INNER JOIN cliente ON cuenta.IdCliente = cliente.id AND cuenta.Activo = 1";
     private static final String EliminarCuenta = "UPDATE cuenta SET Activo = 0 WHERE id = ?";
@@ -24,10 +25,7 @@ public class CuentaDaoImpl implements CuentaDao {
     private static final String ObtenerCuentaPorId = "SELECT * FROM cuenta WHERE id = ?";
     private static final String ObtenerCuentaPorIdCliente = "SELECT * FROM cuenta WHERE IdCliente = ?";
     private static final String ObtenerProximoIdCuenta = "select * from cuenta ORDER BY Id DESC LIMIT 1;";
-    private static final String CuentasPorCliente = "select * from cuenta where IdCliente = ? and Activo = 1;";
     private static final String ClienteInactivo = "select * from cliente where Id = ? and Activo = 0;";
-
-    //REPORTE
     private static final String ReporteCuentas = "SELECT SUM(Saldo) AS saldo FROM cuenta";
 
     @Override
@@ -44,7 +42,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
             conexion.setAutoCommit(false);
 
-            statement = conexion.prepareStatement(insertCuenta);
+            statement = conexion.prepareStatement(insertCuenta, Statement.RETURN_GENERATED_KEYS);
             statement.setInt(1, cuenta.getIdCliente());
             statement.setInt(2, cuenta.getTipoCuenta());
       
@@ -55,10 +53,15 @@ public class CuentaDaoImpl implements CuentaDao {
             statement.setInt(4, cbu);
       
             statement.setBoolean(5, cuenta.isActivo());
-
             if (statement.executeUpdate() > 0) {
-                conexion.commit();
-                isInsertExitoso = true;
+                // Obtener el ID generado
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        cuenta.setId(generatedKeys.getInt(1));  // Asignar el ID generado
+                        conexion.commit();
+                        isInsertExitoso = true;
+                    }
+                }
             }
 
         } catch (SQLException e) {
@@ -217,12 +220,10 @@ public class CuentaDaoImpl implements CuentaDao {
         } else {
             System.out.println("Error al conectar con la base de datos.");
             return false;
-        }
-
-     
+        } 
+        
         conexion.setAutoCommit(false);
-
-      
+        
         String query = EliminarCuenta;
         stmt = conexion.prepareStatement(query);
         stmt.setInt(1, id);
@@ -261,10 +262,8 @@ public class CuentaDaoImpl implements CuentaDao {
                 System.out.println("Error al cerrar PreparedStatement.");
                 e.printStackTrace();
             }
-        }
-       
+        }      
     }
-    
     return success;
 }
 
@@ -279,7 +278,6 @@ public class CuentaDaoImpl implements CuentaDao {
             }
 
             conexion.setAutoCommit(false);
-
             statement = conexion.prepareStatement(ModificarCuenta);
             
             statement.setInt(1, cuenta.getTipoCuenta());
@@ -512,12 +510,10 @@ public class CuentaDaoImpl implements CuentaDao {
 	        if (connection == null) {
 	            throw new SQLException("Conexión a la base de datos es nula");
 	        }
-
 	        
 	        String query = "SELECT COUNT(*) FROM cliente WHERE Id = ? and Activo = 1";
 	        preparedStatement = connection.prepareStatement(query);
 	        preparedStatement.setInt(1, dni);
-
 	        
 	        resultSet = preparedStatement.executeQuery();
 
@@ -555,7 +551,6 @@ public class CuentaDaoImpl implements CuentaDao {
 	        if (connection == null) {
 	            throw new SQLException("Conexión a la base de datos es nula");
 	        }
-
 	        
 	        String query = ObtenerProximoIdCuenta;
 	        preparedStatement = connection.prepareStatement(query);
@@ -642,8 +637,5 @@ public class CuentaDaoImpl implements CuentaDao {
         }
 
         return cliente;
-	}
-    
-    
-    
+	}        
 }

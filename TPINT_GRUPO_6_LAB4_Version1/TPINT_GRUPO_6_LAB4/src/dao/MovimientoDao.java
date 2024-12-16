@@ -8,7 +8,6 @@ import Entidades.Cuota;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
 
-
 public interface MovimientoDao 
 {
 	int ObtenerIdCuentaPorIdCliente(int IdCliente); 
@@ -22,30 +21,9 @@ public interface MovimientoDao
 	ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
     float EgresoDeCliente(int DNICLIENTE);
     float IngresoDeCliente(int DNICLIENTE);
-    
-	
-	/*
-	 * PASA A PRESTAMODAO.JAVA
-	ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
-    boolean insertarPrestamo(Prestamo prestamo);
-    ArrayList<Prestamo> ListPrestamosPedidos();
-    boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion);
-    ArrayList<Prestamo> ListPrestamosPedidosAutorizados();
-    ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
-    ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);     
-    boolean CargarPrestamoEnCuenta(int idcuenta, float monto);
-    double obtenerTotalPrestamosConfirmados(int idCliente);
-	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
-	List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
-	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
-	double obtenerSumaCuotasPendientes(int idCliente);
-    float EgresoDeCliente(int DNICLIENTE);
-    float IngresoDeCliente(int DNICLIENTE);
-    */
-    
+
     boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta);
     boolean insertarMovimientoAltaPrestamoConfirmado(Movimiento movimiento, int idCuenta);
     boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta);
-	boolean insertarMovimientoPagoCuota(Movimiento movimiento, int idCuenta);
-    
+	boolean insertarMovimientoPagoCuota(Movimiento movimiento, int idCuenta);  
 }

@@ -13,7 +13,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ListarMovimientosPorCuenta = "Select * from movimiento where IdCuenta = ?";
 	private static final String IngresarMovimientoPositivo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , ? , ? , ?)";
 	private static final String IngresarMovimientoNegativo = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 4 , CURDATE() , -? , ? , ?)";
-	private static final String IngresarMovimientoPositivoAlta = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 1 , CURDATE() , ? , ? , ?)";
+	private static final String IngresarMovimientoPositivoAlta = "insert into movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) values ( 1 , NOW() , ? , ? , ?)";
 	private static final String ModificarCuentaPositivo = "update cuenta SET Saldo = Saldo + ? where Id = ?";
 	private static final String ModificarCuentaNegativo = "update cuenta SET Saldo = Saldo - ? where Id = ?";
 	private static final String ObtenerIdCuentaPorCBU = "select Id from cuenta where CBU = ? and Activo = 1";
@@ -24,10 +24,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";	
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
-	//private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
     private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
 		
-	//
+	
 	@Override
 	public boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -90,6 +89,7 @@ public class MovimientoDaoImp implements MovimientoDao {
             statement.setInt(1, 2); // Tipo de movimiento: 2 - Alta de préstamo
             statement.setFloat(2, movimiento.getImporte()); // Importe del préstamo
             statement.setInt(3, idCuenta); 
+           // statement.setInt(3, movimiento.getIdCuenta()); 
             statement.setString(4, movimiento.getDetalle()); // Detalle del movimiento (se maneja en la capa de negocio)
 
 	        int rowsAffected = statement.executeUpdate();
@@ -745,6 +745,4 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return total;
 	}
-
-
 }

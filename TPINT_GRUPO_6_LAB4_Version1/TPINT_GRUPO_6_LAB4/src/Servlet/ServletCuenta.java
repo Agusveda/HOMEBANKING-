@@ -80,42 +80,46 @@ public class ServletCuenta extends HttpServlet {
     	    /// Movimiento de Alta cuenta
     	    movi.setTipoMovimiento(1);
     	    movi.setImporte(10000);
-    	    movi.setDetalle("alta de cuenta");
+    	    movi.setDetalle("Alta de cuenta");
     	    
     	    cuenta.setIdCliente(Integer.parseInt(request.getParameter("txtIdCliente")));
     	    cuenta.setTipoCuenta(Integer.parseInt(request.getParameter("txtTipoCuenta")));
     	    cuenta.setActivo(true);
     	    
+    	    
+    	    
     	    CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
-    	    
-    	    boolean insertado = cuentaNegocio.insertCuenta(cuenta);
     	    String mensaje = "";
-    	    
-    	    if (insertado)
-    	    {
-    	    	//Si la cuenta se agrego, buscamos el id cuenta generado y creamos el movimiento.
-    	    	idCuenta = cuentaN.ObtenerProximoIdCuenta();
-    	    	moviN.insertarAltaCuenta(movi, idCuenta);
-    	    	
-    	    	mensaje = "Cuenta creada exitosamente.";
-    	    	request.setAttribute("mensaje", mensaje);    	    	
+
+    	    try {
+    	        // Intentar insertar la cuenta y el movimiento en la capa de negocio
+    	        boolean insertado = cuentaNegocio.insertarCuentaConMovimiento(cuenta, movi);
+
+    	        if (insertado) {
+    	            mensaje = "Cuenta creada exitosamente.";
+    	            request.setAttribute("mensaje", mensaje);
+    	        } else {
+    	            mensaje = "Error al crear la cuenta.";
+    	            
+    	            // Verificar si el cliente existe y ajustar el mensaje de error
+    	            if (!cuentaNegocio.ExisteId(cuenta.getIdCliente())) {
+    	                mensaje = "Ingrese un ID de cliente válido, por favor.";
+    	            }
+    	            request.setAttribute("mensajeError", mensaje);
+    	        }
+    	    } catch (Exception e) {
+    	        e.printStackTrace();
+    	        mensaje = "Ocurrió un error inesperado durante la creación de la cuenta.";
+    	        request.setAttribute("mensajeError", mensaje);
     	    }
-    	    else
-    	    {
-    	    	mensaje = "Error al crear cuenta mano";
-    	    	
-    	    	if (!cuentaNegocio.ExisteId(cuenta.getIdCliente()))
-    	    	{
-    	    		mensaje = "Ingrese un id de cliente valido porfavor.";
-    	    	}
-    	    	request.setAttribute("mensajeError", mensaje);    	    	
-    	    }
-    	    
+
+    	    // Redirigir al JSP de alta de cuentas
     	    RequestDispatcher dispatcher = request.getRequestDispatcher("/AltaCuentas.jsp");
     	    dispatcher.forward(request, response);
-    	    return; 
-    	} 
-    	
+    	    return;
+    	}
+  	  
+    	    
     	if (request.getParameter("btnFiltrar") != null) {
     	    int DNI = Integer.parseInt(request.getParameter("txtBuscar"));
     	    

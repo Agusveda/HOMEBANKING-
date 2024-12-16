@@ -24,13 +24,11 @@ int idCuenta = (int) session.getAttribute("idCuenta");
 
 <fieldset>
         <legend>Movimientos actuales</legend>
-         <a href="Cliente.jsp">
-    
+         <a href="Cliente.jsp">   
     <input class="btnAtras" type="submit" value="Atras" name="btnAtras" >
     </a>
     
     <%	
-    	
     	MovimientoNegocioImpl moviN = new MovimientoNegocioImpl();
     	ArrayList<Movimiento> listaMov = moviN.ListarMovimientosPorCuenta(idCuenta);
     %>
@@ -67,12 +65,8 @@ int idCuenta = (int) session.getAttribute("idCuenta");
         %>
     </tbody>
 </table>
-
-   
+  
     </fieldset>
-    
-    
-
 </body>
 
 </html>

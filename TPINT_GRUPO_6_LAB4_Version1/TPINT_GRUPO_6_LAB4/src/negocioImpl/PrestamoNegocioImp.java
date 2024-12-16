@@ -1,14 +1,11 @@
 package negocioImpl;
 
-import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import Entidades.Cuota;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
-import daoImp.Conexion;
 import daoImp.MovimientoDaoImp;
 import daoImp.PrestamoDaoImp;
 import negocio.PrestamoNegocio;
@@ -16,8 +13,6 @@ import negocio.PrestamoNegocio;
 public class PrestamoNegocioImp implements PrestamoNegocio {
 	private PrestamoDaoImp prestamoDao = new PrestamoDaoImp();
 	private MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
-	
-
 
 	@Override
 	public boolean confirmarPrestamoConMovimiento(int idPrestamo, int idCuenta) {
@@ -58,18 +53,6 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	    return exito;
 	}
 
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//nuevo
 	@Override
 	public boolean solicitarPrestamo(Prestamo prestamo) {
 	    boolean prestamoExitoso = false;
@@ -130,34 +113,6 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	    }
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	//fin nuevo
-/*
-	@Override
-	public boolean insertarPrestamo(Prestamo prestamo) {
-		return prestamoDao.insertarPrestamo(prestamo);
-	}
-*/
 	@Override
 	public ArrayList<Prestamo> ListPrestamosPedidos() {
 		return prestamoDao.ListPrestamosPedidos();
@@ -217,7 +172,4 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	public ArrayList<Prestamo> filtrarClienteXImporteConfirmado(String orden) {
 		return prestamoDao.filtrarClienteXImporteConfirmado(orden);
 	}
-
-
-	
 }
