@@ -24,7 +24,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	private static final String ActualizarConfirmacionPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
 	private static final String ObtenerImportePrestamo = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
 	private static final String ObtenerIdCuentaPrestamo = "SELECT IdCuenta FROM prestamo WHERE id = ?";
-	private static final String ObtenerPrestamosPendientes = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, CantidadCuotas, confirmacion FROM prestamo WHERE confirmacion = 0 AND IdCliente = ?";
+	private static final String ObtenerPrestamosPendientes = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, CantidadCuotas, confirmacion FROM prestamo WHERE  IdCliente = ?";
 	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
 //	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
 	private static final String AprobarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE Id = ?";
@@ -433,7 +433,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
-	            pre.setconfimacion(rs.getBoolean("confirmacion"));          
+	            pre.setconfimacion(rs.getInt("confirmacion"));          
 	            PretAut.add(pre);            
 	        }
 	        
@@ -462,7 +462,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	                pre.setFechaAlta(rs.getDate("FechaAlta"));
 	                pre.setCantCuo(rs.getInt("CantidadCuotas"));
 	                
-	                pre.setconfimacion(rs.getBoolean("confirmacion"));
+	                pre.setconfimacion(rs.getInt("confirmacion"));
 	                PretAut.add(pre);
 	            }
 	        }
@@ -502,7 +502,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
-	            pre.setconfimacion(rs.getBoolean("confirmacion"));
+	            pre.setconfimacion(rs.getInt("confirmacion"));
 	            lista.add(pre);
 	        }
 
@@ -554,7 +554,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            pre.setFechaAlta(rs.getDate("FechaAlta"));
 	          //  pre.setImpxmes(rs.getFloat("ImportePagarXmes"));
 	            pre.setCantCuo(rs.getInt("CantidadCuotas"));
-	            pre.setconfimacion(rs.getBoolean("confirmacion"));
+	            pre.setconfimacion(rs.getInt("confirmacion"));
 	            lista.add(pre);
 	        }
 
@@ -688,7 +688,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            prestamo.setImporteCliente(rs.getFloat("ImporteCliente"));
 	            prestamo.setFechaAlta(rs.getDate("FechaAlta"));
 	            prestamo.setCantCuo(rs.getInt("CantidadCuotas"));
-	            prestamo.setconfimacion(rs.getBoolean("confirmacion"));
+	            prestamo.setconfimacion(rs.getInt("confirmacion"));
 
 	            prestamos.add(prestamo);
 	        }

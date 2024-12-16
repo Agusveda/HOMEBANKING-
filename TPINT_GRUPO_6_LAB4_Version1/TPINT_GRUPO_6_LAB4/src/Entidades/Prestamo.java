@@ -11,7 +11,7 @@ public class Prestamo {
 	private int plazoPago;
 	private float Impxmes;
 	private int cantCuo;
-	private boolean confimacion;
+	private int confirmacion;
 	
 	public Prestamo () 
 	{
@@ -25,7 +25,7 @@ public class Prestamo {
 	
 	
 	
-	public Prestamo(int id, int idCliente, float importeCliente, Date fechaAlta, int plazoPago, float impxmes,int cantCuo, boolean confimacion) {
+	public Prestamo(int id, int idCliente, float importeCliente, Date fechaAlta, int plazoPago, float impxmes,int cantCuo, int confirmacion) {
 		Id = id;
 		IdCliente = idCliente;
 		ImporteCliente = importeCliente;
@@ -33,7 +33,7 @@ public class Prestamo {
 		this.plazoPago = plazoPago;
 		Impxmes = impxmes;
 		this.cantCuo = cantCuo;
-		this.confimacion = confimacion;
+		this.confirmacion = confirmacion;
 	}
 
 
@@ -88,12 +88,12 @@ public class Prestamo {
 	public void setCantCuo(int cantCuo) {
 		this.cantCuo = cantCuo;
 	}
-	public Boolean getConfimarcion() {
-		return confimacion;
+	public int getConfimarcion() {
+		return confirmacion;
 	}
 
-	public void setconfimacion(Boolean confimacion) {
-		this.confimacion = confimacion;
+	public void setconfimacion(int confirmacion) {
+		this.confirmacion = confirmacion;
 	}
 
 
@@ -102,7 +102,7 @@ public class Prestamo {
 	public String toString() {
 		return "Prestamo [Id=" + Id + ", IdCliente=" + IdCliente + ", ImporteCliente=" + ImporteCliente + ", fechaAlta="
 				+ fechaAlta + ", plazoPago=" + plazoPago + ", Impxmes=" + Impxmes + ", cantCuo=" + cantCuo
-				+ ", confimacion=" + confimacion + "]";
+				+ ", confimacion=" + confirmacion + "]";
 	}
 
 

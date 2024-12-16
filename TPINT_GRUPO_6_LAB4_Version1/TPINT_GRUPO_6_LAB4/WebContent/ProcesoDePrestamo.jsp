@@ -64,6 +64,23 @@ int iDcliente = (int) session.getAttribute("IdCliente");
 				  <td><%= prestamo.getImporteCliente() %> </td>
 	  			  <td><%= prestamo.getFechaAlta() %></td>
 	   			  <td><%= prestamo.getCantCuo() %></td>
+	   			     			   <td>
+     			   <% 
+				        if (prestamo.getConfimarcion() == 0) { 
+				        %>
+				            Prestamo en espera
+				        <% 
+				        } else if (prestamo.getConfimarcion() == 1) { 
+				        %>
+				            Prestamo confirmado
+				        <% 
+				        } else if (prestamo.getConfimarcion() == 2) { 
+				        %>
+				            Prestamo denegado
+				        <% 
+				        } 
+				        %>
+    			</td>
 	  	     </tr>
 	    		
 	    

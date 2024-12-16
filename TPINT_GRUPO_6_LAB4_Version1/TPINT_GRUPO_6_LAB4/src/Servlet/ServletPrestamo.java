@@ -71,7 +71,6 @@ public class ServletPrestamo extends HttpServlet {
                 prestamo.setImporteCliente(importeCliente);
                 prestamo.setFechaAlta(fechaAlta);
                 prestamo.setCantCuo(cantCuo);
-                prestamo.setconfimacion(false);               
 
                 // Intentar insertar el préstamo
                 boolean exito = prestamoNegocio.solicitarPrestamo(prestamo);
