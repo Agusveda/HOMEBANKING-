@@ -1,11 +1,11 @@
 package Entidades;
 
-import java.sql.Date;
+
 
 public class Cliente {
 	private int id; 
     private int dni;
-    private int cuil;
+    private long cuil;
     private String nombre;
     private String apellido;
     private String sexo;
@@ -42,7 +42,7 @@ public class Cliente {
 	}
     
     
-	public Cliente(int id, int dni, int cuil, String nombre, String apellido, String sexo, String nacionalidad,
+	public Cliente(int id, int dni, long cuil, String nombre, String apellido, String sexo, String nacionalidad,
 			String fechaNacimiento, String direccion, String localidad, String provincia, String correoElectronico,
 			int telefono, String usu, String contra) 
 	{
@@ -104,10 +104,10 @@ public class Cliente {
 	public void setDni(int dni) {
 		this.dni = dni;
 	}
-	public int getCuil() {
+	public long getCuil() {
 		return cuil;
 	}
-	public void setCuil(int cuil) {
+	public void setCuil(long cuil) {
 		this.cuil = cuil;
 	}
 	public String getNombre() {

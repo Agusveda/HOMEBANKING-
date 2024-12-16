@@ -78,7 +78,7 @@ public boolean insertCliente(Cliente cli, Usuario usu) {
 
         statementCliente = conexion.prepareStatement(insertCliente, Statement.RETURN_GENERATED_KEYS);
         statementCliente.setInt(1, cli.getDni());
-        statementCliente.setInt(2, cli.getCuil());
+        statementCliente.setLong(2, cli.getCuil());
         statementCliente.setString(3, cli.getNombre());
         statementCliente.setString(4, cli.getApellido());
         statementCliente.setString(5, cli.getSexo());
@@ -158,7 +158,7 @@ public boolean ModificarCliente (Cliente cli, Usuario usu)
 		ps = cn.prepareStatement(query);
 		
         ps.setInt(1, cli.getDni());
-        ps.setInt(2, cli.getCuil());
+        ps.setLong(2, cli.getCuil());
         ps.setString(3, cli.getNombre());
         ps.setString(4, cli.getApellido());
         ps.setString(5, cli.getSexo());
@@ -231,7 +231,7 @@ public ArrayList<Cliente> ListarCliente() {
             cli.setNombre(rs.getString("Nombre"));
             cli.setApellido(rs.getString("Apellido"));
             cli.setDni(rs.getInt("DNI"));
-            cli.setCuil(rs.getInt("CUIL"));
+            cli.setCuil(rs.getLong("CUIL"));
             cli.setSexo(rs.getString("Sexo"));
             cli.setNacionalidad(rs.getString("Nacionalidad"));
             cli.setFechaNacimiento(rs.getString("FechaNacimiento"));
@@ -286,7 +286,7 @@ public Cliente ObtenerDatosXid(int id) {
             cli.setNombre(rs.getString("Nombre"));
             cli.setApellido(rs.getString("Apellido"));
             cli.setDni(rs.getInt("DNI"));
-            cli.setCuil(rs.getInt("CUIL"));
+            cli.setCuil(rs.getLong("CUIL"));
             cli.setSexo(rs.getString("Sexo"));
             cli.setNacionalidad(rs.getString("Nacionalidad"));
             cli.setFechaNacimiento(rs.getString("FechaNacimiento"));
@@ -493,7 +493,7 @@ public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
             Cliente cli = new Cliente();
             cli.setId(rs.getInt("Id"));
             cli.setDni(rs.getInt("DNI"));
-            cli.setCuil(rs.getInt("CUIL"));
+            cli.setCuil(rs.getLong("CUIL"));
             cli.setNombre(rs.getString("Nombre"));
             cli.setApellido(rs.getString("Apellido"));
             cli.setSexo(rs.getString("Sexo"));
@@ -573,7 +573,7 @@ public boolean ValidacionDni(int dni) {
 }
 
 @Override
-public boolean ValidacionCuil(int cuil) {
+public boolean ValidacionCuil(long cuil) {
 	boolean exists = false;
     Connection connection = null;
     PreparedStatement preparedStatement = null;
@@ -589,7 +589,7 @@ public boolean ValidacionCuil(int cuil) {
         
         String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setInt(1, cuil);
+        preparedStatement.setLong(1, cuil);
 
         
         resultSet = preparedStatement.executeQuery();
@@ -878,7 +878,7 @@ public boolean ValidacionDniModificar(int dni, int id)
 }
 
 @Override
-public boolean ValidacionCuilModificar(int cuil, int id) {
+public boolean ValidacionCuilModificar(long cuil, int id) {
 	boolean exists = false;
     Connection connection = null;
     PreparedStatement preparedStatement = null;
@@ -894,7 +894,7 @@ public boolean ValidacionCuilModificar(int cuil, int id) {
         
         String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ? and Id != ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
-        preparedStatement.setInt(1, cuil);
+        preparedStatement.setLong(1, cuil);
         preparedStatement.setInt(2, id);
 
         

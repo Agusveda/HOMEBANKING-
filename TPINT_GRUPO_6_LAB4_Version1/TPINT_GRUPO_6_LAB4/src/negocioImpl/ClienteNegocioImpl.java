@@ -51,7 +51,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
-	public boolean ValidacionCuil(int cuil) {
+	public boolean ValidacionCuil(long cuil) {
 		return clienteDao.ValidacionCuil(cuil);
 	}
 
@@ -98,7 +98,7 @@ public class ClienteNegocioImpl implements ClienteNegocio {
 	}
 
 	@Override
-	public boolean ValidacionCuilModificar(int cuil, int id) {
+	public boolean ValidacionCuilModificar(long cuil, int id) {
 		
 		return clienteDao.ValidacionCuilModificar(cuil, id);
 	}

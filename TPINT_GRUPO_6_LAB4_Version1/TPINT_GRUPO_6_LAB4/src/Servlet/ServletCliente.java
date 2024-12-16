@@ -110,7 +110,7 @@ public class ServletCliente extends HttpServlet {
             cli.setNombre(request.getParameter("txtNombre"));
             cli.setApellido(request.getParameter("txtApellido"));
             cli.setDni(Integer.parseInt(request.getParameter("txtDNI")));
-            cli.setCuil(Integer.parseInt(request.getParameter("txtCUIL")));
+            cli.setCuil(Long.parseLong(request.getParameter("txtCUIL")));
             cli.setSexo(request.getParameter("txtSexo"));
             cli.setNacionalidad(request.getParameter("txtNacionalidad"));
             cli.setFechaNacimiento(request.getParameter("txtFechaNacimiento"));
@@ -133,7 +133,7 @@ public class ServletCliente extends HttpServlet {
             ClienteNegocioImpl bandao = new ClienteNegocioImpl();
             
             int dni = Integer.parseInt(request.getParameter("txtDNI"));
-            int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
+            long cuil = Long.parseLong(request.getParameter("txtCUIL"));
             String user = request.getParameter("txtUsuario");
             
             try {
@@ -241,7 +241,7 @@ public class ServletCliente extends HttpServlet {
              cli.setNombre(request.getParameter("txtNombre"));
              cli.setApellido(request.getParameter("txtApellido"));
              cli.setDni(Integer.parseInt(request.getParameter("txtDNI")));
-             cli.setCuil(Integer.parseInt(request.getParameter("txtCUIL")));
+             cli.setCuil(Long.parseLong(request.getParameter("txtCUIL")));
              cli.setSexo(request.getParameter("txtSexo"));
              cli.setNacionalidad(request.getParameter("txtNacionalidad"));
              cli.setFechaNacimiento(request.getParameter("txtFechaNacimiento"));
@@ -256,7 +256,7 @@ public class ServletCliente extends HttpServlet {
              
              int id = Integer.parseInt(request.getParameter("txtId"));
              int dni = Integer.parseInt(request.getParameter("txtDNI"));
-             int cuil = Integer.parseInt(request.getParameter("txtCUIL"));
+             long cuil = Long.parseLong(request.getParameter("txtCUIL"));
              String user = request.getParameter("txtUsuario");
              
              
@@ -284,17 +284,7 @@ public class ServletCliente extends HttpServlet {
  		        return;
  			}
              
-             
-             
-             
-          
-             /*
-             if (bandolero.ValidacionUsuarioModificar(user, id)) {
-                 request.setAttribute("mensajeError", "El Usuario ya existe en la base de datos.");
-                 request.getRequestDispatcher("/ModificarCliente.jsp").forward(request, response);
-                 return;
-             }
-             */
+            
              
              boolean insertado2 = false;
              

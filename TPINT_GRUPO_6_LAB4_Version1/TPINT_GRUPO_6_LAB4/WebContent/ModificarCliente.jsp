@@ -79,7 +79,7 @@
             </p>
             <p>
                 <label class="form-label" for="cuil">CUIL</label>
-                <input class="controls" id="cuil" type="number" maxlength="9"  placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudCuil(this)" >
+                <input class="controls" id="cuil" type="number" maxlength="11"  placeholder="Ingrese el CUIL" Value="<%= cli.getCuil() %>" required name="txtCUIL" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudCuil(this)" >
             </p>
             <p>
             		<label class="form-label" for="sexo">Sexo</label>
@@ -194,7 +194,7 @@ function validarLongitudDni(input) {
 }
 
 function validarLongitudCuil(input) {
-    const longitudExacta   = 9;
+    const longitudExacta   = 11;
  
     if (input.value.length > longitudExacta) {
         alert("El CUIL no puede tener más de 11 dígitos.");

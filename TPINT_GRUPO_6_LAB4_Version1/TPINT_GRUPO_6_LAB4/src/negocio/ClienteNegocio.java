@@ -16,7 +16,7 @@ public interface ClienteNegocio {
 	public Cliente ObtenerDatosXid(int id);
 	public ArrayList<Cliente> filtrarClienteXsexo (String sexo);
 	public boolean ValidacionDni (int dni);
-	public boolean ValidacionCuil (int cuil);
+	public boolean ValidacionCuil (long cuil);
 	public Usuario verificarCredenciales(String username, String password);
 	public boolean ValidacionUsuario (String usu);
 	public ArrayList<Nacionalidades> ListNacionalidades();
@@ -25,7 +25,7 @@ public interface ClienteNegocio {
 	public boolean existeEmail(String Mail);
 	public boolean actualizarContrasenaPorEmail (String email, String nuevaContrasena);
 	public boolean ValidacionDniModificar (int dni, int id);
-	public boolean ValidacionCuilModificar (int cuil, int id);
+	public boolean ValidacionCuilModificar (long cuil, int id);
 	public boolean ValidacionUsuarioModificar (String usu, int id);
 
 }
