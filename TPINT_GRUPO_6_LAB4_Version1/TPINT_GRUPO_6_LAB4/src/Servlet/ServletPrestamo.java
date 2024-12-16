@@ -98,6 +98,8 @@ public class ServletPrestamo extends HttpServlet {
         }
     }
     */
+    
+    // 1. Solicitar Prestamo
     private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
 
@@ -157,7 +159,8 @@ public class ServletPrestamo extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
-
+    //2. Aprobar Prestamo
+    /*
     private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
@@ -192,6 +195,43 @@ public class ServletPrestamo extends HttpServlet {
 
         } catch (NumberFormatException e) {
             e.printStackTrace();
+        }
+    }
+*/
+    
+    
+    private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        try {
+            // Obtención de parámetros
+            int idPrestamo = Integer.parseInt(request.getParameter("idPrestamo"));
+            int confirmacion = Integer.parseInt(request.getParameter("confirmacion"));
+            float monto = Float.parseFloat(request.getParameter("monto"));
+            int idcuenta = Integer.parseInt(request.getParameter("cuenta"));
+
+            System.out.println("idPrestamo: " + idPrestamo);
+            System.out.println("confirmacion: " + confirmacion);
+            System.out.println("monto: " + monto);
+            System.out.println("cuenta: " + idcuenta);
+
+            // Llamada al servicio de negocio
+            PrestamoNegocioImp prestamoNegocio = new PrestamoNegocioImp();
+            boolean exito = prestamoNegocio.confirmarPrestamoConMovimiento(idPrestamo, idcuenta);
+
+            // Manejo de confirmación
+            if (exito && confirmacion == 1) {
+                response.sendRedirect("SolicitudesPrestamo.jsp");
+            } else if (exito && confirmacion == 2) {
+                response.sendRedirect("SolicitudesPrestamo.jsp");
+            } else {
+                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar el préstamo.");
+            }
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Parámetros inválidos.");
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Ocurrió un error al procesar la solicitud.");
         }
     }
 

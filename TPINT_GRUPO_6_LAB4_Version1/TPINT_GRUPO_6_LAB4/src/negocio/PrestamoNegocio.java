@@ -26,6 +26,7 @@ public interface PrestamoNegocio {
 	
 	//nuevos
 	boolean solicitarPrestamo(Prestamo prestamo);
-	List<Cuota> generarCuotas(Prestamo prestamo, float montoConInteres);  
+	List<Cuota> generarCuotas(Prestamo prestamo, float montoConInteres);
+	boolean confirmarPrestamoConMovimiento(int idPrestamo, int idCuenta);  
 
 }

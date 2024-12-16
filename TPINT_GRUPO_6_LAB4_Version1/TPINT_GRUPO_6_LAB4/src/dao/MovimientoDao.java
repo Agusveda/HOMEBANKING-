@@ -44,7 +44,7 @@ public interface MovimientoDao
     */
     
     boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta);
-    boolean insertarMovimientoAltaPrestamo(Movimiento movimiento, int idCuenta);
+    boolean insertarMovimientoAltaPrestamoConfirmado(Movimiento movimiento, int idCuenta);
     boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta);
 	boolean insertarMovimientoPagoCuota(Movimiento movimiento, int idCuenta);
     

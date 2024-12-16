@@ -170,7 +170,6 @@ System.out.println("Filtro seleccionado: " + filtro);
             <th>ID Cliente</th>
             <th>Importe Pedido</th>
             <th>Fecha Alta</th>
-            <th>Importe Mensual</th>
             <th>Cantidad Cuotas</th>
             <th>Confirmado</th>
         </tr>
@@ -184,7 +183,6 @@ System.out.println("Filtro seleccionado: " + filtro);
                     <td><%= prestamo.getIdCliente() %></td>
                     <td><%= prestamo.getImporteCliente() %></td>
                     <td><%= prestamo.getFechaAlta() %></td>
-                    <td><%= prestamo.getImpxmes() %></td>
                     <td><%= prestamo.getCantCuo() %></td>
                     <td><%= prestamo.getConfimarcion()%></td>
                 </tr>

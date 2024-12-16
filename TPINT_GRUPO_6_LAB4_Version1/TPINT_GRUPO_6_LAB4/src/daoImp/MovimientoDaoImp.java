@@ -24,8 +24,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";	
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
-	private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
-				
+	//private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
+    private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
+		
 	//
 	@Override
 	public boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta) {
@@ -68,7 +69,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	}
 
 	@Override
-	public boolean insertarMovimientoAltaPrestamo(Movimiento movimiento, int idCuenta) {
+	public boolean insertarMovimientoAltaPrestamoConfirmado(Movimiento movimiento, int idCuenta) {
 	    System.out.println("Iniciando inserción de movimiento para alta de préstamo...");
 	    Connection connection = null;
 	    PreparedStatement statement = null;
@@ -85,10 +86,11 @@ public class MovimientoDaoImp implements MovimientoDao {
 	        // Registrar el movimiento de alta de préstamo   
 	        statement = connection.prepareStatement(InsertarMovimientoAltaPrestamo);       
 	       
-	        statement.setInt(1, 2); // Tipo de movimiento 2: Alta de un préstamo
-	        statement.setFloat(2, movimiento.getImporte()); 
-	        statement.setInt(3, idCuenta);
-	        statement.setString(4, "Alta de préstamo"); // Detalle del movimiento
+            // Establecer los parámetros para el movimiento
+            statement.setInt(1, 2); // Tipo de movimiento: 2 - Alta de préstamo
+            statement.setFloat(2, movimiento.getImporte()); // Importe del préstamo
+            statement.setInt(3, idCuenta); 
+            statement.setString(4, movimiento.getDetalle()); // Detalle del movimiento (se maneja en la capa de negocio)
 
 	        int rowsAffected = statement.executeUpdate();
 

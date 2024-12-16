@@ -29,4 +29,5 @@ public interface PrestamoDao {
 	// ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);   
 	
 	boolean insertarPrestamo(Prestamo prestamo, List<Cuota> cuotas);
+	boolean confirmacionPrestamo(int idPrestamo);
 }

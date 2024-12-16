@@ -26,14 +26,7 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	public int ObtenerIdCuentaPorCBU(int CBU) {
 		return movimientoDao.ObtenerIdCuentaPorCBU(CBU);
 	}
-	@Override
-	public boolean insertar(Movimiento movi, int idCue) {
-		return movimientoDao.insertar(movi,idCue);
-	}
-	@Override
-	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
-		return movimientoDao.insertarAltaCuenta(movi, idCue);
-	}
+
 	@Override
 	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue) {
 		return movimientoDao.ListarMovimientosPorCuenta(idCue);
@@ -61,6 +54,16 @@ public class MovimientoNegocioImpl implements MovimientoNegocio
 	@Override
 	public float IngresoDeCliente(int DNICLIENTE) {
 		return movimientoDao.IngresoDeCliente(DNICLIENTE);
+	}
+	@Override
+	public boolean insertar(Movimiento movi, int idCue) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

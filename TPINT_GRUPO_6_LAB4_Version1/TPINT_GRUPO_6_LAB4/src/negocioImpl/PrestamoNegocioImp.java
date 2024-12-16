@@ -1,22 +1,78 @@
 package negocioImpl;
 
+import java.sql.Connection;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import Entidades.Cuota;
+import Entidades.Movimiento;
 import Entidades.Prestamo;
+import daoImp.Conexion;
+import daoImp.MovimientoDaoImp;
 import daoImp.PrestamoDaoImp;
 import negocio.PrestamoNegocio;
 
 public class PrestamoNegocioImp implements PrestamoNegocio {
 	private PrestamoDaoImp prestamoDao = new PrestamoDaoImp();
+	private MovimientoDaoImp movimientoDao = new MovimientoDaoImp();
 	
 
+
+	@Override
+	public boolean confirmarPrestamoConMovimiento(int idPrestamo, int idCuenta) {
+	    boolean exito = false;
+
+	    try {
+	        // 1. Confirmar el préstamo
+	        boolean confirmacionExitosa = prestamoDao.confirmacionPrestamo(idPrestamo);
+
+	        if (confirmacionExitosa) {
+	            // 2. Obtener el importe del préstamo
+	        	
+	            float importePrestamo = prestamoDao.obtenerImportePrestamo(idPrestamo);
+
+	            // 3. Crear el movimiento para registrar el alta del préstamo
+	            Movimiento movimiento = new Movimiento();
+	            movimiento.setImporte(importePrestamo);  
+	            movimiento.setTipoMovimiento(2); // Tipo 2: Alta de préstamo
+	            movimiento.setDetalle("Alta de préstamo"); // Este es el detalle que se maneja en la capa de negocio
+
+	            // 4. Registrar el movimiento llamando al DAO
+	            boolean movimientoInsertado = movimientoDao.insertarMovimientoAltaPrestamoConfirmado(movimiento, idCuenta);
+
+	            if (movimientoInsertado) {
+	                System.out.println("El préstamo y el movimiento fueron procesados exitosamente.");
+	                exito = true;
+	            } else {
+	                System.out.println("Error al registrar el movimiento.");
+	            }
+	        } else {
+	            System.out.println("Error al confirmar el préstamo.");
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return exito;
+	}
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//nuevo
 	@Override
 	public boolean solicitarPrestamo(Prestamo prestamo) {
-	    boolean isInsertExitoso = false;
+	    boolean prestamoExitoso = false;
 
 	    float tasaInteres = calcularTasaInteres(prestamo.getCantCuo());
 	    if (tasaInteres == -1) {
@@ -31,8 +87,8 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 
 	    // Realizamos la inserción del préstamo y las cuotas en el DAO
 	    try {
-	        isInsertExitoso = prestamoDao.insertarPrestamo(prestamo, cuotas);
-	        if (isInsertExitoso) {
+	        prestamoExitoso = prestamoDao.insertarPrestamo(prestamo, cuotas);
+	        if (prestamoExitoso) {
 	            System.out.println("El préstamo y sus cuotas se han insertado correctamente.");
 	        }
 	    } catch (Exception e) {
@@ -40,7 +96,7 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	        e.printStackTrace();
 	    }
 
-	    return isInsertExitoso;
+	    return prestamoExitoso;
 	}
 
 	public List<Cuota> generarCuotas(Prestamo prestamo, float montoConInteres) {
@@ -57,10 +113,8 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	        cuota.setFechaPago(LocalDate.now().plusMonths(i)); // Genera la fecha de pago para cada cuota
 	        cuotas.add(cuota);
 	    }
-	    
 	    return cuotas;
 	}
-
 
 	private float calcularTasaInteres(int cantidadCuotas) {
 	    // Calcula la tasa de interés según la cantidad de cuotas
@@ -76,6 +130,27 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	    }
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	//fin nuevo
 /*
 	@Override
