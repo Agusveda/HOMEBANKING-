@@ -24,6 +24,226 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";	
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
+	private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
+				
+	//
+	@Override
+	public boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta) {
+		System.out.println("Iniciando inserción de movimiento...");
+		PreparedStatement statementMovimientoPositivo = null;
+		
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		if (conexion == null) {
+			System.out.println("No se pudo obtener la conexión a la base de datos.");
+			return false;
+		}
+		boolean isInsertExitoso = false;
+
+		try {
+			System.out.println("Preparando declaración de inserción para movimiento...");
+			statementMovimientoPositivo = conexion.prepareStatement(IngresarMovimientoPositivoAlta);
+
+			statementMovimientoPositivo.setFloat(1, movimiento.getImporte());
+			statementMovimientoPositivo.setInt(2, idCuenta);
+			statementMovimientoPositivo.setString(3, movimiento.getDetalle());
+			
+			if (statementMovimientoPositivo.executeUpdate() > 0) 
+			{
+				conexion.commit();
+				System.out.println("Inserción en Movimiento Positivo exitoso.");
+				isInsertExitoso = true;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error durante la inserción.");
+
+			try {
+				conexion.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return isInsertExitoso;
+	}
+
+	@Override
+	public boolean insertarMovimientoAltaPrestamo(Movimiento movimiento, int idCuenta) {
+	    System.out.println("Iniciando inserción de movimiento para alta de préstamo...");
+	    Connection connection = null;
+	    PreparedStatement statement = null;
+	    boolean altaPrestamoExitoso = false;
+
+	    try {
+	        connection = Conexion.getConexion().getSQLConexion(); 
+	        if (connection == null) {
+	            System.out.println("No se pudo obtener la conexión a la base de datos.");
+	            return false;
+	        }
+	        connection.setAutoCommit(false);
+	        
+	        // Registrar el movimiento de alta de préstamo   
+	        statement = connection.prepareStatement(InsertarMovimientoAltaPrestamo);       
+	       
+	        statement.setInt(1, 2); // Tipo de movimiento 2: Alta de un préstamo
+	        statement.setFloat(2, movimiento.getImporte()); 
+	        statement.setInt(3, idCuenta);
+	        statement.setString(4, "Alta de préstamo"); // Detalle del movimiento
+
+	        int rowsAffected = statement.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            System.out.println("Movimiento de alta de préstamo registrado exitosamente.");
+	            altaPrestamoExitoso = true;
+	            connection.commit(); // Confirmar transacción
+	        } else {
+	            System.out.println("No se insertó el movimiento de alta de préstamo. Verifica los datos.");
+	            connection.rollback(); // Revertir si el movimiento no fue insertado
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la inserción del movimiento de alta de préstamo.");
+	        try {
+	            if (connection != null) {
+	                connection.rollback(); // Rollback en caso de error
+	            }
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    } finally {
+	        try {
+	            if (statement != null) {
+	                statement.close(); // Cerrar statement
+	            }
+	            if (connection != null) {
+	                connection.setAutoCommit(true); // Restaurar el autocommit
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return altaPrestamoExitoso;
+	}
+	
+	@Override
+	public boolean insertarMovimientoPagoCuota(Movimiento movimiento, int idCuenta) {
+	    System.out.println("Iniciando inserción de movimiento para pago de cuota...");
+	    PreparedStatement statementMovimientoNegativo = null;
+	    PreparedStatement statementCuenta = null;
+	    Connection conexion = Conexion.getConexion().getSQLConexion();
+	    if (conexion == null) {
+	        System.out.println("No se pudo obtener la conexión a la base de datos.");
+	        return false;
+	    }
+	    boolean pagoCuotaExitoso = false;
+
+	    try {
+	        // Preparando declaración para insertar movimiento negativo (Pago de cuota)
+	        statementMovimientoNegativo = conexion.prepareStatement(IngresarMovimientoNegativo);
+	        statementMovimientoNegativo.setFloat(1, movimiento.getImporte());  // El importe del pago (negativo)
+	        statementMovimientoNegativo.setInt(2, idCuenta);  // ID de la cuenta
+	        statementMovimientoNegativo.setString(3, "Pago de cuota");
+
+	        if (statementMovimientoNegativo.executeUpdate() > 0) {
+	            System.out.println("Inserción en Movimiento negativo (pago de cuota) exitosa.");
+
+	            // Actualizar saldo de la cuenta (restar el pago)
+	            String sqlActualizarCuenta = "UPDATE cuenta SET Saldo = Saldo - ? WHERE Id = ?";
+	            statementCuenta = conexion.prepareStatement(sqlActualizarCuenta);
+	            statementCuenta.setFloat(1, movimiento.getImporte());  // El importe a restar
+	            statementCuenta.setInt(2, idCuenta);  // ID de la cuenta
+
+	            if (statementCuenta.executeUpdate() > 0) {
+	                System.out.println("Actualización de saldo de cuenta exitosa.");
+	                conexion.commit();
+	                pagoCuotaExitoso = true;
+	            }
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la inserción del movimiento de pago de cuota.");
+
+	        try {
+	            conexion.rollback();  // Rollback en caso de error
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    }
+
+	    return pagoCuotaExitoso;
+	}
+	
+	@Override
+	public boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta) {
+		System.out.println("Iniciando inserción de movimiento...");
+		PreparedStatement statementMovimientoPositivo = null;
+		PreparedStatement statementMovimientoNegativo = null;
+		PreparedStatement statementCuenta = null;
+		PreparedStatement statementBajaSaldo = null;
+		Connection conexion = Conexion.getConexion().getSQLConexion();
+		if (conexion == null) {
+			System.out.println("No se pudo obtener la conexión a la base de datos.");
+			return false;
+		}
+		boolean transferenciaExitosa = false;
+
+		try {
+			System.out.println("Preparando declaración de inserción para movimiento...");
+			statementMovimientoPositivo = conexion.prepareStatement(IngresarMovimientoPositivo);
+
+			statementMovimientoPositivo.setFloat(1, movimiento.getImporte());
+			statementMovimientoPositivo.setInt(2, movimiento.getIdCuenta()); // SE DEBERIA OBTENER ID DE CUENTA
+			statementMovimientoPositivo.setString(3, movimiento.getDetalle());
+
+			if (statementMovimientoPositivo.executeUpdate() > 0) {
+				System.out.println("Inserción en Movimiento Positivo exitoso.");
+
+				// DEBITO EN CUENTA DE CLIENTE
+				statementMovimientoNegativo = conexion.prepareStatement(IngresarMovimientoNegativo);
+				statementMovimientoNegativo.setFloat(1, movimiento.getImporte());
+				statementMovimientoNegativo.setInt(2, idCuenta);
+				statementMovimientoNegativo.setString(3, movimiento.getDetalle());
+
+				if (statementMovimientoNegativo.executeUpdate() > 0) {
+					System.out.println("Inserción en Movimiento negativo exitoso.");
+
+					System.out.println("Preparando declaración de inserción para cuenta.");
+					
+					statementBajaSaldo = conexion.prepareStatement(ModificarCuentaNegativo);
+					statementBajaSaldo.setFloat(1, movimiento.getImporte());
+					statementBajaSaldo.setInt(2, idCuenta);
+
+					if (statementBajaSaldo.executeUpdate() > 0) {
+						System.out.println("Inserción en Cuenta negativa exitosa.");
+						
+						// ACREDITACION EN CUENTA DE CLIENTE DESTINO
+						statementCuenta = conexion.prepareStatement(ModificarCuentaPositivo);
+						statementCuenta.setFloat(1, movimiento.getImporte());
+						statementCuenta.setInt(2, movimiento.getIdCuenta());
+						if (statementCuenta.executeUpdate() > 0) {
+							System.out.println("Inserción en Cuenta exitosa.");
+							conexion.commit();
+							transferenciaExitosa = true;
+						}
+					}
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Error durante la inserción.");
+
+			try {
+				conexion.rollback();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		return transferenciaExitosa;
+	}
+
+	
+	/////////////////////////
 	
 	@Override
 	public int ObtenerIdCuentaPorIdCliente(int IdCliente) {
@@ -105,7 +325,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 		return id;
 	}
-	
+	/*
 	@Override
 	public boolean insertar(Movimiento movi, int idCue) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -174,7 +394,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	}
 
 	@Override
-	public boolean insertarAltaCuenta(Movimiento movi, int idCue) {
+	public boolean insertarAltaCuenta(Movimiento movi, int idCue) { //borrar
 		System.out.println("Iniciando inserción de movimiento...");
 
 		PreparedStatement statementMovimientoP = null;
@@ -214,7 +434,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 		}
 		return isInsertExitoso;
 	}
-	
+	*/
 	@Override
 	public ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue) {
 		ArrayList<Movimiento> ListaMovimiento = new ArrayList<Movimiento>();
@@ -523,4 +743,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return total;
 	}
+
+
 }

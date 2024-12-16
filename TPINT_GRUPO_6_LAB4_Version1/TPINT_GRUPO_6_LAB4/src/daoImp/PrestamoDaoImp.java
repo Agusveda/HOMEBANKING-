@@ -236,6 +236,10 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    return ListaPrestamos;
 	}
 	
+	
+	
+	
+/*	viejo
 	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
 	    Connection connection = null;
 	    PreparedStatement statement = null;
@@ -301,6 +305,76 @@ public class PrestamoDaoImp implements PrestamoDao{
 	            e.printStackTrace();
 	        }
 	    }
+	    return isUpdateExitoso;
+	}
+*/
+	
+	public boolean confirmacionPrestamo(int idPrestamo) {
+	    Connection connection = null;
+	    PreparedStatement statement = null;
+	    boolean isUpdateExitoso = false;
+
+	    try {
+	        connection = Conexion.getConexion().getSQLConexion(); 
+	        if (connection == null) {
+	            System.out.println("No se pudo obtener la conexión a la base de datos.");
+	            return false;
+	        }
+
+	        connection.setAutoCommit(false);
+
+	        // Actualizar estado de confirmación del préstamo
+	        String sqlActualizarConfirmacion = "UPDATE prestamo SET confirmacion = ? WHERE idPrestamo = ?";
+	        statement = connection.prepareStatement(sqlActualizarConfirmacion);
+	        statement.setInt(1, 1); // 1: Aprobado, 0: Rechazado
+	        statement.setInt(2, idPrestamo);
+
+	        int rowsAffected = statement.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            System.out.println("Confirmación del préstamo actualizada correctamente.");
+	            isUpdateExitoso = true;
+
+	            // Registrar movimiento de préstamo aprobado en la cuenta correspondiente
+	            String sqlInsertMovimiento = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) " +
+	                    "VALUES (?, NOW(), ?, ?, ?)";
+
+	            try (PreparedStatement stmtMovimiento = connection.prepareStatement(sqlInsertMovimiento)) {
+	                stmtMovimiento.setInt(1, 2); // Tipo de movimiento: Préstamo aprobado
+	                stmtMovimiento.setFloat(2, obtenerImportePrestamo(idPrestamo, connection)); 
+	                stmtMovimiento.setInt(3, obtenerIdCuentaPrestamo(idPrestamo, connection)); 
+	                stmtMovimiento.setString(4, "Préstamo aprobado");
+	                stmtMovimiento.executeUpdate();
+	            }
+
+	            connection.commit(); // Confirmar transacción
+	        } else {
+	            System.out.println("No se actualizó ninguna fila. Verifica si el ID del préstamo es válido.");
+	            connection.rollback(); // Revertir si no se actualizó el préstamo
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error durante la actualización de la confirmación del préstamo.");
+	        try {
+	            if (connection != null) {
+	                connection.rollback(); // Rollback en caso de error
+	            }
+	        } catch (SQLException e1) {
+	            e1.printStackTrace();
+	        }
+	    } finally {
+	        try {
+	            if (statement != null) {
+	                statement.close(); // Cerrar statement
+	            }
+	            if (connection != null) {
+	                connection.setAutoCommit(true); // Restaurar el autocommit
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
 	    return isUpdateExitoso;
 	}
 
@@ -824,5 +898,12 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        }
 	    }
 	    return montoTotalPendiente;
+	}
+
+
+	@Override
+	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

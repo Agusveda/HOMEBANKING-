@@ -43,7 +43,7 @@ public class ServletPrestamo extends HttpServlet {
             procesarPagoCuota(request, response);
         }
     }
-
+/*
     private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
 
@@ -97,8 +97,66 @@ public class ServletPrestamo extends HttpServlet {
             response.sendRedirect("login.jsp");
         }
     }
-    
-    
+    */
+    private void procesarSolicitudPrestamo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Integer idCliente = (Integer) request.getSession().getAttribute("IdCliente");
+
+        // Validar que el usuario esté logueado
+        if (idCliente != null) {
+            try {
+                // Obtener los parámetros del formulario
+                float importeCliente = Float.parseFloat(request.getParameter("monto"));
+                int cantCuo = Integer.parseInt(request.getParameter("cuotas"));
+                int idCuenta = Integer.parseInt(request.getParameter("cuenta"));
+
+                // Validación del monto mínimo
+                if (importeCliente < 1000) {
+                    request.setAttribute("mensajeError", "Monto mínimo de préstamo es $1000.");
+                    forwardToPrestamoPage(request, response);
+                    return;
+                }
+
+                // Crear la fecha de alta con la fecha actual
+                java.sql.Date fechaAlta = new java.sql.Date(System.currentTimeMillis());
+
+                // Crear objeto Prestamo con los datos obtenidos
+                Prestamo prestamo = new Prestamo();
+                prestamo.setIdCliente(idCliente);
+                prestamo.setIdCuenta(idCuenta);
+                prestamo.setImporteCliente(importeCliente);
+                prestamo.setFechaAlta(fechaAlta);
+                prestamo.setCantCuo(cantCuo);
+                prestamo.setconfimacion(false);               
+                
+                // Intentar insertar el préstamo
+                boolean exito = prestamoNegocio.solicitarPrestamo(prestamo);
+
+                // Responder al usuario
+                if (exito) {
+                    request.setAttribute("mensaje", "Pedido de préstamo confirmado.");
+                } else {
+                    request.setAttribute("mensajeError", "No se pudo procesar la solicitud de préstamo. Intente nuevamente.");
+                }
+
+                // Redirigir a la página de préstamo con el mensaje correspondiente
+                forwardToPrestamoPage(request, response);
+
+            } catch (NumberFormatException e) {
+                request.setAttribute("mensajeError", "Error en los datos ingresados. Asegúrese de que todos los campos sean correctos.");
+                forwardToPrestamoPage(request, response);
+            }
+        } else {
+            // Si el cliente no está logueado, redirigir al login
+            response.sendRedirect("Login.jsp");
+        }
+    }
+
+    // Método auxiliar para redirigir a la página de préstamo
+    private void forwardToPrestamoPage(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        RequestDispatcher dispatcher = request.getRequestDispatcher("prestamoCliente.jsp");
+        dispatcher.forward(request, response);
+    }
+
 
     private void procesarAprobacionPrestamo(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
