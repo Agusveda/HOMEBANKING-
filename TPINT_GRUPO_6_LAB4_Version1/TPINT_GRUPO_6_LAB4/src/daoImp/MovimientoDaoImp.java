@@ -25,7 +25,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";	
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
     private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
-		
+    private static final String ActualizarSaldoCuenta = "UPDATE cuenta SET Saldo = Saldo - ? WHERE Id = ?";
 	
 	@Override
 	public boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta) {
@@ -127,7 +127,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return altaPrestamoExitoso;
 	}
-	
+	/*funciona 11.55
 	@Override
 	public boolean insertarMovimientoPagoCuota(Movimiento movimiento, int idCuenta) {
 	    System.out.println("Iniciando inserción de movimiento para pago de cuota...");
@@ -175,7 +175,61 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 	    return pagoCuotaExitoso;
 	}
-	
+	*/
+	@Override
+	public boolean insertarMovimientoPagoCuota(Movimiento movimiento, int idCuenta) {
+	    System.out.println("Iniciando inserción de movimiento para pago de cuota...");
+
+	    Connection conexion = Conexion.getConexion().getSQLConexion();
+	    if (conexion == null) {
+	        System.out.println("No se pudo obtener la conexión a la base de datos.");
+	        return false;
+	    }
+
+	    boolean exito = false;
+
+	    try (PreparedStatement psMovimiento = conexion.prepareStatement(IngresarMovimientoNegativo);
+	         PreparedStatement psActualizarSaldo = conexion.prepareStatement(ActualizarSaldoCuenta)) {
+
+	        conexion.setAutoCommit(false); // Iniciar la transacción
+
+	        // Configurar y ejecutar inserción del movimiento negativo
+	        psMovimiento.setFloat(1, -movimiento.getImporte());  // Monto negativo del pago
+	        psMovimiento.setInt(2, idCuenta);                  // ID de la cuenta asociada
+	        psMovimiento.setString(3, "Pago de cuota");        // Detalle del movimiento
+
+	        if (psMovimiento.executeUpdate() > 0) {
+	            System.out.println("Inserción en movimiento negativa exitosa.");
+
+	            // Configurar y ejecutar actualización de saldo
+	            psActualizarSaldo.setFloat(1, -movimiento.getImporte()); // Monto a restar
+	            psActualizarSaldo.setInt(2, idCuenta);                 // ID de la cuenta
+
+	            if (psActualizarSaldo.executeUpdate() > 0) {
+	                System.out.println("Actualización de saldo exitosa.");
+	                conexion.commit(); // Confirmar la transacción
+	                exito = true;
+	            }
+	        }
+
+	        if (!exito) {
+	            conexion.rollback(); // Revertir cambios si no se completaron ambas operaciones
+	            System.out.println("Transacción revertida por error en alguna operación.");
+	        }
+
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        try {
+	            conexion.rollback();
+	            System.out.println("Se realizó un rollback debido a una excepción.");
+	        } catch (SQLException rollbackEx) {
+	            rollbackEx.printStackTrace();
+	        }
+	    }
+
+	    return exito;
+	}
+
 	@Override
 	public boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta) {
 		System.out.println("Iniciando inserción de movimiento...");
@@ -516,7 +570,8 @@ public class MovimientoDaoImp implements MovimientoDao {
 			}
 		}
 
-		saldo = cuenta.getId();
+		//saldo = cuenta.getId();
+		saldo = cuenta.getSaldo();
 
 		return saldo;
 	}

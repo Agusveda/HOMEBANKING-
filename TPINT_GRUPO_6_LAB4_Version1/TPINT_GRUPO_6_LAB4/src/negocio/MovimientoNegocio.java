@@ -47,4 +47,5 @@ public interface MovimientoNegocio
     float EgresoDeCliente(int DNICLIENTE);
     float IngresoDeCliente(int DNICLIENTE);
     */
+    public boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta);
 }

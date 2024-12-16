@@ -17,9 +17,6 @@ import negocioImpl.MovimientoNegocioImpl;
 import dao.MovimientoDao;
 import daoImp.MovimientoDaoImp;
 
-/**
- * Servlet implementation class ServletTransferencia
- */
 @WebServlet("/ServletTransferencia")
 public class ServletTransferencia extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -27,7 +24,6 @@ public class ServletTransferencia extends HttpServlet {
     public ServletTransferencia() {
         super();
     }
-
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -64,98 +60,77 @@ public class ServletTransferencia extends HttpServlet {
         dispatcher.forward(request, response);
     }
 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        if (request.getParameter("btnAceptar") != null) {
+            // Declaración de objetos
+            Movimiento movimiento = new Movimiento();
+            MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
+            CuentaNegocioImpl cuentaNegocio = new CuentaNegocioImpl();
+            
+            // Validaciones
+            try {
+                // Validación para evitar transferir a la misma cuenta (por el CBU)
+                String idCuentaStrCBU = request.getSession().getAttribute("idCuenta").toString();
+                int idCuentaOrigen = Integer.parseInt(idCuentaStrCBU);
+                Cuenta cuentaOrigen = cuentaNegocio.obtenerCuentaPorId(idCuentaOrigen);
 
+                if (cuentaOrigen.getCbu() == Integer.parseInt(request.getParameter("txtCbuDestino"))) {
+                    request.setAttribute("mensajeError", "No puede transferirse a la misma cuenta.");
+                    request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                    return;
+                }
 
+                // Validación para evitar transferir montos menores o iguales a 0
+                float importe = Float.parseFloat(request.getParameter("txtImporte"));
+                if (importe <= 0) {
+                    request.setAttribute("mensajeError", "El importe debe ser mayor a 0.");
+                    request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                    return;
+                }
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                // Validación para evitar transferir montos mayores al saldo disponible
+                float saldoDisponible = Float.parseFloat(request.getParameter("txtSaldo"));
+                if (importe > saldoDisponible) {
+                    request.setAttribute("mensajeError", "El importe es mayor a su saldo disponible.");
+                    request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                    return;
+                }
 
-		if (request.getParameter("btnAceptar") != null)
-		{
-			//declaracion de objetos
-			Movimiento movimiento = new Movimiento();
-			MovimientoNegocioImpl movimientoNegocio = new MovimientoNegocioImpl();
-			Cuenta cuen = new Cuenta();
-			CuentaNegocioImpl cuentaN = new CuentaNegocioImpl();
-			
-			
-			
-			
-			///VALIDACIONES
-			
-			/// PARA VERIFICAR QUE NO SE TRANSFIERA A LA MISMA CUENTA (POR EL CBU)
-			String idCuentaStrCBU = request.getSession().getAttribute("idCuenta").toString();
-			int idCueCBU = Integer.parseInt(idCuentaStrCBU);
-			cuen = cuentaN.obtenerCuentaPorId(idCueCBU);
-			if (cuen.getCbu() == Integer.parseInt(request.getParameter("txtCbuDestino")))
-			{
-                request.setAttribute("mensajeError", "No puede transferirse a esta misma cuenta.");
+                // Validación para comprobar que el CBU destino existe
+                int cbuDestino = Integer.parseInt(request.getParameter("txtCbuDestino"));
+                if (!movimientoNegocio.ExisteCBU(cbuDestino)) {
+                    request.setAttribute("mensajeError", "El CBU destino no existe.");
+                    request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
+                    return;
+                }
+
+                // Obtener ID de la cuenta destino
+                int idCuentaDestino = movimientoNegocio.ObtenerIdCuentaPorCBU(cbuDestino);
+
+                // Configuración del movimiento
+                movimiento.setImporte(importe);
+                movimiento.setDetalle(request.getParameter("txtDetalle"));
+                movimiento.setIdCuenta(idCuentaDestino); // Cuenta destino
+
+                // Llamada al método de negocio para realizar la transferencia
+                boolean transferenciaExitosa = movimientoNegocio.insertarMovimientosTransferencia(movimiento, idCuentaOrigen);
+
+                // Manejo de la respuesta
+                if (transferenciaExitosa) {
+                    request.setAttribute("mensaje", "Transferencia realizada exitosamente.");
+                } else {
+                    request.setAttribute("mensajeError", "Hubo un error al realizar la transferencia.");
+                }
                 request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
-                return;
-			}
-			
-			///PARA VERIFICAR QUE SE INGRESE UN MONTO MAYOR A 0 PARA TRANSFERIR
-			if (Float.parseFloat(request.getParameter("txtImporte")) <= 0)
-			{
-                request.setAttribute("mensajeError", "El importe debe ser mayor a 0.");
+            } catch (NumberFormatException e) {
+                request.setAttribute("mensajeError", "Datos inválidos. Verifique los campos e intente nuevamente.");
                 request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
-                return;
-			}
-			
-			/// PARA VERIFICAR QUE EL SALDO SEA MAYOR AL IMPORTE A TRANSFERIR
-            if (Float.parseFloat(request.getParameter("txtImporte")) > Float.parseFloat(request.getParameter("txtSaldo")) ) 
-            {
-                request.setAttribute("mensajeError", "El importe es mayor a su sueldo.");
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("mensajeError", "Ocurrió un error inesperado. Intente nuevamente.");
                 request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
-                return;
             }
-            
-            /// PARA VERIFICAR SI EXISTE EL CBU A TRANSFERIR
-            if (movimientoNegocio.ExisteCBU(Integer.parseInt(request.getParameter("txtCbuDestino"))) == false)
-            {
-                request.setAttribute("mensajeError", "El CBU no existe.");
-                request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
-                return;
-            }
-
-            
-            
-            /// -------------------------------------------------------------------
-			String idCli = request.getSession().getAttribute("IdCliente").toString();	
-            			
-	    	    
-			
-			//  Traigo al cuenta de destino (donde envio el importe/transferencia)
-		
-			int CBUDestino = Integer.parseInt(request.getParameter("txtCbuDestino"));
-			int CuentaDestino = movimientoNegocio.ObtenerIdCuentaPorCBU(CBUDestino);
-			
-			
-			
-			// Seteo los parametros para el insert de Movimiento.
-			
-			//movimiento.setTipoMovimiento(Integer.parseInt(request.getParameter("")));
-			movimiento.setImporte(Float.parseFloat(request.getParameter("txtImporte")));
-			movimiento.setDetalle(request.getParameter("txtDetalle"));
-			movimiento.setIdCuenta(CuentaDestino);
-				
-			
-			int idCue = 0;
-			String idCuentaStr = request.getSession().getAttribute("idCuenta").toString();
-			idCue = Integer.parseInt(idCuentaStr);
-	    	    
-	   	    boolean insertado = movimientoNegocio.insertar(movimiento, idCue);
-	   	    
-            if (insertado) {
-                request.setAttribute("mensaje", "Transferencia realizada exitosamente.");
-            } else {
-                request.setAttribute("mensajeError", "Hubo un error en la transferencia");
-            }
-            request.getRequestDispatcher("/Transferencias.jsp").forward(request, response);
-            
-	   	    return; 
-			
-		}
-		doGet(request, response);
-	}
-
+        }
+        doGet(request, response);
+    }
 }

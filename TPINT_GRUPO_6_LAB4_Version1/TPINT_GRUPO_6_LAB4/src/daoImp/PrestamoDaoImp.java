@@ -781,7 +781,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    return cuotas;
 	}
 
-	
 	@Override
 	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
 	    Connection conn = null;
@@ -860,6 +859,24 @@ public class PrestamoDaoImp implements PrestamoDao{
 	        }
 	    }
 	}
+	
+	@Override
+	public boolean actualizarEstadoCuota(int cuotaId, boolean estaPagada) {
+	    boolean actualizado = false;
+	    try (Connection conn = Conexion.getConexion().getSQLConexion();
+	         PreparedStatement ps = conn.prepareStatement("UPDATE cuota SET estaPagada = ? WHERE Id = ?")) {
+
+	        ps.setBoolean(1, estaPagada);
+	        ps.setInt(2, cuotaId);
+
+	        actualizado = ps.executeUpdate() > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        System.out.println("Error al actualizar el estado de la cuota.");
+	    }
+	    return actualizado;
+	}
+
 
 	@Override
 	public double obtenerSumaCuotasPendientes(int idCliente) {

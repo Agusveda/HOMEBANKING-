@@ -16,17 +16,18 @@ public interface PrestamoNegocio {
     double obtenerTotalPrestamosConfirmados(int idCliente);
 	List<Prestamo> obtenerPrestamosConfirmados(int idCliente);
 	List<Cuota> obtenerCuotas(int idCliente, int idPrestamo);
-	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
+	//boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
 	double obtenerSumaCuotasPendientes(int idCliente);
 	ArrayList<Prestamo> filtrarClienteXImporte (String orden); 
 	ArrayList<Prestamo> filtrarClienteXImporteConfirmado (String orden);  
 	ArrayList<Prestamo> obtenerPrestamosEnEspera(int idCliente);
 //	boolean solicitarPrestamo(Prestamo prestamo);  
-	
-	
+
 	//nuevos
 	boolean solicitarPrestamo(Prestamo prestamo);
 	List<Cuota> generarCuotas(Prestamo prestamo, float montoConInteres);
-	boolean confirmarPrestamoConMovimiento(int idPrestamo, int idCuenta);  
+	boolean confirmarPrestamoConMovimiento(int idPrestamo, int idCuenta);
+	boolean realizarPagoCuotaConMovimiento(int cuotaId, int cuentaId, float monto);
+	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);  
 
 }
