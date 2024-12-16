@@ -461,6 +461,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	                pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	                pre.setFechaAlta(rs.getDate("FechaAlta"));
 	                pre.setCantCuo(rs.getInt("CantidadCuotas"));
+	                
 	                pre.setconfimacion(rs.getBoolean("confirmacion"));
 	                PretAut.add(pre);
 	            }

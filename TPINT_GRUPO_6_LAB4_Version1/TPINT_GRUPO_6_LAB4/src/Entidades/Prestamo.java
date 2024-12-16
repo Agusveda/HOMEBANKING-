@@ -91,6 +91,7 @@ public class Prestamo {
 	public Boolean getConfimarcion() {
 		return confimacion;
 	}
+
 	public void setconfimacion(Boolean confimacion) {
 		this.confimacion = confimacion;
 	}
