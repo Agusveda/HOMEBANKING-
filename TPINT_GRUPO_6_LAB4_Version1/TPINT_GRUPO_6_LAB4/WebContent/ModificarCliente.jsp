@@ -126,7 +126,7 @@
             </p>
             <p>
                 <label class="form-label" for="telefono">Teléfono</label>
-                <input class="controls" id="telefono" type="text" maxlength="8" placeholder="Ingrese el teléfono" Value="<%= cli.getTelefono() %>" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
+                <input class="controls" id="telefono" type="text" maxlength="9" placeholder="Ingrese el teléfono" Value="<%= cli.getTelefono() %>" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
             </p>
             <p>
                 <label class="form-label" for="usuario">Usuario</label>

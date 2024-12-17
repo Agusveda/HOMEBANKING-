@@ -125,7 +125,7 @@
                 </p>
                 <p>
                     <label class="form-label" for="dni">DNI</label>
-                    <input class="controls" id="dni" type="number" placeholder="Ingrese el DNI" required name="txtDNI" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudDni(this)">
+                    <input class="controls" id="dni" type="number" maxlength="8" placeholder="Ingrese el DNI" required name="txtDNI" onkeypress="validarSoloNumeros(event)" oninput="validarLongitudDni(this)">
                 </p>
                 <p>
                     <label class="form-label" for="cuil">CUIL</label>
@@ -164,7 +164,7 @@
                 </p>
                 <p>
                     <label class="form-label" for="telefono">Teléfono</label>
-                    <input class="controls" id="telefono" type="text" maxlength="10" placeholder="Ingrese el teléfono" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
+                    <input class="controls" id="telefono" type="text" maxlength="9" placeholder="Ingrese el teléfono" required name="txtTelefono" onkeypress="validarSoloNumeros(event)">
                 </p>
                 <p>
                     <label class="form-label" for="usuario">Usuario</label>
