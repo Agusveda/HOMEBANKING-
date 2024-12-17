@@ -81,7 +81,7 @@ public class ServletCliente extends HttpServlet {
 
     
     	
-    	// Modificar de Cliente
+    	
        
 
         // Manejo de alta de cliente
@@ -177,6 +177,7 @@ public class ServletCliente extends HttpServlet {
                 request.setAttribute("mensaje", "Cliente registrado exitosamente.");
              // Restablecer valores de los desplegables
                 request.setAttribute("limpiarFormulario", true);
+                request.setAttribute("nacionalidadId", null);
                 request.setAttribute("provincias", null);
                 request.setAttribute("localidades", null);
                

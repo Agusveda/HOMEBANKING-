@@ -509,6 +509,8 @@ public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
             cli.setCorreoElectronico(rs.getString("CorreoElectronico"));
             cli.setTelefono(rs.getInt("Telefono"));
             cli.setActivo(rs.getBoolean("Activo"));
+            cli.setUsuario(rs.getString("NombreUsuario"));
+            cli.setContrasenia(rs.getString("Contraseña"));
             lista.add(cli);
         }
 
