@@ -28,7 +28,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
 //	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
 	private static final String AprobarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE Id = ?";
-	
+	private static final String DenegarPrestamo = "UPDATE prestamo SET confirmacion = 2 WHERE id = ?";
 	@Override
 	public boolean insertarPrestamo(Prestamo prestamo, List<Cuota> cuotas) {
 	    boolean isInsertExitoso = false;
@@ -357,6 +357,54 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    }
 
 	    return isUpdateExitoso;
+	}
+	
+	
+	public boolean denegarPrestamo(int idPrestamo) {
+	    Connection connection = null;
+	    PreparedStatement statement = null;
+	    boolean isDenegacionExitosa = false;
+
+	    try {
+	    	 System.out.println("Intentando obtener conexión a la base de datos...");
+	         connection = Conexion.getConexion().getSQLConexion(); 
+	         if (connection == null) {
+	             System.out.println("No se pudo obtener la conexión a la base de datos.");
+	             return false;
+	         }
+
+	         System.out.println("Conexión exitosa. Preparando la consulta SQL...");
+	         statement = connection.prepareStatement(DenegarPrestamo);
+	         
+	         System.out.println("Estableciendo el valor de idPrestamo: " + idPrestamo);
+	         statement.setInt(1, idPrestamo);
+
+	         System.out.println("Ejecutando la consulta SQL...");
+	         int rowsAffected = statement.executeUpdate();
+
+	        if (rowsAffected > 0) {
+	            System.out.println("Préstamo denegado correctamente.");
+	            isDenegacionExitosa = true;
+	        } else {
+	            System.out.println("No se encontró el préstamo con el ID especificado.");
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("Error al denegar el préstamo.");
+	        e.printStackTrace();
+	    } finally {
+	        try {
+	            if (statement != null) {
+	                statement.close();
+	            }
+	            if (connection != null) {
+	                connection.close();
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	    }
+
+	    return isDenegacionExitosa;
 	}
 /*
 	private float obtenerImportePrestamo(int idPrestamo, Connection connection) throws SQLException {

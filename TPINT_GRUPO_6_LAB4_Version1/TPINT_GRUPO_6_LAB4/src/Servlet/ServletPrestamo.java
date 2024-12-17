@@ -114,16 +114,18 @@ public class ServletPrestamo extends HttpServlet {
             System.out.println("monto: " + monto);
             System.out.println("cuenta: " + idcuenta);
 
-            // Llamada al servicio de negocio
-            boolean exito = prestamoNegocio.confirmarPrestamoConMovimiento(idPrestamo, idcuenta);
+            boolean exito = false;
+            if (confirmacion == 1) { // Aprobación del préstamo
+                exito = prestamoNegocio.confirmarPrestamoConMovimiento(idPrestamo, idcuenta);
+            } else if (confirmacion == 2) { // Denegación del préstamo
+                exito = prestamoNegocio.denegarPrestamo(idPrestamo);
+            }
 
-            // Manejo de confirmación
-            if (exito && confirmacion == 1) {
-                response.sendRedirect("SolicitudesPrestamo.jsp");
-            } else if (exito && confirmacion == 2) {
-                response.sendRedirect("SolicitudesPrestamo.jsp");
+            // Manejo de la respuesta
+            if (exito) {
+                response.sendRedirect("SolicitudesPrestamo.jsp?mensaje=Operación realizada correctamente.");
             } else {
-                response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar el préstamo.");
+                response.sendRedirect("SolicitudesPrestamo.jsp?mensaje=Error al procesar la solicitud.");
             }
 
         } catch (NumberFormatException e) {
@@ -191,5 +193,6 @@ public class ServletPrestamo extends HttpServlet {
             e.printStackTrace();
             response.sendRedirect("error.jsp"); // Redirigir a página de error general
         }
+        
     }
 }

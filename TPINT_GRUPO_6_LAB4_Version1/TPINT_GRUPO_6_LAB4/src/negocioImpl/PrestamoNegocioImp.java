@@ -226,5 +226,10 @@ public class PrestamoNegocioImp implements PrestamoNegocio {
 	public boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto) {
 		return prestamoDao.realizarPagoCuota(cuotaId,cuentaId,monto);
 	}
+	
+
+	public boolean denegarPrestamo(int idPrestamo) {
+		return prestamoDao.denegarPrestamo(idPrestamo);
+	}
 
 }

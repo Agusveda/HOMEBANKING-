@@ -25,4 +25,5 @@ public interface PrestamoDao {
 	boolean confirmacionPrestamo(int idPrestamo);
 	boolean realizarPagoCuota(int cuotaId, int cuentaId, float monto);
 	boolean actualizarEstadoCuota(int cuotaId, boolean estaPagada);
+	boolean denegarPrestamo(int idPrestamo);
 }
