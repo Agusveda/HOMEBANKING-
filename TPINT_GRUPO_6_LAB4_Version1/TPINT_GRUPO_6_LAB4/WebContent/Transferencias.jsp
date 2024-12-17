@@ -1,3 +1,4 @@
+<%@page import="com.mysql.jdbc.PreparedStatement.ParseInfo"%>
 <%@page import="daoImp.MovimientoDaoImp"%>
 <%@page import="dao.MovimientoDao"%>
 <%@page import="java.util.ArrayList"%>
@@ -71,7 +72,10 @@ function EventoSeleccionarCuenta()
 	    <% if (mensaje != null) { %>
 	    <div class="mensaje mensaje-exito"><%= mensaje %></div>
 		<% } %>
-		<% if (mensajeError != null) { %>
+		<% if (mensajeError != null) {
+			session.removeAttribute("idCuenta");
+			
+			%>
 		    <div class="mensaje mensaje-error"><%= mensajeError %></div>
 		<% } %>
 	
