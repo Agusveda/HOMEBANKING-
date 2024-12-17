@@ -28,7 +28,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
 //	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
 	private static final String AprobarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE Id = ?";
-	private static final String DenegarPrestamo = "UPDATE prestamo SET confirmacion = 2 WHERE id = ?";
+	private static final String DenegarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
 	@Override
 	public boolean insertarPrestamo(Prestamo prestamo, List<Cuota> cuotas) {
 	    boolean isInsertExitoso = false;
@@ -361,50 +361,64 @@ public class PrestamoDaoImp implements PrestamoDao{
 	
 	
 	public boolean denegarPrestamo(int idPrestamo) {
-	    Connection connection = null;
-	    PreparedStatement statement = null;
-	    boolean isDenegacionExitosa = false;
+		 Connection connection = null;
+		    PreparedStatement statement = null;
+		    boolean isUpdateExitoso = false;
 
-	    try {
-	    	 System.out.println("Intentando obtener conexión a la base de datos...");
-	         connection = Conexion.getConexion().getSQLConexion(); 
-	         if (connection == null) {
-	             System.out.println("No se pudo obtener la conexión a la base de datos.");
-	             return false;
-	         }
+		    try {
+		        connection = Conexion.getConexion().getSQLConexion(); 
+		        if (connection == null) {
+		            System.out.println("No se pudo obtener la conexión a la base de datos.");
+		            return false;
+		        }
+		        connection.setAutoCommit(false);
 
-	         System.out.println("Conexión exitosa. Preparando la consulta SQL...");
-	         statement = connection.prepareStatement(DenegarPrestamo);
-	         
-	         System.out.println("Estableciendo el valor de idPrestamo: " + idPrestamo);
-	         statement.setInt(1, idPrestamo);
+		        // Actualizar estado de negacion del préstamo
+		        statement = connection.prepareStatement(DenegarPrestamo);
+		        statement.setInt(1, 2); // 1: Aprobado, 2: Rechazado
+		        statement.setInt(2, idPrestamo);
+		        
+		        
+		        System.out.println("Ejecutando la consulta SQL...");
 
-	         System.out.println("Ejecutando la consulta SQL...");
-	         int rowsAffected = statement.executeUpdate();
+		        int rowsAffected = statement.executeUpdate();
+		        
+		        System.out.println("Filas afectadas: " + rowsAffected);
 
-	        if (rowsAffected > 0) {
-	            System.out.println("Préstamo denegado correctamente.");
-	            isDenegacionExitosa = true;
-	        } else {
-	            System.out.println("No se encontró el préstamo con el ID especificado.");
-	        }
-	    } catch (SQLException e) {
-	        System.out.println("Error al denegar el préstamo.");
-	        e.printStackTrace();
-	    } finally {
-	        try {
-	            if (statement != null) {
-	                statement.close();
-	            }
-	            if (connection != null) {
-	                connection.close();
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
 
-	    return isDenegacionExitosa;
+		        if (rowsAffected > 0) {
+		            System.out.println("Negacion del préstamo actualizada correctamente.");
+		            isUpdateExitoso = true;
+
+		        } else {
+		            System.out.println("No se actualizó ninguna fila. Verifica si el ID del préstamo es válido.");
+		            connection.rollback(); // Revertir si no se actualizó el préstamo
+		        }
+		    } catch (SQLException e) {
+		        e.printStackTrace();
+		        System.out.println("Error durante la actualización de la confirmación del préstamo.");
+		        try {
+		            if (connection != null) {
+		                connection.rollback(); // Rollback en caso de error
+		            }
+		        } catch (SQLException e1) {
+		            e1.printStackTrace();
+		        }
+		    } finally {
+		        try {
+		            if (statement != null) {
+		                statement.close(); // Cerrar statement
+		            }
+		            if (connection != null) {
+		                connection.setAutoCommit(true); // Restaurar el autocommit
+		            }
+		        } catch (SQLException e) {
+		            e.printStackTrace();
+		        }
+		    }
+
+		    return isUpdateExitoso;
+
 	}
 /*
 	private float obtenerImportePrestamo(int idPrestamo, Connection connection) throws SQLException {
