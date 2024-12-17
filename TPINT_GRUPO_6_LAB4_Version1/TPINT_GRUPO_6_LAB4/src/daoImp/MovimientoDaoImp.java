@@ -20,9 +20,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerIdCuentaPorIdCliente = "select Id from cuenta where IdCliente = ? and Activo = 1";
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
-	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE DATE(FechaMovimiento) BETWEEN ? AND ? AND Importe > 0 and TipoMovimiento = ?";
-	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and c.Activo = 1"; 
-	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and c.Activo = 1";	
+	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE DATE(FechaMovimiento) BETWEEN ? AND ? AND Importe > 0 and TipoMovimiento = ?"; 
+	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and m.TipoMovimiento = 4 and c.Activo = 1"; 
+	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and m.TipoMovimiento = 4 and c.Activo = 1";	
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
     private static final String InsertarMovimientoAltaPrestamo = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) VALUES (?, NOW(), ?, ?, ?)";
     private static final String ActualizarSaldoCuenta = "UPDATE cuenta SET Saldo = Saldo - ? WHERE Id = ?";

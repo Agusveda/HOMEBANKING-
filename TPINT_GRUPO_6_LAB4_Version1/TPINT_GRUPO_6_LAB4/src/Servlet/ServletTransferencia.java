@@ -114,10 +114,12 @@ public class ServletTransferencia extends HttpServlet {
 
                 // Llamada al método de negocio para realizar la transferencia
                 boolean transferenciaExitosa = movimientoNegocio.insertarMovimientosTransferencia(movimiento, idCuentaOrigen);
+                request.getSession().removeAttribute("idCuenta");
 
                 // Manejo de la respuesta
                 if (transferenciaExitosa) {
                     request.setAttribute("mensaje", "Transferencia realizada exitosamente.");
+                    request.getSession().removeAttribute("idCuenta");
                 } else {
                     request.setAttribute("mensajeError", "Hubo un error al realizar la transferencia.");
                 }

@@ -34,10 +34,6 @@
 		
 	
     </form>
-    
-   	 <a href="Administrador.jsp">
-        <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
-     </a>
 
 
 

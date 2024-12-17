@@ -243,7 +243,10 @@
     <span class="ingreso">La cantidad de plata que se ingresó en la cuenta es </span>
     <span class="total"> <%= ImporteIngreso %> </span>
 </div>
-    	<%} %>
+    	<%
+    	session.removeAttribute("ImporteEgreso");
+    	session.removeAttribute("ImporteIngreso");
+		} %>
 
 
     	
