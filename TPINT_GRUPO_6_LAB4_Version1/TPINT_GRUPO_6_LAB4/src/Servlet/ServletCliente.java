@@ -177,7 +177,7 @@ public class ServletCliente extends HttpServlet {
                 request.setAttribute("mensaje", "Cliente registrado exitosamente.");
              // Restablecer valores de los desplegables
                 request.setAttribute("limpiarFormulario", true);
-                request.setAttribute("nacionalidadId", null);
+                request.setAttribute("txtNacionalidad", null);
                 request.setAttribute("provincias", null);
                 request.setAttribute("localidades", null);
                
