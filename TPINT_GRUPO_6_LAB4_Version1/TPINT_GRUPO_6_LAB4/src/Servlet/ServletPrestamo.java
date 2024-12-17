@@ -56,11 +56,18 @@ public class ServletPrestamo extends HttpServlet {
 
                 // Validación del monto mínimo
                 if (importeCliente < 1000) {
-                    request.setAttribute("mensajeError", "Monto mínimo de préstamo es $1000.");
+                    request.setAttribute("mensajeError", "Monto mínimo de préstamo es $1.000");
                     forwardToPrestamoPage(request, response);
                     return;
                 }
-
+                
+                // Validación del monto mínimo
+                if (importeCliente > 1000000) {
+                    request.setAttribute("mensajeError", "Monto maximo por transaccion es $1.000.000");
+                    forwardToPrestamoPage(request, response);
+                    return;
+                }
+                
                 // Crear la fecha de alta con la fecha actual
                 java.sql.Date fechaAlta = new java.sql.Date(System.currentTimeMillis());
 
@@ -144,7 +151,7 @@ public class ServletPrestamo extends HttpServlet {
             float montoPago = Float.parseFloat(request.getParameter("montoPago"));
 
             boolean exito = prestamoNegocio.realizarPagoCuota(cuotaId, cuentaId, montoPago);
-
+          
             if (exito) {
                 response.sendRedirect("pagoExitoso.jsp");
             } else {

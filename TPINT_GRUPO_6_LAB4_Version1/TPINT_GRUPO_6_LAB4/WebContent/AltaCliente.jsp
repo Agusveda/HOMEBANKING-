@@ -57,18 +57,12 @@
 	    <% } %>
 	</div>
 
-
-
   <div class="form-register">
-        <h4>Alta de Cliente</h4>
-        
-        
-
+        <h4>Alta de Cliente</h4>     
         <!-- Formulario para registrar cliente -->
         <form method="POST" action="ServletBanco" onsubmit="validaYConfirma(this)" >
-        <input type="hidden" name="action" value="loadProvinces">
-        
-           <p>
+        <input type="hidden" name="action" value="loadProvinces">       
+         <p>
     <label class="form-label" for="nacionalidad">Nacionalidad</label>
     <select class="controls" id="nacionalidad" required name="txtNacionalidad" onchange="this.form.submit()">
  <option value="" <%= (request.getAttribute("limpiarFormulario") != null || "".equals(request.getParameter("txtNacionalidad"))) ? "selected" : "" %>>Seleccione</option>
@@ -99,7 +93,6 @@
             }
         %>
     </select>
-  
 </p>
 <p>
     <label class="form-label" for="localidad">Localidad</label>
@@ -122,11 +115,9 @@
     </select>
   
 </p>
-
                 <p>
                     <label class="form-label" for="nombre">Nombre</label>
-                    <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" required name="txtNombre" onkeypress="validarSoloLetras(event)">
-                    
+                    <input class="controls" id="nombre" type="text" placeholder="Ingrese el nombre" required name="txtNombre" onkeypress="validarSoloLetras(event)">                   
                 </p>
                 <p>
                     <label class="form-label" for="apellido">Apellido</label>
@@ -149,8 +140,7 @@
                         <option value="Otro">Otro</option>
                     </select>
                 </p>
-    <p>
-    
+   				<p>
 			    <p>
 				    <label class="form-label" for="fechaNacimiento">Fecha de Nacimiento</label>
 				    <input 
@@ -197,20 +187,14 @@
 				        <option value="0">Cliente</option>
 				    </select>
 				</p>
-
-                <!-- indica la acción -->
                 <input type="hidden" name="action" value="ValidarContraseñas">
-
-            </fieldset>
+          </fieldset>
             
             <div class="botones-container">
                 <input class="botons" id="btnAceptar" type="submit" value="Aceptar" required name="btnAltaCliente">
-
-            </div>
-            
+            </div>         
         </form>
     </div>
-
 
 <script>
 function confirmarAlta(form) 
@@ -223,8 +207,6 @@ function confirmarAlta(form)
         return false;
     }
 }
-   
-    
 function validarSoloLetras(event) {
     const key = event.key;
     const regex = /^[a-zA-Z]+$/;
@@ -252,9 +234,7 @@ function validarLongitudDni(input) {
         alert("El DNI no puede tener más de 8 dígitos.");
         input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
         return;
-    }
-    
-
+    }   
 }
 
 function validarLongitudCuil(input) {
@@ -264,15 +244,11 @@ function validarLongitudCuil(input) {
         alert("El CUIL no puede tener más de 11 dígitos.");
         input.value = input.value.slice(0, longitudExacta); // Recorta el valor a 11 caracteres
         return;
-    }
-    
+    }   
 }
 
-function validateDateInput(input) {
-    
-    input.value = input.value.replace(/[^0-9-]/g, '').slice(0, 10);
-
-    
+function validateDateInput(input) {    
+    input.value = input.value.replace(/[^0-9-]/g, '').slice(0, 10);   
     const pattern = /^\d{4}-\d{2}-\d{2}$/; // Formato DD-MM-YYYY
     if (input.value && !pattern.test(input.value)) {
         input.setCustomValidity("Por favor, ingrese la fecha en el formato YYYY-MM-DD.");
@@ -281,17 +257,13 @@ function validateDateInput(input) {
   }
 }
 
-
 function validaYConfirma(form){
 	if(!confirmarAlta(form)){
 		return false;
 	}
 	return true;
-	
 }
 
-
-</script>
-    
+</script>  
 </body>
 </html>

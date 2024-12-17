@@ -1,138 +1,69 @@
-@charset "ISO-8859-1";
+@charset "UTF-8";
 
 /* Estilo general */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 0;
 }
 
 /* Tabla de cuotas */
 .tabla-cuotas {
-    width: 90%;
-    max-width: 1200px;
-    margin: 20px auto;
+    width: 100%;
+    margin: 20px 0;
     border-collapse: collapse;
-    background-color: white;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .tabla-cuotas th, .tabla-cuotas td {
     border: 1px solid #ddd;
-    padding: 10px; /* Espaciado compacto */
+    padding: 12px;
     text-align: center;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .tabla-cuotas thead {
-    background-color: #f2f2f2;
-}
-
-.tabla-cuotas thead th {
-    background-color: #3f51b5;
+    background-color: #007bff;
     color: white;
-    padding: 12px;
     text-transform: uppercase;
 }
 
+.tabla-cuotas tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
 .tabla-cuotas tbody tr:hover {
-    background-color: #f9f9f9;
+    background-color: #f1f1f1;
 }
 
-/* Estilo para la fila seleccionada */
-.tabla-cuotas .selected-row {
-    background-color: #d3e0ea !important;
+.btn-pagar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
-/* Botones dentro de la tabla */
-.tabla-cuotas td .btn-pagar {
-    background-color: #28a745; /* Verde atractivo */
-    color: white; /* Texto blanco */
-    border: none; /* Sin borde */
-    padding: 10px 15px; /* Tamaño adecuado */
-    border-radius: 5px; /* Bordes redondeados */
-    cursor: pointer; /* Cambiar cursor al pasar */
-    font-size: 14px; /* Ajustar tamaño de letra */
-    transition: background-color 0.3s ease; /* Suavizar cambios de color */
+.btn-pagar:hover {
+    background-color: #218838;
 }
 
-.tabla-cuotas td .btn-pagar:hover {
-    background-color: #218838; /* Verde más oscuro al pasar */
-}
-
-.tabla-cuotas td .btn-pagar:active {
-    background-color: #1e7e34; /* Verde más intenso al hacer clic */
-}
-
-/* Mensaje de "No se encontraron cuotas" */
-.tabla-cuotas tbody tr td[colspan] {
-    color: #999;
-    font-style: italic;
-    text-align: center;
-    padding: 20px;
-}
-
-/* Encabezado */
 .encabezado {
     text-align: center;
-    padding: 20px 0;
-    background-color: #3f51b5;
+    background-color: #007bff;
     color: white;
-    margin-bottom: 20px;
+    padding: 20px 0;
 }
 
-/* Contenedor principal */
 .container {
     width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
+    max-width: 1000px;
+    margin: 20px auto;
     background-color: white;
     padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     border-radius: 5px;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.container h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
-}
-
-.container .form-group {
-    margin-bottom: 15px;
-}
-
-.container .form-group label {
-    font-weight: bold;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.container .form-group span {
-    display: block;
-    color: #666;
-}
-
-/* Enlaces */
-a {
-    color: #3f51b5;
-    text-decoration: none;
-    font-weight: bold;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
-/* Footer */
-footer {
-    text-align: center;
-    padding: 10px 0;
-    background-color: #3f51b5;
-    color: white;
-    margin-top: 20px;
-    position: relative;
-    bottom: 0;
-    width: 100%;
 }

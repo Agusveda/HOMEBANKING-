@@ -9,11 +9,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Listado de Cuentas</title>
-
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/ABMCuenta.css">
     <link rel="stylesheet" type="text/css" href="css/Footer.css">
-
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 </head>
 
@@ -71,7 +69,6 @@
 <table id="table_Cuenta" class="display">
     <thead>
         <tr>
-            <th>ID Cuenta</th>
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Tipo de Cuenta</th>
@@ -79,7 +76,6 @@
             <th>Numero Cuenta</th>
             <th>CBU</th>
             <th>Saldo</th>
-            <th>Activo</th>
             <th>Acciones</th>
         </tr>
     </thead>
@@ -89,7 +85,6 @@
                 for (Cuenta cuentaItem : listaCuenta) {  
         %>
         <tr>
-            <td><%= cuentaItem.getId() %></td>
             <td><%= cuentaItem.getCliente().getNombre() %></td>
             <td><%= cuentaItem.getCliente().getApellido() %></td>
             <td><%= cuentaItem.getTipoCuenta() == 1 ? "Ahorro" : "Cta. Corriente" %></td>
@@ -97,7 +92,6 @@
             <td><%= cuentaItem.getNumeroCuenta() %></td>
             <td><%= cuentaItem.getCbu() %></td>
             <td>$<%= cuentaItem.getSaldo() %></td>
-            <td><%= cuentaItem.isActivo() ? "Sí" : "No" %></td>
             <td>
                 <form action="ModificarCuenta.jsp" method="get">
                     <input type="hidden" name="idCuenta" value="<%= cuentaItem.getId() %>">
@@ -121,7 +115,6 @@
         %>
     </tbody>
 </table>
-
 
 <script>
     function confirmarEliminacion(form) {

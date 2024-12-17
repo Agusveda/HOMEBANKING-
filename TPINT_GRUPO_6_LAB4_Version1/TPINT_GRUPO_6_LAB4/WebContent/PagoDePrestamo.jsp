@@ -1,16 +1,17 @@
 <%@ page import="daoImp.MovimientoDaoImp" %>
 <%@ page import="daoImp.PrestamoDaoImp" %>
 <%@ page import="dao.MovimientoDao" %>
-<%@page import="negocioImpl.PrestamoNegocioImp"%>
+<%@ page import="negocioImpl.PrestamoNegocioImp" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="Entidades.Cuenta" %>
 <%@ page import="Entidades.Prestamo" %>
 <%@ page import="Entidades.Cuota" %>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
     <title>Pago de Préstamo</title>
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     <link rel="stylesheet" type="text/css" href="css/PagoPrestamo.css">
@@ -23,10 +24,20 @@
                 alert("Por favor, seleccione una cuenta antes de continuar.");
                 return false;
             }
+
+            // Obtener el saldo de la cuenta seleccionada
+            var saldoCuenta = parseFloat(document.getElementById("cuenta" + cuentaSeleccionada).getAttribute("data-saldo"));
+            
+            // Validar si el saldo es suficiente para el pago
+            if (saldoCuenta < montoPago) {
+                alert("Saldo insuficiente. El monto disponible en la cuenta es $" + saldoCuenta.toFixed(2));
+                return false;
+            }
+
             var confirmacion = confirm("¿Estás seguro de realizar el pago?\nMonto a pagar: $" + montoPago);
             if (confirmacion) {
                 document.getElementById("cuotaId").value = cuotaId;
-                document.getElementById("cuentaId").value = cuentaSeleccionada; 
+                document.getElementById("cuentaId").value = cuentaSeleccionada;
                 return true;
             } else {
                 return false;
@@ -55,8 +66,8 @@
         <%
             } else {
                 int idCliente = idClienteObj;
-               MovimientoDao movimientoDao = new MovimientoDaoImp();
-               PrestamoNegocioImp prestamoNegocio = new PrestamoNegocioImp();
+                MovimientoDao movimientoDao = new MovimientoDaoImp();
+                PrestamoNegocioImp prestamoNegocio = new PrestamoNegocioImp();
                 double totalPrestamos = 0;
                 double totalCuotasPendientes = 0;
                 ArrayList<Cuenta> cuentas = new ArrayList<>();
@@ -129,7 +140,7 @@
                             String tipoCuenta = (cuenta.getTipoCuenta() == 1) ? " (CAJA AHORRO)" : " (CUENTA CORRIENTE)";
                             double saldo = cuenta.getSaldo();
                 %>
-                    <option value="<%= cuenta.getId() %>">
+                    <option value="<%= cuenta.getId() %>" id="cuenta<%= cuenta.getId() %>" data-saldo="<%= cuenta.getSaldo() %>">
                         <%= cuenta.getNumeroCuenta() %> - <%= tipoCuenta %> - Saldo: $<%= String.format("%.2f", saldo) %>
                     </option>
                 <%

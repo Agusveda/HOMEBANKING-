@@ -63,7 +63,7 @@
     </div>
 
     <div class="parteDer">
-        <iframe id="contenido" name="contenido" src="Administrador.jsp" width="100%" height="600px" frameborder="0"></iframe>
+        <iframe id="contenido" name="contenido" src="AdminHome.jsp" width="100%" height="600px" frameborder="0"></iframe>
     </div>
 </div>
 

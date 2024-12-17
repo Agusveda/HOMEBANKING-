@@ -10,19 +10,18 @@
     <!-- Navbar -->
     <div class="navegador">
         <div class="nav-brand-container">
-            <a class="nav-brand" href="Cliente.jsp">CodeBank</a>
+            <a class="nav-brand">CodeBank</a>
             
             <% 
                 String nombreCliente = (String) session.getAttribute("nombreCliente");
                 Integer tipoUsuario = (Integer) session.getAttribute("tipoUsuario");                 
                 if (nombreCliente != null) {
             %>
-            
+              
+            <% if (tipoUsuario != null && tipoUsuario == 0) { %>
             <a class="logoNav" href="Cliente.jsp" title="Ir a la página de inicio">
                 <img src="img/icoHome.png" alt="Ícono de la página de inicio" />
             </a>
-            
-            <% if (tipoUsuario != null && tipoUsuario == 0) { %>
             <a href="InformacionPersonal.jsp" title="Ir a mi perfil">
                 <img src="img/icoInfo.png" alt="Ícono de información" />
             </a>
