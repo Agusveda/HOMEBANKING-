@@ -30,13 +30,8 @@
 	</div>
 	<div class="botones-contenedor">
     	<input type="submit" class="BtnCuentas" name="btnCuentas" value="Cuentas" />
-	</div>
-		
-	
+	</div>	
     </form>
-
-
-
 
 </body>
 </html>

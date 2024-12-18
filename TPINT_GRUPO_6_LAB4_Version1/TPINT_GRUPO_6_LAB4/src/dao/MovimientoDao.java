@@ -8,12 +8,9 @@ import Entidades.Cuota;
 import Entidades.Movimiento;
 import Entidades.Prestamo;
 
-public interface MovimientoDao 
-{
+public interface MovimientoDao {
 	int ObtenerIdCuentaPorIdCliente(int IdCliente); 
 	int ObtenerIdCuentaPorCBU(int CBU);
-	//boolean insertar(Movimiento movi, int idCue);
-	//boolean insertarAltaCuenta(Movimiento movi, int idCue);
 	ArrayList<Movimiento> ListarMovimientosPorCuenta(int idCue);
 	float ObtenerSaldoPorIdCuenta(int idCue); 
 	boolean ExisteCBU(int Cbu);
@@ -21,7 +18,6 @@ public interface MovimientoDao
 	ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente);
     float EgresoDeCliente(int DNICLIENTE);
     float IngresoDeCliente(int DNICLIENTE);
-
     boolean insertarMovimientoAltaCuenta(Movimiento movimiento, int idCuenta);
     boolean insertarMovimientoAltaPrestamoConfirmado(Movimiento movimiento, int idCuenta);
     boolean insertarMovimientosTransferencia(Movimiento movimiento, int idCuenta);

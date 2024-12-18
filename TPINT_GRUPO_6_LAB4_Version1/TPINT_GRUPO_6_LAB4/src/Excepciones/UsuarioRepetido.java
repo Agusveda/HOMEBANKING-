@@ -4,9 +4,6 @@ import Entidades.Cliente;
 
 public class UsuarioRepetido extends Exception {
 		
-/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	String MensajeError;
 	
@@ -31,5 +28,4 @@ public class UsuarioRepetido extends Exception {
 	public String toString() {
 		return "UsuarioRepetido: " + getMessage();
 	}
-	
 }

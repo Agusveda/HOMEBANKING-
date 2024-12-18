@@ -136,10 +136,10 @@ Integer idClien = (Integer) session.getAttribute("IdCliente");
                 // Llenar dinámicamente las cuentas del cliente
                 if (cuentas != null && !cuentas.isEmpty()) {
                     for (Cuenta cuenta : cuentas) {
-                        String tipoCuenta = cuenta.getTipoCuenta() == 1 ? "Caja de Ahorro" : "Cuenta Corriente";
+                        String tipoCuenta = cuenta.getTipoCuenta() == 1 ? "(CAJA AHORRO)" : "(CTA. CORRIENTE)";
             %>
                         <option value="<%= cuenta.getId() %>">
-                            <%= cuenta.getNumeroCuenta() + " - " + tipoCuenta %>
+                            <%= "Nro Cuenta: #" + cuenta.getNumeroCuenta() + " - " + tipoCuenta %>
                         </option>
             <% 
                     }

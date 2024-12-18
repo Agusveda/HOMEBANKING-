@@ -7,7 +7,6 @@ import Entidades.Cuenta;
 import Excepciones.ClienteExcedeCantCuentas;
 
 public interface CuentaDao {
-	//CuentaDao
 	public boolean insertCuenta(Cuenta cuenta);
 	public boolean EliminarCuenta(int id);
 	public ArrayList<Cuenta> ListarCuenta(int DNI);
@@ -22,9 +21,6 @@ public interface CuentaDao {
 	public int ObtenerProximoIdCuenta();
 	public void verificarCuentasPorCliente(int idCliente) throws ClienteExcedeCantCuentas;
 	public int ClienteInactivo(int idCliente);
-
-	
-	//REPORTE CUENTAS
 	public float ReporteCuentas(); 
 }
 

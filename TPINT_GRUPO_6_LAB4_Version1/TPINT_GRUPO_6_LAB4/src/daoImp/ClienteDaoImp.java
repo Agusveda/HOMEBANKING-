@@ -1,13 +1,11 @@
 package daoImp;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import Entidades.Cliente;
 import Entidades.Localidad;
 import Entidades.Nacionalidades;
@@ -15,7 +13,6 @@ import Entidades.Provincia;
 import Entidades.Usuario;
 import dao.ClienteDao;
 import daoImp.Conexion;
-
 
 public class ClienteDaoImp implements ClienteDao {
 	
@@ -469,20 +466,14 @@ public Usuario verificarCredenciales(String username, String password) {
         }
     }
 
-    // No cerramos la conexión aquí, para que pueda ser reutilizada si es necesario
     return usuario;
 }
 
 @Override
 public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
     ArrayList<Cliente> lista = new ArrayList<>();
-    /*
-     UPPER(c.Sexo) = UPPER(?): Compara de forma case-insensitive el valor del campo Sexo con el parámetro que pases al ?.
-     */
-    
     String query = "SELECT c.*, u.* FROM cliente c INNER JOIN usuario u ON u.IdCliente = c.Id WHERE c.Activo = 1 AND UPPER(c.Sexo) = UPPER(?)";
-    
-   
+      
     Connection conexion = null;
     PreparedStatement statement = null;
     ResultSet rs = null;
@@ -532,7 +523,6 @@ public ArrayList<Cliente> filtrarClienteXsexo(String sexo) {
         }
     }
 
-    // No se cierra la conexión aquí
     return lista;
 }
 
@@ -549,7 +539,6 @@ public boolean ValidacionDni(int dni) {
         if (connection == null) {
             throw new SQLException("Conexión a la base de datos es nula");
         }
-
         
         String query = "SELECT COUNT(*) FROM cliente WHERE DNI = ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
@@ -663,8 +652,6 @@ public boolean ValidacionUsuario(String usu) {
     return exists;
 }
 
-
-
 @Override
 public ArrayList<Provincia> listProvincias(int idNacionalidad) {
 	ArrayList<Provincia> ListaProv = new ArrayList<Provincia>();
@@ -713,7 +700,6 @@ public ArrayList<Localidad> listLocalidades(int idProvincia) {
     }
 
     try (PreparedStatement ps = con.prepareStatement(query)) {
-        // Filtrar por provincia
         ps.setInt(1, idProvincia);
 
         try (ResultSet rs = ps.executeQuery()) {
@@ -747,7 +733,6 @@ public boolean existeEmail(String Mail) {
         if (connection == null) {
             throw new SQLException("Conexión a la base de datos es nula");
         }
-
         
         String query = "SELECT COUNT(*) FROM cliente WHERE CorreoElectronico = ?";
         preparedStatement = connection.prepareStatement(query);
@@ -783,30 +768,25 @@ public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena
     ResultSet rs = null;
 
     try {
-        // Obtener la conexión
         cn = Conexion.getConexion().getSQLConexion();
         if (cn == null) {
             System.out.println("No se pudo obtener la conexión a la base de datos.");
             return false;
         }
-
-        // Consulta para actualizar la contraseña
         String query = "UPDATE usuario u "
                      + "INNER JOIN cliente c ON u.IdCliente = c.Id "
                      + "SET u.Contraseña = ? "
                      + "WHERE c.CorreoElectronico = ? and u.Activo = 1";
         
-        // Preparar la consulta
         ps = cn.prepareStatement(query);
         ps.setString(1, nuevaContrasena); // Nueva contraseña
         ps.setString(2, email);          // Correo electrónico
 
-        // Ejecutar la consulta
         int rowsAffected = ps.executeUpdate();
         
         if (rowsAffected > 0) {
             System.out.println("Actualización exitosa de la contraseña para el correo: " + email);
-            cn.commit(); // Confirmar la transacción
+            cn.commit(); 
             return true;
         } else {
             System.out.println("No se encontró un cliente con el correo: " + email);
@@ -823,7 +803,6 @@ public boolean actualizarContrasenaPorEmail(String email, String nuevaContrasena
         }
         return false;
     } finally {
-        // Cerrar los recursos
         try {
             if (ps != null) ps.close();
             if (cn != null) cn.close();
@@ -850,16 +829,13 @@ public boolean ValidacionDniModificar(int dni, int id)
         {
             throw new SQLException("Conexión a la base de datos es nula");
         }
-
         
         String query = "SELECT COUNT(*) FROM cliente WHERE DNI = ? and Id != ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setInt(1, dni);
         preparedStatement.setInt(2, id);
-
-        
+     
         resultSet = preparedStatement.executeQuery();
-
         
         if (resultSet.next()) {
             exists = resultSet.getInt(1) > 0;
@@ -873,7 +849,6 @@ public boolean ValidacionDniModificar(int dni, int id)
         try {
             if (resultSet != null) resultSet.close();
             if (preparedStatement != null) preparedStatement.close();
-            // NO cierres la conexión aquí si usas un pool de conexiones
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -896,16 +871,13 @@ public boolean ValidacionCuilModificar(long cuil, int id) {
         if (connection == null) {
             throw new SQLException("Conexión a la base de datos es nula");
         }
-
-        
+       
         String query = "SELECT COUNT(*) FROM cliente WHERE CUIL = ? and Id != ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setLong(1, cuil);
         preparedStatement.setInt(2, id);
-
-        
+     
         resultSet = preparedStatement.executeQuery();
-
         
         if (resultSet.next()) {
             exists = resultSet.getInt(1) > 0;
@@ -917,7 +889,7 @@ public boolean ValidacionCuilModificar(long cuil, int id) {
         try {
             if (resultSet != null) resultSet.close();
             if (preparedStatement != null) preparedStatement.close();
-            // NO cierres la conexión aquí si usas un pool de conexiones
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -939,14 +911,12 @@ public boolean ValidacionUsuarioModificar(String usu, int id) {
         if (connection == null) {
             throw new SQLException("Conexión a la base de datos es nula");
         }
-
         
         String query = "SELECT COUNT(*) FROM usuario WHERE NombreUsuario = ? and IdCliente != ? and Activo = 1";
         preparedStatement = connection.prepareStatement(query);
         preparedStatement.setString(1, usu);
         preparedStatement.setInt(2, id);
-
-        
+      
         resultSet = preparedStatement.executeQuery();
 
         
@@ -960,7 +930,7 @@ public boolean ValidacionUsuarioModificar(String usu, int id) {
         try {
             if (resultSet != null) resultSet.close();
             if (preparedStatement != null) preparedStatement.close();
-            // NO cierres la conexión aquí si usas un pool de conexiones
+          
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -998,22 +968,15 @@ public ArrayList<Nacionalidades> ListNacionalidades() {
             nac.setId(rs.getInt("IdNacionalidad"));
             nac.setNombre(rs.getString("Pais"));
      
-            ListaPais.add(nac);
-            
-        }
-        
+            ListaPais.add(nac);           
+        }        
         
     } catch (SQLException e) {
         System.out.println("Error al ejecutar la consulta: " + e.getMessage());
         e.printStackTrace();
-    }
-    
-    
+    }      
     return ListaPais;
-}
-
-
-
+	}
 }
 
 

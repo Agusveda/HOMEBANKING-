@@ -85,7 +85,7 @@ public class CuentaDaoImpl implements CuentaDao {
     }
 
     public int GenerarNumeroCuenta() {
-        int numCuenta = 0;
+        int numCuenta = 10000;  
         PreparedStatement statement = null;
         Connection conexion = Conexion.getConexion().getSQLConexion();
         ResultSet rs = null;
@@ -96,9 +96,8 @@ public class CuentaDaoImpl implements CuentaDao {
             rs = statement.executeQuery();
             
             if (rs.next()) {
-                numCuenta = rs.getInt("NumeroCuenta");
+                numCuenta = rs.getInt("NumeroCuenta") + 1;
             }
-            numCuenta += 1;
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -113,6 +112,7 @@ public class CuentaDaoImpl implements CuentaDao {
 
         return numCuenta;
     }
+
 
     public int GenerarCBU() {
         int cbu = 0;

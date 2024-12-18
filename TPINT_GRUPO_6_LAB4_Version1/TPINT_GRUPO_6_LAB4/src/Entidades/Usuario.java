@@ -7,7 +7,6 @@ public class Usuario {
 	private int tipoUsuario;
 	private int IdCliente;
 	
-	
 	public Usuario ()
 	{
 		id=0;
@@ -40,7 +39,6 @@ public class Usuario {
 	}
 
 	private boolean Activo;
-
 	
 	public String getUsuario() {
 		return usuario;
@@ -67,6 +65,5 @@ public class Usuario {
 	
 	public void setActivo(boolean Activo) {
 	    this.Activo = Activo;
-	}
-	
+	}	
 }

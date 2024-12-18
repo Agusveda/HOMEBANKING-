@@ -10,7 +10,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
     <title>Solicitudes de Préstamo</title>
     <link rel="stylesheet" type="text/css" href="css/Navbar.css">
-    <link rel="stylesheet" type="text/css" href="css/Footer.css">
+
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
 
     <style>
@@ -108,7 +108,6 @@
     </tbody>
 </table>
 
-<jsp:include page="Footer.jsp"/>
 
 <script>
     let selectedRow = null;

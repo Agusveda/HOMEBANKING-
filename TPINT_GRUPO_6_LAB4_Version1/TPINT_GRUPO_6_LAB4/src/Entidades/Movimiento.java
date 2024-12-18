@@ -1,7 +1,5 @@
 package Entidades;
 
-import javax.print.attribute.standard.DateTimeAtCompleted;
-
 public class Movimiento 
 {
 	private int id;

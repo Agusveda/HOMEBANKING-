@@ -21,12 +21,10 @@ public class PrestamoDaoImp implements PrestamoDao{
 	private static final String ListarPrestamosPedidosAutorizados = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
 	private static final String InsertarCuotasEnPrestamo = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
 	private static final String ListarTodosPrestamos = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
-	private static final String ActualizarConfirmacionPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
 	private static final String ObtenerImportePrestamo = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
 	private static final String ObtenerIdCuentaPrestamo = "SELECT IdCuenta FROM prestamo WHERE id = ?";
 	private static final String ObtenerPrestamosPendientes = "SELECT Id, IdCliente, ImportePedidoCliente, FechaAlta, CantidadCuotas, confirmacion FROM prestamo WHERE  IdCliente = ?";
 	private static final String ObtenerPrestamosConfirmados = "SELECT p.Id, p.IdCliente, p.IdCuenta, p.ImportePedidoCliente AS ImporteCliente, p.FechaAlta, p.CantidadCuotas, p.confirmacion FROM prestamo p WHERE p.IdCliente = ? AND p.confirmacion = 1";
-//	private static String ObtenerCuotasDePrestamo = "SELECT cu.Id, cu.IdPrestamo, cu.NumeroCuota, cu.Monto, cu.FechaPago, cu.estaPagada FROM cuota cu JOIN prestamo p ON cu.IdPrestamo = p.Id WHERE p.IdCliente = ? AND p.confirmacion = 1";
 	private static final String AprobarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE Id = ?";
 	private static final String DenegarPrestamo = "UPDATE prestamo SET confirmacion = ? WHERE id = ?";
 	@Override
@@ -99,96 +97,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    return isInsertExitoso;
 	}
 
-
-	/*v2
-	@Override
-    public boolean insertarPrestamo(Prestamo prestamo) {
-        boolean isInsertExitoso = false;
- 
-        try (Connection connection = Conexion.getConexion().getSQLConexion()) {
-            if (connection == null) {
-                System.out.println("No se pudo obtener la conexión a la base de datos.");
-                return false;
-            }
- 
-            connection.setAutoCommit(false); 
- 
-            // Intereses generados segun cantidad de cuotas
-            float tasaInteres = 0;
-            switch (prestamo.getCantCuo()) {
-                case 1:
-                    tasaInteres = 0.0f; // Sin interés para 1 cuota
-                    break;
-                case 3:
-                    tasaInteres = 0.05f; // 5% para 3 cuotas
-                    break;
-                case 6:
-                    tasaInteres = 0.10f; // 10% para 6 cuotas
-                    break;
-                case 9:
-                    tasaInteres = 0.15f; // 15% para 9 cuotas
-                    break;
-                case 12:
-                    tasaInteres = 0.20f; // 20% para 12 cuotas
-                    break;
-                default:
-                    System.out.println("Número de cuotas no válido.");
-                    return false; 
-            }
-    
-            float montoRecibido = prestamo.getImporteCliente();
-            float montoConInteres = montoRecibido * (1 + tasaInteres);
- 
-            try (PreparedStatement statement = connection.prepareStatement(InsertarPrestamo, Statement.RETURN_GENERATED_KEYS)) {
-                statement.setInt(1, prestamo.getIdCliente());
-                statement.setInt(2, prestamo.getIdCuenta());
-                statement.setFloat(3, prestamo.getImporteCliente()); // Monto sin intereses
-                statement.setInt(4, prestamo.getCantCuo());
-                statement.setInt(5, 0); 
- 
-                int rowsAffected = statement.executeUpdate(); 
- 
-                if (rowsAffected > 0) {
-                    ResultSet generatedKeys = statement.getGeneratedKeys();
-                    if (generatedKeys.next()) {
-                        int idPrestamo = generatedKeys.getInt(1); 
-                           
-                        try (PreparedStatement statementCuota = connection.prepareStatement(InsertarCuotasEnPrestamo)) {
-                            for (int i = 1; i <= prestamo.getCantCuo(); i++) {
-                                statementCuota.setInt(1, idPrestamo); 
-                                statementCuota.setInt(2, i); 
-                                statementCuota.setFloat(3, montoConInteres / prestamo.getCantCuo()); 
-                                statementCuota.setInt(4, 0); // estaPagada (0: pendiente)
-                                statementCuota.setDate(5, java.sql.Date.valueOf(LocalDate.now().plusMonths(i)));
-                                statementCuota.addBatch(); 
-                            }
- 
-                            int[] cuotasAfectadas = statementCuota.executeBatch();
-                            if (cuotasAfectadas.length == prestamo.getCantCuo()) {
-                                connection.commit(); 
-                                System.out.println("El préstamo y sus cuotas se han insertado correctamente.");
-                                isInsertExitoso = true;
-                            } else {
-                                connection.rollback(); // Si hubo un error en las cuotas, hacer rollback
-                                System.out.println("Error al insertar las cuotas. Se realizó un rollback.");
-                            }
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                connection.rollback();
-                System.out.println("Error durante la inserción del préstamo o las cuotas. Se realizó un rollback.");
-                e.printStackTrace();
-            }
- 
-        } catch (SQLException e) {
-            System.out.println("Error al obtener la conexión a la base de datos o al cerrar los recursos.");
-            e.printStackTrace();
-        }
- 
-        return isInsertExitoso;
-    }
-*/
 	@Override
 	public ArrayList<Prestamo> ListPrestamosPedidos() {
 		try {
@@ -231,79 +139,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	    }    
 	    return ListaPrestamos;
 	}
-	
-	
-	
-	
-/*	viejo
-	public boolean actualizarConfirmacionPrestamo(int idPrestamo, int confirmacion) {
-	    Connection connection = null;
-	    PreparedStatement statement = null;
-	    boolean isUpdateExitoso = false;
 
-	    try {
-	        connection = Conexion.getConexion().getSQLConexion(); 
-	        if (connection == null) {
-	            System.out.println("No se pudo obtener la conexión a la base de datos.");
-	            return false;
-	        }
-
-	        connection.setAutoCommit(false);
-
-	        System.out.println("Actualizando préstamo con ID: " + idPrestamo);
-	        System.out.println("Nuevo estado de confirmación: " + confirmacion);
-
-	        statement = connection.prepareStatement(ActualizarConfirmacionPrestamo);
-	        statement.setInt(1, confirmacion);
-	        statement.setInt(2, idPrestamo);
-
-	        int rowsAffected = statement.executeUpdate();
-
-	        if (rowsAffected > 0) {
-	            System.out.println("El estado del préstamo se ha actualizado correctamente. Filas afectadas: " + rowsAffected);
-	            isUpdateExitoso = true;
-
-	            String sqlInsertMovimiento = "INSERT INTO movimiento (TipoMovimiento, FechaMovimiento, Importe, IdCuenta, Detalle) " +
-	                    "VALUES (?, NOW(), ?, ?, ?)";
-	            
-	            try (PreparedStatement stmtMovimiento = connection.prepareStatement(sqlInsertMovimiento)) {
-	                stmtMovimiento.setInt(1, 2); // 
-	                stmtMovimiento.setFloat(2, obtenerImportePrestamo(idPrestamo, connection)); 
-	                stmtMovimiento.setInt(3, obtenerIdCuentaPrestamo(idPrestamo, connection)); 
-	                stmtMovimiento.setString(4, "Préstamo aprobado"); 
-	                stmtMovimiento.executeUpdate();
-	            }
-
-	            connection.commit(); 
-	        } else {
-	            System.out.println("No se actualizó ninguna fila. Verifica si el ID de préstamo es válido.");
-	            connection.rollback(); 
-	        }
-	    } catch (SQLException e) {
-	        e.printStackTrace();
-	        System.out.println("Error durante la actualización.");
-	        if (connection != null) {
-	            try {
-	                connection.rollback(); 
-	            } catch (SQLException e1) {
-	                e1.printStackTrace();
-	            }
-	        }
-	    } finally {
-	        try {
-	            if (statement != null) {
-	                statement.close(); 
-	            }
-	            if (connection != null) {
-	                connection.setAutoCommit(true); 
-	            }
-	        } catch (SQLException e) {
-	            e.printStackTrace();
-	        }
-	    }
-	    return isUpdateExitoso;
-	}
-*/
 	@Override
 	public boolean confirmacionPrestamo(int idPrestamo) {
 	    Connection connection = null;
@@ -420,19 +256,6 @@ public class PrestamoDaoImp implements PrestamoDao{
 		    return isUpdateExitoso;
 
 	}
-/*
-	private float obtenerImportePrestamo(int idPrestamo, Connection connection) throws SQLException {
-	    try (PreparedStatement statement = connection.prepareStatement(ObtenerImportePrestamo)) {
-	        statement.setInt(1, idPrestamo);
-	        try (ResultSet resultSet = statement.executeQuery()) {
-	            if (resultSet.next()) {
-	                return resultSet.getFloat("ImportePedidoCliente");
-	            }
-	        }
-	    }
-	    return 0;
-	}
-*/
 	
 	public float obtenerImportePrestamo(int idPrestamo) {
 	    float importe = 0;
@@ -522,8 +345,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	                pre.setIdCliente(rs.getInt("IdCliente"));
 	                pre.setImporteCliente(rs.getFloat("ImportePedidoCliente"));
 	                pre.setFechaAlta(rs.getDate("FechaAlta"));
-	                pre.setCantCuo(rs.getInt("CantidadCuotas"));
-	                
+	                pre.setCantCuo(rs.getInt("CantidadCuotas"));                
 	                pre.setconfimacion(rs.getInt("confirmacion"));
 	                PretAut.add(pre);
 	            }

@@ -5,17 +5,15 @@
 <%@page import="Entidades.Nacionalidades"%>
 <%@page import="Entidades.Localidad"%>
 <%@page import="Entidades.Provincia"%>
-
 <%@page import="java.util.ArrayList"%>
+
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-	        <link rel="stylesheet" type="text/css" href="css/altclien.css">
-
-
-    <title>Alta de Cliente</title>
+        	<link rel="stylesheet" type="text/css" href="css/Navbar.css">
+	        <link rel="stylesheet" type="text/css" href="css/altclien.css">		               
     <style>
         .mensaje-cuadro {
             background-color: #f5f5f5; 
@@ -39,7 +37,9 @@
     
 </head>
 <body>
-
+<div class="encabezado">
+    <h1>Alta Cliente</h1>
+</div>
 	<div class="mensaje-cuadro">
 	    <% 
 	        String mensaje = (String) request.getAttribute("mensaje");
@@ -57,8 +57,7 @@
 	    <% } %>
 	</div>
 
-  <div class="form-register">
-        <h4>Alta de Cliente</h4>     
+  <div class="form-register">   
         <!-- Formulario para registrar cliente -->
         <form method="POST" action="ServletBanco" onsubmit="validaYConfirma(this)" >
         <input type="hidden" name="action" value="loadProvinces">       

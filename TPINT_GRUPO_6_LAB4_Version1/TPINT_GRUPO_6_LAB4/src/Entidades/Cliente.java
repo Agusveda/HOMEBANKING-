@@ -20,8 +20,6 @@ public class Cliente {
     private String usuario;
     private String contrasenia;
     
-
-
 	public Cliente() 
 	{
 		id=0;
@@ -40,7 +38,6 @@ public class Cliente {
 		usuario="";
 		contrasenia="";
 	}
-    
     
 	public Cliente(int id, int dni, long cuil, String nombre, String apellido, String sexo, String nacionalidad,
 			String fechaNacimiento, String direccion, String localidad, String provincia, String correoElectronico,

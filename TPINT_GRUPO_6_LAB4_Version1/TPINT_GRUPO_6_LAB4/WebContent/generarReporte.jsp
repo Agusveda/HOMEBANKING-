@@ -16,18 +16,14 @@
     border-radius: 5px;
     font-weight: bold;
     text-align: center;
-    
-    
 	}
-
-
+	
 	.mensaje-exito 
 	{
     background-color: #d4edda;
     color: #155724;
     border: 1px solid #c3e6cb;
 	}
-
 
 	.mensaje-error 
 	{
@@ -64,20 +60,6 @@
     	TipoMovimiento = (String) session.getAttribute("TipoMovimiento");	
 	}
 	
-	/// REPORTE DE TRANSFERENCIA
-//	float ImporteEgreso =0;
-//	float Importeingreso = 0 ;
-	
-//	if (session.getAttribute("ImporteEgreso") != null && session.getAttribute("Importeingreso") != null )
-//	{
-//	 ImporteEgreso = (float) session.getAttribute("ImporteEgreso");
-//	 Importeingreso = (float)session.getAttribute("Importeingreso");
-	
-	
-//	}
-	
-	
-	
 	///REPORTE DE CUENTAS
 	float saldo = 0;
 	
@@ -109,15 +91,12 @@
     	}
     	%>
     
-    </h1>
-    
-    
+    </h1> 
         <% 
 	    	String mensaje = (String) request.getAttribute("mensaje");
 	    	String mensajeError = (String) request.getAttribute("mensajeError");
 	    %>
         
-        	<!-- Mensajes de éxito o error -->
 	    <% if (mensaje != null) { %>
 	    <div class="mensaje mensaje-exito"><%= mensaje %></div>
 		<% } %>
@@ -126,12 +105,8 @@
 		<% } %>
 </div>
 
-
-
-    <form action="ServletReportes" method="post">
-    	
-    	<div class="form-contenedor">
-    	
+    <form action="ServletReportes" method="post">	
+    	<div class="form-contenedor"> 	
     	<%
     		if (id == 1)
     		{
@@ -201,8 +176,7 @@
     			</div>
     			
     	   </div>
-    	   
-        	
+    	        	
         	<%
         	session.removeAttribute("total");
         	}
@@ -218,9 +192,7 @@
     	
        <label for="DNICliente">DNI del cliente:</label>
 <input type="text" id="DNICliente" name="DNICliente" pattern="\d*" title="Solo se permiten números" oninput="this.value = this.value.replace(/[^0-9-]/g, '').slice(0, 10);" maxlength="8"  required>
-
-        <br>
-        
+        <br> 
         <br>
         <br>
     	
@@ -248,13 +220,6 @@
     	session.removeAttribute("ImporteIngreso");
 		} %>
 
-
-    	
-    	
-    	
-    	
-    	
-    	
     	<% 
     	/// REPORTE DE CUENTAS
         if (saldo != 0)
@@ -279,9 +244,6 @@
 
    	 <a href="Reportes.jsp">
         <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
-     </a>
-     
+     </a>   
 </body>
-
-
 </html>

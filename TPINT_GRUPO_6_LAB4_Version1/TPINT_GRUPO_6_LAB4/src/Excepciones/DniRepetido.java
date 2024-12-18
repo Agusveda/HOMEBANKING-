@@ -2,9 +2,6 @@ package Excepciones;
 
 public class  DniRepetido extends Exception{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	String MensajeError;
@@ -26,5 +23,4 @@ public class  DniRepetido extends Exception{
 	public String toString() {
 		return "UsuarioRepetido: " + getMessage();
 	}
-
 }

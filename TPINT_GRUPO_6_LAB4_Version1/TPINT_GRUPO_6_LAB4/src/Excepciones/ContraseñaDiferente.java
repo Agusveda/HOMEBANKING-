@@ -1,13 +1,8 @@
 package Excepciones;
 
 public class ContraseñaDiferente extends Exception{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-
-	public ContraseñaDiferente() {
-		
+	public ContraseñaDiferente() {	
 	}
 
 	@Override

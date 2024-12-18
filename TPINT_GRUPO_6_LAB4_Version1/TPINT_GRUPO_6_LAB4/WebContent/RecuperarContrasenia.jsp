@@ -52,10 +52,8 @@
 	        } else {
 	            mensajeError = "No se encontró un usuario con ese correo.";
 	        }
-	    }
-	      
+	    }      
 %>
-        
         <!-- Mensajes de éxito o error -->
 	    <% if (mensaje != null) { %>
 	    <div class="mensaje mensaje-exito"><%= mensaje %></div>

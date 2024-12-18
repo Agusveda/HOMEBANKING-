@@ -18,21 +18,19 @@
         <link rel="stylesheet" type="text/css" href="css/Transferencias.css">
         <link rel="stylesheet" type="text/css" href="css/Navbar.css">
     	<link rel="stylesheet" type="text/css" href="css/Footer.css">
-    <style>
+<style>
         <jsp:include page="css/Transferencias.css"></jsp:include>
         #inputSaldo {
             border: none;
             outline: none;
         }
         
-        .mensaje {
+.mensaje {
     padding: 10px;
     margin: 10px 0;
     border-radius: 5px;
     font-weight: bold;
     text-align: center;
-    
-    
 }
 
 .mensaje-exito {
@@ -46,8 +44,9 @@
     color: #721c24;
     border: 1px solid #f5c6cb;
 }
-    </style>
+</style>
 </head>
+
 <script type="text/javascript">
 function EventoSeleccionarCuenta() 
 {
@@ -58,11 +57,9 @@ function EventoSeleccionarCuenta()
 <body>
 
 <jsp:include page="Navbar.jsp"/>
-
     <div class="encabezado">
         <h1>Cuentas</h1>
     </div>
-    
         <% 
 	    String mensaje = (String) request.getAttribute("mensaje");
 	    String mensajeError = (String) request.getAttribute("mensajeError");
@@ -136,12 +133,10 @@ function EventoSeleccionarCuenta()
     <a href="Cliente.jsp">
         <input class="BtnAtras" type="button" value="Atrás" name="btnAtras">
     </a>
-
-    </form>
+</form>
 	
 
-    
-    <script>
+<script>
     function confirmarTransferencia(form) 
     {
         const confirmacion = confirm("¿Estás seguro de transferir a esta cuenta?");
@@ -152,7 +147,7 @@ function EventoSeleccionarCuenta()
             return false;
         }
     }
-	</script>
+</script>
 
  <jsp:include page="Footer.jsp"/>
     

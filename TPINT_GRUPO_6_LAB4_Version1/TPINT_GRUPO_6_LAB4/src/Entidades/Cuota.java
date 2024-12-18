@@ -9,7 +9,7 @@ public class Cuota {
     private int NumeroCuota;
     private float Monto; 
     private Date FechaPago;
-    private boolean estaPagada; // Nuevo atributo
+    private boolean estaPagada; 
 
     public Cuota() {
         Id = 0;
@@ -17,7 +17,7 @@ public class Cuota {
         NumeroCuota = 0;
         Monto = 0;
         FechaPago = null;
-        estaPagada = false; // Por defecto, no está pagada
+        estaPagada = false; 
     }
 
     public Cuota(int id, int idPrestamo, int numeroCuota, float monto, Date fechaPago, boolean estaPagada) {
@@ -29,7 +29,6 @@ public class Cuota {
         this.estaPagada = estaPagada;
     }
 
-    // Getters y Setters
     public int getId() {
         return Id;
     }
@@ -66,13 +65,11 @@ public class Cuota {
         return FechaPago;
     }
     
-    //Usaremos java.sql.Date para almacenar las fechas en la base de datos, pero LocalDate para las operaciones dentro de la lógica de negocio.
     public void setFechaPago(Date fechaPago) {
         FechaPago = fechaPago;
     }
 
     public void setFechaPago(LocalDate fechaPago) {
-        // Convertimos LocalDate a java.sql.Date
         FechaPago = Date.valueOf(fechaPago);
     }
 

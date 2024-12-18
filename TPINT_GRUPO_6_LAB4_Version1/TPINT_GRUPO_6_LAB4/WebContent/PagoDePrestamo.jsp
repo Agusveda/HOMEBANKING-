@@ -49,7 +49,7 @@
     <jsp:include page="Navbar.jsp"/>
 
     <div class="encabezado">
-        <h1>Formulario de Pago de Préstamo</h1>
+        <h1>Pago de Préstamo</h1>
     </div>
 
     <div class="container">

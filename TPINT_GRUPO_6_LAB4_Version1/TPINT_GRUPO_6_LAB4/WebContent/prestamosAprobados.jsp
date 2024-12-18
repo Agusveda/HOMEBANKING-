@@ -18,11 +18,10 @@
 
     <style>
         .selected-row {
-            background-color: #d3e0ea;
-            
+            background-color: #d3e0ea;         
         }
         
-            body {
+        body {
         font-family: Arial, sans-serif;
         background-color: #f5f5f5;
         color: #333;
@@ -32,7 +31,7 @@
     }
 
     h1, h2, h3, h4, h5, h6 {
-        color: #444;
+        color: white;
     }
 
     /* Formularios */
@@ -117,9 +116,7 @@
 
     button:hover, input[type="submit"]:hover {
         background-color: #0056b3;
-    }
-        
-        
+    }     
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -128,7 +125,7 @@
 <body>
 
 <div class="encabezado">
-    <h1>Solicitudes de Préstamo</h1>
+    <h1>Préstamos Aprobados</h1>
 </div>
 
 <form method="get" action="" id="filtroForm">
@@ -151,8 +148,6 @@ PrestamoNegocioImp prestamoNegocio = new PrestamoNegocioImp();
 ArrayList<Prestamo> prestamos;
 String filtro = request.getParameter("txtfiltrar");
 System.out.println("Filtro seleccionado: " + filtro);
-
-
 
     if (filtro == null || filtro.trim().isEmpty() || filtro.equals("todos")) {
     	System.out.println("Obteniendo todos los prestamos.");

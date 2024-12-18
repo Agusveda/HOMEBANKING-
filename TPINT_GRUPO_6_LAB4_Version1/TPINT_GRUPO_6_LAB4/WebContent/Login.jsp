@@ -54,7 +54,6 @@
     
 </div>
 </div>
-
     <%
     String username = request.getParameter("txtuser");
     String password = request.getParameter("txtpass");

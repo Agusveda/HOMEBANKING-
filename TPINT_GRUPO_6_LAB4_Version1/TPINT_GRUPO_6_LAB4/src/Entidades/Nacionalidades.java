@@ -20,7 +20,5 @@ public class Nacionalidades {
 	@Override
     public String toString() {
         return nombre; 
-    }
-    
+    }  
 }
-

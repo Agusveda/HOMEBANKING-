@@ -23,8 +23,6 @@ public class Prestamo {
 		cantCuo=0;	
 	}
 	
-	
-	
 	public Prestamo(int id, int idCliente, float importeCliente, Date fechaAlta, int plazoPago, float impxmes,int cantCuo, int confirmacion) {
 		Id = id;
 		IdCliente = idCliente;
@@ -52,11 +50,11 @@ public class Prestamo {
 	
 	 public int getIdCuenta() {
 	        return IdCuenta;
-	    }
+	}
 	 
-	    public void setIdCuenta(int idCuenta) {
+	public void setIdCuenta(int idCuenta) {
 	        IdCuenta = idCuenta;
-	    }
+	}
 	
 	public float getImporteCliente() {
 		return ImporteCliente;
@@ -96,18 +94,10 @@ public class Prestamo {
 		this.confirmacion = confirmacion;
 	}
 
-
-
 	@Override
 	public String toString() {
 		return "Prestamo [Id=" + Id + ", IdCliente=" + IdCliente + ", ImporteCliente=" + ImporteCliente + ", fechaAlta="
 				+ fechaAlta + ", plazoPago=" + plazoPago + ", Impxmes=" + Impxmes + ", cantCuo=" + cantCuo
 				+ ", confimacion=" + confirmacion + "]";
 	}
-
-
-
-	
-	
-
 }
