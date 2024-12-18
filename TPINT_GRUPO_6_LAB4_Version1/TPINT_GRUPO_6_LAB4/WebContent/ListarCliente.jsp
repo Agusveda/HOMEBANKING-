@@ -68,7 +68,7 @@
 <table id="clientes_table" class="display">
     <thead>
         <tr>
-            <th>ID</th>
+   
             <th>Nombre</th>
             <th>Apellido</th>
             <th>DNI</th>
@@ -89,11 +89,11 @@
         <% if (lista != null && !lista.isEmpty()) {
             for (Cliente cli : lista) { %>
                 <tr onclick="selectRow(this)">
-                    <td><%= cli.getId() %></td>
+                
                     <td><%= cli.getNombre() %></td>
                     <td><%= cli.getApellido() %></td>
                     <td><%= cli.getDni() %></td>
-                    <td><%= cli.getCuil() %></td>
+                    <td><%= cli.getCuil()%></td>
                     <td><%= cli.getSexo() %></td>
                     <td><%= cli.getNacionalidad() %></td>
                     <td><%= cli.getFechaNacimiento() %></td>
