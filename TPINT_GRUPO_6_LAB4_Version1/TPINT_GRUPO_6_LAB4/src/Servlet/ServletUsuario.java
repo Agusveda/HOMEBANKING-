@@ -39,7 +39,7 @@ public class ServletUsuario extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+		/*
 		String idCli = request.getSession().getAttribute("IdCliente").toString();
 	    System.out.println("ID Cliente obtenido de la sesión: " + idCli);
 	    
@@ -61,7 +61,7 @@ public class ServletUsuario extends HttpServlet {
         }
 		
 		doGet(request, response);
-		
+		*/
 	}
 
 }
