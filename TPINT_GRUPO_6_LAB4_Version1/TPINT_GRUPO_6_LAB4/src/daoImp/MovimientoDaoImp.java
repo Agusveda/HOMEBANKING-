@@ -21,6 +21,7 @@ public class MovimientoDaoImp implements MovimientoDao {
 	private static final String ObtenerSaldoPorIdCuenta = "select * from cuenta where Id = ? and Activo = 1 ";
 	private static final String ExisteCBU = "SELECT * FROM cuenta WHERE CBU = ? and Activo = 1";
 	private static final String ReporteMovimientos = "SELECT SUM(Importe) AS total FROM movimiento WHERE DATE(FechaMovimiento) BETWEEN ? AND ? AND Importe > 0 and TipoMovimiento = ?"; 
+	private static final String ReporteMovimiento3 = "SELECT SUM(Importe) AS total FROM movimiento WHERE DATE(FechaMovimiento) BETWEEN ? AND ? and TipoMovimiento = ?";
 	private static final String ReporteIngresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe not like '%-%' and m.TipoMovimiento = 4 and c.Activo = 1"; 
 	private static final String ReporteEgresoMovimiento = "SELECT SUM(m.Importe) AS total FROM movimiento m inner join cuenta c on c.Id = m.idCuenta inner join cliente cli on cli.Id = c.IdCliente WHERE cli.DNI = ? and m.Importe  like '%-%' and m.TipoMovimiento = 4 and c.Activo = 1";	
 	private static final String TraerCuentasPorIdCliente = "select * from cuenta where IdCliente = ? and Activo = 1 ";
@@ -626,7 +627,9 @@ public class MovimientoDaoImp implements MovimientoDao {
 	{
 		float total = 0;
 		PreparedStatement statement = null;
+		PreparedStatement statement2 = null;
 		ResultSet rs = null;
+		ResultSet rs2 = null;
 		Connection conexion = Conexion.getConexion().getSQLConexion();
 
 		try 
@@ -645,6 +648,21 @@ public class MovimientoDaoImp implements MovimientoDao {
 			if (rs.next()) 
 			{
 				total = rs.getFloat("Total");
+			}
+			
+			/// PARA EL MOVIMIENTO DE PAGAR PRESTAMO(EL 3)
+			if (TipoMovimiento == 3)
+			{
+				statement2 = conexion.prepareStatement(ReporteMovimiento3);
+				statement2.setString(1, FechaInicio);
+				statement2.setString(2, FechaFinal);
+				statement2.setInt(3, TipoMovimiento);
+				rs2 = statement2.executeQuery();
+				
+				if (rs2.next()) 
+				{
+					total = rs2.getFloat("Total");
+				}
 			}
 
 		} 
@@ -669,7 +687,6 @@ public class MovimientoDaoImp implements MovimientoDao {
 
 		return total;
 	}
-
 	@Override
 	public ArrayList<Cuenta> TraeCuentasPorIdCliente(int idCliente) {
 	    ArrayList<Cuenta> CuentasCliente = new ArrayList<>();
