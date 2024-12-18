@@ -361,7 +361,7 @@ public class PrestamoDaoImp implements PrestamoDao{
 	@Override
 	public ArrayList<Prestamo> filtrarClienteXImporte(String orden) {
 		ArrayList<Prestamo> lista = new ArrayList<>();
-	    String query = "SELECT * FROM prestamo ORDER BY ImportePedidoCliente " 
+	    String query = "SELECT * FROM prestamo WHERE confirmacion = 0 ORDER BY ImportePedidoCliente " 
 	        + (orden.equalsIgnoreCase("Mayor") ? "DESC" : "ASC");
 
 	    Connection conexion = null;
