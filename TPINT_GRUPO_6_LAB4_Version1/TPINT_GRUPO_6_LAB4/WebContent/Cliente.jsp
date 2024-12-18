@@ -49,7 +49,7 @@
 <table id="table_Cuenta" class="display">
     <thead>
         <tr>
-            <th>ID </th>
+
             <th>Tipo cuenta</th>
             <th>CBU</th>
             <th>Saldo</th>
@@ -62,7 +62,7 @@
                 for (Cuenta cuentaItem : listaCuenta) {
         %>
         <tr>
-            <td><%= cuentaItem.getId() %></td>
+           
             <td><%= cuentaItem.getTipoCuenta() == 1 ? "Ahorro" : "Cta. Corriente" %></td>
             <td><%= cuentaItem.getCbu() %></td>
             <td><%= cuentaItem.getSaldo() %></td>

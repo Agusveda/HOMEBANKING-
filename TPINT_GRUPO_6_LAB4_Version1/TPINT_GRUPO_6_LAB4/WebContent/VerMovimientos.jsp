@@ -36,7 +36,7 @@ int idCuenta = (int) session.getAttribute("idCuenta");
 <table class="tabla"  border="1">
     <thead>
         <tr>
-            <th>ID</th>
+      
             <th>Fecha de movimiento</th>
             <th>Importe</th>
             <th>Detalle</th>
@@ -48,7 +48,7 @@ int idCuenta = (int) session.getAttribute("idCuenta");
                 for (Movimiento movItem : listaMov) {
         %>
         <tr>
-            <td><%= movItem.getId() %></td>
+        
             <td><%= movItem.getFechaMovimiento() %></td>
             <td><%= movItem.getImporte() %></td>
             <td><%= movItem.getDetalle() %></td>
