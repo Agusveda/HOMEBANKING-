@@ -18,7 +18,7 @@ import dao.PrestamoDao;
 public class PrestamoDaoImp implements PrestamoDao{
 	private static final String InsertarPrestamo = "INSERT INTO prestamo (IdCliente, IdCuenta ,ImportePedidoCliente, FechaAlta, CantidadCuotas, confirmacion) VALUES (?,?, ?, NOW(), ?, ?)";	
 	private static final String CargarPrestamoEnCuenta = "update cuenta set saldo = saldo + ? where Id = ? ";
-	private static final String ListarPrestamosPedidosAutorizados = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
+	private static final String ListarPrestamosPedidosAutorizados = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 1 order by id desc";
 	private static final String InsertarCuotasEnPrestamo = "INSERT INTO cuota (IdPrestamo, NumeroCuota, Monto, estaPagada, FechaPago) VALUES (?, ?, ?, ?, ?)";
 	private static final String ListarTodosPrestamos = "SELECT Id, IdCliente,IdCuenta, ImportePedidoCliente,FechaAlta,CantidadCuotas,confirmacion FROM prestamo where confirmacion = 0 order by id desc";
 	private static final String ObtenerImportePrestamo = "SELECT ImportePedidoCliente FROM prestamo WHERE id = ?";
